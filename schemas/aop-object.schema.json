@@ -131,7 +131,47 @@
           "type": "string",
           "minLength": 1
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "scheme": {
+                "const": "oauth2"
+              }
+            },
+            "required": ["scheme"]
+          },
+          "then": {
+            "required": ["scopes", "issuer", "audience"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "scheme": {
+                "const": "none"
+              }
+            },
+            "required": ["scheme"]
+          },
+          "then": {
+            "not": {
+              "anyOf": [
+                {
+                  "required": ["scopes"]
+                },
+                {
+                  "required": ["issuer"]
+                },
+                {
+                  "required": ["audience"]
+                }
+              ]
+            }
+          }
+        }
+      ]
     },
     "PermissionConfig": {
       "type": "object",
@@ -176,7 +216,81 @@
           "type": "string",
           "minLength": 1
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": ["checksum"]
+          },
+          "then": {
+            "required": ["checksum_algo"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "checksum_algo": {
+                "const": "sha256"
+              }
+            },
+            "required": ["checksum_algo"]
+          },
+          "then": {
+            "required": ["checksum"],
+            "properties": {
+              "checksum": {
+                "type": "string",
+                "pattern": "^[A-Fa-f0-9]{64}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "checksum_algo": {
+                "const": "sha512"
+              }
+            },
+            "required": ["checksum_algo"]
+          },
+          "then": {
+            "required": ["checksum"],
+            "properties": {
+              "checksum": {
+                "type": "string",
+                "pattern": "^[A-Fa-f0-9]{128}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "signed": {
+                "const": true
+              }
+            },
+            "required": ["signed"]
+          },
+          "then": {
+            "required": ["signature_ref"]
+          }
+        },
+        {
+          "if": {
+            "required": ["signature_ref"]
+          },
+          "then": {
+            "properties": {
+              "signed": {
+                "const": true
+              }
+            },
+            "required": ["signed"]
+          }
+        }
+      ]
     },
     "Security": {
       "type": "object",

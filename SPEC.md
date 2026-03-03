@@ -172,3 +172,15 @@ Execution environments should:
 - sandbox object execution
 - validate input schemas
 - enforce policy constraints
+
+---
+
+## 9. AOP and MCP Bridge Note (Non-Normative)
+
+- MCP focuses on transport-level discovery and invocation of tools over a
+  standardized channel.
+- AOP focuses on object manifests, versioned contracts, governance
+  definitions, and conformance baselines.
+- Combined usage is complementary:
+  - MCP carries calls and responses.
+  - AOP defines what is being called and how it is validated/governed.
