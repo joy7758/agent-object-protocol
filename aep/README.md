@@ -1,12 +1,19 @@
 # AOP Enhancement Proposals (AEP)
 
-This directory contains AOP Enhancement Proposals (AEPs): design documents used to propose, discuss, and ratify non-trivial changes to Agent Object Protocol (AOP).
+This directory contains AOP Enhancement Proposals (AEPs): design
+documents used to propose, discuss, and ratify non-trivial changes to
+Agent Object Protocol (AOP).
 
 ## AEP Index
 
-| AEP | Title | Status | Target | Tracking |
-|---:|---|---|---|---|
-| 0001 | Versioning and Compatibility Policy for v0.x | Accepted | v0.x | (optional) issue link |
+- `AEP-0001`: Versioning and Compatibility Policy for v0.x
+  - Status: `Accepted`
+  - Target: `v0.x`
+  - Tracking: optional issue link
+- `AEP-0002`: v0.3.0 Breaking Plan - Governance + Extensions
+  - Status: `Draft`
+  - Target: `v0.3.0`
+  - Tracking: optional issue link
 
 ## Status Definitions
 
