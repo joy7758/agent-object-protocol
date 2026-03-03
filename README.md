@@ -110,11 +110,16 @@ AOP can be seen as an execution-oriented profile of FAIR Digital Objects for AI 
 See:
 
 - `schemas/aop-object.schema.json`
+- `schemas/aop-policy.schema.json`
+- `schemas/aop-registry-record.schema.json` (non-normative, v0.4.x)
+- `schemas/aop-resolve-response.schema.json` (non-normative, v0.4.x)
 - `examples/aop-object.json`
 - `examples/aop-tool.object.json`
 - `examples/aop-workflow.object.json`
 - `examples/aop-policy.allow.json`
 - `examples/aop-policy.deny.json`
+- `examples/registry/aop-registry-record.example.json`
+- `examples/registry/aop-resolve-response.example.json`
 - `CONFORMANCE.md`
 
 ---

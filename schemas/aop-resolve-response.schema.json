@@ -1,0 +1,225 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joy7758/agent-object-protocol/schemas/aop-resolve-response.schema.json",
+  "title": "AOP Resolve Response (Non-Normative)",
+  "$comment": "Experimental resolve-response shape for v0.4.x registry interoperability.",
+  "type": "object",
+  "properties": {
+    "response_type": {
+      "type": "string",
+      "const": "aop_resolve_response"
+    },
+    "request": {
+      "$ref": "#/$defs/ResolveRequest"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["resolved", "not_found", "invalid", "unauthorized"]
+    },
+    "record": {
+      "$ref": "#/$defs/RegistryRecordSummary"
+    },
+    "manifest_location": {
+      "type": "string",
+      "pattern": "^[a-zA-Z][a-zA-Z0-9+.-]*://.+$"
+    },
+    "verification": {
+      "$ref": "#/$defs/Verification"
+    },
+    "error": {
+      "$ref": "#/$defs/ErrorInfo"
+    }
+  },
+  "required": ["response_type", "request", "status"],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "resolved"
+          }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "anyOf": [
+          {
+            "required": ["record"]
+          },
+          {
+            "required": ["manifest_location"]
+          }
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "enum": ["not_found", "invalid", "unauthorized"]
+          }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "required": ["error"],
+        "not": {
+          "anyOf": [
+            {
+              "required": ["record"]
+            },
+            {
+              "required": ["manifest_location"]
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "patternProperties": {
+    "^x-[a-z0-9][a-z0-9-]{0,31}-[a-z0-9][a-z0-9-]{0,63}$": true
+  },
+  "unevaluatedProperties": false,
+  "$defs": {
+    "Digest": {
+      "type": "object",
+      "properties": {
+        "algo": {
+          "type": "string",
+          "enum": ["sha256", "sha512"]
+        },
+        "value": {
+          "type": "string",
+          "pattern": "^(?:[A-Fa-f0-9]{64}|[A-Fa-f0-9]{128})$"
+        }
+      },
+      "required": ["algo", "value"],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "algo": {
+                "const": "sha256"
+              }
+            },
+            "required": ["algo"]
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "string",
+                "pattern": "^[A-Fa-f0-9]{64}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "algo": {
+                "const": "sha512"
+              }
+            },
+            "required": ["algo"]
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "string",
+                "pattern": "^[A-Fa-f0-9]{128}$"
+              }
+            }
+          }
+        }
+      ],
+      "patternProperties": {
+        "^x-[a-z0-9][a-z0-9-]{0,31}-[a-z0-9][a-z0-9-]{0,63}$": true
+      },
+      "unevaluatedProperties": false
+    },
+    "ResolveRequest": {
+      "type": "object",
+      "properties": {
+        "object_id": {
+          "type": "string",
+          "pattern": "^urn:aop:(tool|workflow|dataset|policy):[a-z0-9][a-z0-9-]{0,63}:v[0-9]+$"
+        },
+        "object_version": {
+          "type": "string",
+          "pattern": "^v[0-9]+$"
+        }
+      },
+      "required": ["object_id"],
+      "patternProperties": {
+        "^x-[a-z0-9][a-z0-9-]{0,31}-[a-z0-9][a-z0-9-]{0,63}$": true
+      },
+      "unevaluatedProperties": false
+    },
+    "RegistryRecordSummary": {
+      "type": "object",
+      "properties": {
+        "object_id": {
+          "type": "string",
+          "pattern": "^urn:aop:(tool|workflow|dataset|policy):[a-z0-9][a-z0-9-]{0,63}:v[0-9]+$"
+        },
+        "object_version": {
+          "type": "string",
+          "pattern": "^v[0-9]+$"
+        },
+        "digest": {
+          "$ref": "#/$defs/Digest"
+        },
+        "locations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-zA-Z][a-zA-Z0-9+.-]*://.+$"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": ["object_id", "object_version", "digest", "locations"],
+      "patternProperties": {
+        "^x-[a-z0-9][a-z0-9-]{0,31}-[a-z0-9][a-z0-9-]{0,63}$": true
+      },
+      "unevaluatedProperties": false
+    },
+    "Verification": {
+      "type": "object",
+      "properties": {
+        "digest": {
+          "$ref": "#/$defs/Digest"
+        },
+        "signature_ref": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": ["digest"],
+      "patternProperties": {
+        "^x-[a-z0-9][a-z0-9-]{0,31}-[a-z0-9][a-z0-9-]{0,63}$": true
+      },
+      "unevaluatedProperties": false
+    },
+    "ErrorInfo": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "enum": ["NOT_FOUND", "INVALID", "UNAUTHORIZED"]
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        }
+      },
+      "required": ["code", "message"],
+      "patternProperties": {
+        "^x-[a-z0-9][a-z0-9-]{0,31}-[a-z0-9][a-z0-9-]{0,63}$": true
+      },
+      "unevaluatedProperties": false
+    }
+  }
+}

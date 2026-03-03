@@ -1,0 +1,7 @@
+{
+  "response_type": "aop_resolve_response",
+  "request": {
+    "object_id": "urn:aop:tool:file-search:v1"
+  },
+  "status": "resolved"
+}

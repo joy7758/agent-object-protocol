@@ -1,4 +1,4 @@
-# Agent Object Protocol Specification (Draft v0.2)
+# Agent Object Protocol Specification (Draft v0.4)
 
 This document defines the core AOP object contract.
 The normative machine-readable schema for v0.2 is:
@@ -96,6 +96,13 @@ Examples for conformance checks:
 - `examples/aop-invocation-migrated.valid.json`
 - `examples/aop-capabilities-migrated.valid.json`
 - `examples/aop-extension-x-vendor.valid.json`
+- `examples/aop-policy.allow.json`
+- `examples/aop-policy.deny.json`
+
+Non-normative registry interoperability schemas for v0.4 experiments:
+
+- `schemas/aop-registry-record.schema.json`
+- `schemas/aop-resolve-response.schema.json`
 
 CI MUST validate examples against the canonical schema for pull
 requests and pushes to `main`.
@@ -185,7 +192,61 @@ If an object includes `security`:
 - The AOP repository CI MUST keep `examples/` passing validation against
   the normative schema on pull requests and pushes to `main`.
 
-## 8. Security Considerations
+## 8. Policy (Normative)
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+document are to be interpreted as described in RFC 2119.
+
+### 8.1 Policy Object Validity
+
+- A policy object MUST conform to
+  `schemas/aop-policy.schema.json`.
+- A policy object MUST use `kind: "policy"` and a policy URN with the
+  form `urn:aop:policy:<name>:vN`.
+- Policy objects MUST NOT embed secrets (credentials, tokens, private
+  keys) directly in the manifest.
+
+### 8.2 Targeting
+
+- A policy object MUST specify a `target.selector`.
+- If `target.selector = "object_id"`, the policy MUST include
+  `target.object_id`.
+- If `target.selector = "object_kind"`, the policy MUST include
+  `target.object_kind`.
+
+### 8.3 Rule Evaluation and Effect
+
+- A runtime operating in `enforced` mode MUST treat any matched `deny`
+  rule as a denial of execution for targeted objects.
+- A runtime operating in `enforced` mode MUST NOT proceed with
+  invocation when the final decision is deny.
+- A runtime operating in `advisory` mode MAY proceed after deny, but
+  SHOULD surface `reason` data for auditability.
+
+Note: v0.4 does not mandate a single rule-combination algorithm (for
+example, first-match-wins versus deny-overrides). Implementations SHOULD
+document their evaluation strategy and keep it stable within a minor
+version.
+
+### 8.4 Reasons and Patches
+
+- If a rule includes `reason`, conforming runtimes SHOULD preserve
+  `reason.code` and `reason.message` in decision outputs or logs.
+- If `patch.type = "require"`, enforced runtimes SHOULD treat patch
+  operations as hard requirements before invocation is allowed.
+- If `patch.type = "suggest"`, runtimes MAY treat patch operations as
+  non-blocking remediation hints.
+
+### 8.5 Extension Discipline
+
+- Policy objects MAY include extension fields in the
+  `x-<vendor>-<key>` namespace.
+- Policy validation MUST reject unknown fields outside the extension
+  namespace, enforced via `patternProperties` and
+  `unevaluatedProperties: false`.
+
+## 9. Security Considerations
 
 Execution environments should:
 
@@ -204,7 +265,7 @@ Security field semantics for implementers:
 
 ---
 
-## 9. AOP and MCP Bridge Note (Non-Normative)
+## 10. AOP and MCP Bridge Note (Non-Normative)
 
 - MCP focuses on transport-level discovery and invocation of tools over a
   standardized channel.

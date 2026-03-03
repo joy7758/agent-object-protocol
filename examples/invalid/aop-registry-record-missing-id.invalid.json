@@ -1,0 +1,11 @@
+{
+  "record_type": "aop_registry_record",
+  "object_version": "v1",
+  "digest": {
+    "algo": "sha256",
+    "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "locations": [
+    "https://registry.example.com/objects/urn:aop:tool:file-search:v1"
+  ]
+}
