@@ -76,13 +76,53 @@ fields without runtime execution.
 An implementation validates AOP manifests against the normative schema and
 rejects malformed manifests.
 
-### Level 2: Governance and Security Conformance
+### Level 2: Schema-Backed Conformance (Objects + Policy)
 
-An implementation enforces governance/security relation rules expressed in
-schema (for example, conditional auth and integrity constraints) and can
-apply policy gating based on declared fields.
+A system meets Level 2 if it:
 
----
+1. Produces and consumes AOP object manifests that validate against
+   `schemas/aop-object.schema.json`.
+2. Produces and consumes AOP policy objects that validate against
+   `schemas/aop-policy.schema.json`.
+3. Enforces strict validation discipline:
+   - schemas MUST compile (`ajv compile`)
+   - all positive examples MUST validate
+   - all negative fixtures MUST be rejected
 
-Current repository CI provides Level 1 checks and partial Level 2 coverage
-through governance and security relation validation.
+Reference CI and tooling use Ajv CLI with `--spec=draft2020` for schema
+compilation and validation.
+
+### Level 3: Interoperable Registry Artifacts (Non-Normative, Schema-Validated)
+
+A system meets Level 3 if it additionally supports registry
+interoperability artifacts:
+
+- Registry records validate against
+  `schemas/aop-registry-record.schema.json`.
+- Resolve responses validate against
+  `schemas/aop-resolve-response.schema.json`.
+
+Notes:
+
+- These registry schemas are non-normative in v0.4 and support
+  interoperable discovery and resolution workflows without v1-level
+  protocol guarantees.
+- Even as non-normative artifacts, AOP expects schema-backed validation
+  for determinism and auditability, including rejection of unknown
+  fields.
+
+Reference fixtures for quick interoperability checks:
+
+- Valid registry examples:
+  - `examples/registry/aop-registry-record.example.json`
+  - `examples/registry/aop-resolve-response.example.json`
+- Invalid registry fixtures:
+  - `examples/invalid/aop-registry-record-missing-id.invalid.json`
+  - `examples/invalid/aop-resolve-response-invalid-shape.invalid.json`
+
+### Validation Expectations
+
+When a schema is provided for structured artifacts, providers are
+expected to conform and consumers are expected to validate.
+This follows the broader interoperability pattern used in MCP tool
+schemas (provider conformance plus client-side validation).
