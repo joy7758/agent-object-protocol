@@ -1,0 +1,15 @@
+{
+  "id": "urn:aop:tool:file-search:v1",
+  "type": "tool",
+  "name": "file-search",
+  "description": "Search files in a directory",
+
+  "inputs": {
+    "path": "string",
+    "query": "string"
+  },
+
+  "outputs": {
+    "results": "array"
+  }
+}
