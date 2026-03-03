@@ -52,30 +52,87 @@ jobs:
       - name: Install ajv-cli
         run: npm i -g ajv-cli
 
-      - name: Compile AOP schema (draft2020)
-        run: ajv compile --spec=draft2020 -s schemas/aop-object.schema.json
-
-      - name: Validate examples against AOP schema (draft2020)
-        run: |
-          ajv validate \
-            --spec=draft2020 \
-            -s schemas/aop-object.schema.json \
-            -d "examples/*.json" \
-            --all-errors
-
-      - name: Validate invalid examples are rejected (draft2020)
+      - name: Compile all schemas (draft2020)
         run: |
           shopt -s nullglob
-          invalid_files=(examples/invalid/*.json)
-          if [ "${#invalid_files[@]}" -eq 0 ]; then
-            echo "No invalid examples found under examples/invalid"
+          schema_files=(schemas/*.schema.json)
+          if [ "${#schema_files[@]}" -eq 0 ]; then
+            echo "No schema files found under schemas/"
             exit 1
           fi
-          for file in "${invalid_files[@]}"; do
-            echo "Expecting schema validation failure: ${file}"
+          for schema in "${schema_files[@]}"; do
+            echo "Compiling schema: ${schema}"
+            ajv compile --spec=draft2020 -s "${schema}"
+          done
+
+      - name: Validate object examples against aop-object schema (draft2020)
+        run: |
+          shopt -s nullglob
+          object_files=()
+          for file in examples/*.json; do
+            if [[ "${file}" == examples/aop-policy.*.json ]]; then
+              continue
+            fi
+            object_files+=("${file}")
+          done
+          if [ "${#object_files[@]}" -eq 0 ]; then
+            echo "No object examples found under examples/"
+            exit 1
+          fi
+          for file in "${object_files[@]}"; do
+            echo "Validating object example: ${file}"
+            ajv validate --spec=draft2020 -s schemas/aop-object.schema.json -d "${file}" --all-errors
+          done
+
+      - name: Validate policy examples against aop-policy schema (draft2020)
+        run: |
+          shopt -s nullglob
+          policy_files=(examples/aop-policy.*.json)
+          if [ "${#policy_files[@]}" -eq 0 ]; then
+            echo "No policy examples found under examples/"
+            exit 1
+          fi
+          for file in "${policy_files[@]}"; do
+            echo "Validating policy example: ${file}"
+            ajv validate --spec=draft2020 -s schemas/aop-policy.schema.json -d "${file}" --all-errors
+          done
+
+      - name: Validate object invalid fixtures are rejected (draft2020)
+        run: |
+          shopt -s nullglob
+          object_invalid=()
+          for file in examples/invalid/*.json; do
+            if [[ "${file}" == examples/invalid/aop-policy-* ]]; then
+              continue
+            fi
+            object_invalid+=("${file}")
+          done
+          if [ "${#object_invalid[@]}" -eq 0 ]; then
+            echo "No object invalid fixtures found under examples/invalid"
+            exit 1
+          fi
+          for file in "${object_invalid[@]}"; do
+            echo "Expecting object schema validation failure: ${file}"
             if ajv validate --spec=draft2020 -s schemas/aop-object.schema.json -d "${file}" --all-errors; then
-              echo "Unexpectedly valid invalid fixture: ${file}"
+              echo "Unexpectedly valid object invalid fixture: ${file}"
               exit 1
             fi
           done
-          echo "All invalid fixtures were correctly rejected."
+          echo "All object invalid fixtures were correctly rejected."
+
+      - name: Validate policy invalid fixtures are rejected (draft2020)
+        run: |
+          shopt -s nullglob
+          policy_invalid=(examples/invalid/aop-policy-*.json)
+          if [ "${#policy_invalid[@]}" -eq 0 ]; then
+            echo "No policy invalid fixtures found under examples/invalid"
+            exit 1
+          fi
+          for file in "${policy_invalid[@]}"; do
+            echo "Expecting policy schema validation failure: ${file}"
+            if ajv validate --spec=draft2020 -s schemas/aop-policy.schema.json -d "${file}" --all-errors; then
+              echo "Unexpectedly valid policy invalid fixture: ${file}"
+              exit 1
+            fi
+          done
+          echo "All policy invalid fixtures were correctly rejected."
