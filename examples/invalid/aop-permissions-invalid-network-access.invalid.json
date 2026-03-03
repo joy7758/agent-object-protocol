@@ -1,0 +1,26 @@
+{
+  "aop_version": "0.3",
+  "id": "urn:aop:policy:invalid-network-access:v1",
+  "kind": "policy",
+  "name": "invalid-network-access",
+  "description": "Invalid: permissions.network_access must use an allowed enum value",
+  "schema": {
+    "inputs": {
+      "type": "object",
+      "properties": {}
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  "security": {
+    "auth": {
+      "scheme": "none"
+    },
+    "permissions": {
+      "data_access": "read",
+      "network_access": "internal-only"
+    }
+  }
+}
