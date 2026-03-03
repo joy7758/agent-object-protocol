@@ -1,5 +1,5 @@
 {
-  "aop_version": "0.2",
+  "aop_version": "0.3",
   "id": "urn:aop:tool:invalid-capabilities-side-effects:v1",
   "kind": "tool",
   "name": "invalid-capabilities-side-effects",

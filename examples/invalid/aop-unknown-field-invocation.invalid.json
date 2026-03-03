@@ -1,5 +1,5 @@
 {
-  "aop_version": "0.2",
+  "aop_version": "0.3",
   "id": "urn:aop:tool:invalid-invocation-unknown:v1",
   "kind": "tool",
   "name": "invalid-invocation-unknown",
