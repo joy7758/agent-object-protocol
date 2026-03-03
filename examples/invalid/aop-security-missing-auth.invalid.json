@@ -1,0 +1,22 @@
+{
+  "aop_version": "0.2",
+  "id": "urn:aop:tool:invalid-security-auth:v1",
+  "kind": "tool",
+  "name": "invalid-security-auth",
+  "description": "Invalid: security present without auth",
+  "schema": {
+    "inputs": {
+      "type": "object",
+      "properties": {}
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  "security": {
+    "permissions": {
+      "data_access": "read"
+    }
+  }
+}

@@ -93,6 +93,9 @@ Examples for conformance checks:
 - `examples/aop-workflow.object.json`
 - `examples/aop-security-oauth2.object.json`
 - `examples/aop-security-none.object.json`
+- `examples/aop-invocation-migrated.valid.json`
+- `examples/aop-capabilities-migrated.valid.json`
+- `examples/aop-extension-x-vendor.valid.json`
 
 CI MUST validate examples against the canonical schema for pull
 requests and pushes to `main`.
@@ -114,6 +117,8 @@ Only all-caps forms of these keywords are normative.
 
 If an object includes `invocation`:
 
+- `invocation.mode` and `invocation.idempotency` are REQUIRED when
+  `invocation` is present.
 - `invocation.mode` MUST be one of: `sync`, `async`, `stream`.
 - `invocation.idempotency` MUST be one of:
   `idempotent`, `non-idempotent`, `best-effort`.
@@ -129,6 +134,8 @@ If an object includes `invocation`:
 
 If an object includes `capabilities`:
 
+- `capabilities.side_effects` and `capabilities.determinism` are
+  REQUIRED when `capabilities` is present.
 - `capabilities.side_effects` MUST be one of: `none`, `low`, `high`.
 - `capabilities.determinism` MUST be one of:
   `deterministic`, `bounded-nondeterministic`, `nondeterministic`.
@@ -143,6 +150,7 @@ If an object includes `capabilities`:
 
 If an object includes `security`:
 
+- `security.auth` is REQUIRED when `security` is present.
 - If present, `security.auth.scheme` MUST be one of:
   `none`, `api_key`, `oauth2`, `mtls`, `custom`.
 - If present, `security.auth.scopes` SHOULD contain unique scope values.
@@ -158,7 +166,17 @@ If an object includes `security`:
 - Objects MUST NOT embed secrets (API keys, private tokens, credentials)
   directly in the manifest.
 
-### 7.4 Validation and Conformance (Normative)
+### 7.4 Extension Namespace and Unknown-Field Rejection (Normative)
+
+- Extensions MAY be expressed with fields matching:
+  `^x-[a-z0-9][a-z0-9-]{0,31}-[a-z0-9][a-z0-9-]{0,63}$`.
+- Top-level manifest objects and governance objects (`invocation`,
+  `capabilities`, `security`) MUST reject unknown fields that are not
+  defined schema properties and do not match the extension namespace.
+- Conforming schemas SHOULD enforce this behavior using extension
+  `patternProperties` plus `unevaluatedProperties: false`.
+
+### 7.5 Validation and Conformance (Normative)
 
 - Conforming implementations SHOULD validate objects against the
   normative JSON Schema when available.

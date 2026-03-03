@@ -1,0 +1,20 @@
+{
+  "aop_version": "0.2",
+  "id": "urn:aop:tool:invalid-invocation-idempotency:v1",
+  "kind": "tool",
+  "name": "invalid-invocation-idempotency",
+  "description": "Invalid: invocation present without idempotency",
+  "schema": {
+    "inputs": {
+      "type": "object",
+      "properties": {}
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  "invocation": {
+    "mode": "sync"
+  }
+}

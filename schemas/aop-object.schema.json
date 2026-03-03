@@ -4,6 +4,10 @@
   "title": "AOP Object Manifest",
   "type": "object",
   "additionalProperties": false,
+  "patternProperties": {
+    "^x-[a-z0-9][a-z0-9-]{0,31}-[a-z0-9][a-z0-9-]{0,63}$": true
+  },
+  "unevaluatedProperties": false,
   "required": ["aop_version", "id", "kind", "name", "description", "schema"],
   "$defs": {
     "TimeoutsMs": {
@@ -55,7 +59,12 @@
     "Invocation": {
       "type": "object",
       "description": "Optional invocation contract.",
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9][a-z0-9-]{0,31}-[a-z0-9][a-z0-9-]{0,63}$": true
+      },
+      "unevaluatedProperties": false,
+      "required": ["mode", "idempotency"],
       "properties": {
         "mode": {
           "type": "string",
@@ -91,7 +100,12 @@
     "Capabilities": {
       "type": "object",
       "description": "Optional capability declarations.",
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9][a-z0-9-]{0,31}-[a-z0-9][a-z0-9-]{0,63}$": true
+      },
+      "unevaluatedProperties": false,
+      "required": ["side_effects", "determinism"],
       "properties": {
         "side_effects": {
           "type": "string",
@@ -295,7 +309,12 @@
     "Security": {
       "type": "object",
       "description": "Optional security/provenance/integrity declarations.",
-      "additionalProperties": true,
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-[a-z0-9][a-z0-9-]{0,31}-[a-z0-9][a-z0-9-]{0,63}$": true
+      },
+      "unevaluatedProperties": false,
+      "required": ["auth"],
       "properties": {
         "auth": {
           "$ref": "#/$defs/AuthConfig"

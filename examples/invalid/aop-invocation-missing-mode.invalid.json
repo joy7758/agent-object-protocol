@@ -1,0 +1,20 @@
+{
+  "aop_version": "0.2",
+  "id": "urn:aop:tool:invalid-invocation-mode:v1",
+  "kind": "tool",
+  "name": "invalid-invocation-mode",
+  "description": "Invalid: invocation present without mode",
+  "schema": {
+    "inputs": {
+      "type": "object",
+      "properties": {}
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  "invocation": {
+    "idempotency": "idempotent"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "aop_version": "0.2",
+  "id": "urn:aop:tool:capabilities-migrated:v1",
+  "kind": "tool",
+  "name": "capabilities-migrated",
+  "description": "Migrated object with required capabilities core fields",
+  "schema": {
+    "inputs": {
+      "type": "object",
+      "properties": {}
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  "capabilities": {
+    "side_effects": "low",
+    "determinism": "bounded-nondeterministic"
+  }
+}

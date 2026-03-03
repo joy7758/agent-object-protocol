@@ -32,6 +32,8 @@ CI also asserts rejection behavior for negative fixtures:
 
 - Each file under `examples/invalid/` MUST fail schema validation.
 - If any invalid file unexpectedly passes, CI MUST fail.
+- Conformant publishers and runtimes SHOULD run both valid and invalid
+  fixture suites as part of conformance testing.
 
 ## Conformance Levels
 
