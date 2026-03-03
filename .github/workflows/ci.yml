@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  markdown-lint:
+    name: Markdown lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run markdownlint-cli2
+        uses: DavidAnson/markdownlint-cli2-action@v22
+
+  link-check:
+    name: Link check (lychee)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >
+            --verbose
+            --no-progress
+            --exclude-mail
+            --timeout 20
+            --max-retries 2
+            .
+
+  schema-validate:
+    name: JSON Schema validate (placeholder)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Detect schema folder
+        id: detect
+        shell: bash
+        run: |
+          if [ -d "schemas" ]; then
+            echo "has_schemas=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_schemas=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Placeholder notice
+        if: steps.detect.outputs.has_schemas != 'true'
+        run: |
+          echo "No schemas/ directory found. Schema validation is currently a placeholder."
+          echo "Add schemas/ and wire ajv validation when ready."
+
+      - name: Validate JSON examples against schemas (TODO)
+        if: steps.detect.outputs.has_schemas == 'true'
+        run: |
+          echo "TODO: add AJV validation here."
+          echo "Suggested approach: ajv-cli"
+          echo "  npm i -g ajv-cli"
+          echo "  ajv validate -s schemas/aop-object.schema.json -d examples/*.json --all-errors"

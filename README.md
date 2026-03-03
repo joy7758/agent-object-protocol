@@ -1,5 +1,11 @@
 # Agent Object Protocol (AOP)
 
+> **Status:** Draft / Experimental
+> **Version:** v0.1.0
+> **Stability:** Breaking changes may occur between `v0.x` releases.
+> **Scope:** Specification only (no reference runtime in this repo).
+> **License:** Apache-2.0
+
 Agent Object Protocol (AOP) is a proposed open standard for defining executable objects used by AI agents.
 
 AOP introduces a universal object structure that allows AI agents to discover, load, and execute capabilities in a standardized way.
