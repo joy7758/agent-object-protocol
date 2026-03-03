@@ -68,15 +68,73 @@ Agents interact with AOP objects using three steps:
 
 ---
 
-## 5. Registry
+## 5. Registry (Non-Normative)
 
-AOP objects may be stored in registries similar to:
+AOP defines registry interoperability artifacts as non-normative schemas
+in v0.4. These artifacts support discovery and resolution workflows
+without committing to v1-level protocol guarantees (for example,
+immutability, transparency logs, or auth models).
 
-npm  
-docker hub  
-huggingface
+Non-normative registry schemas:
 
-Future work will define a global AOP registry.
+- `schemas/aop-registry-record.schema.json`
+- `schemas/aop-resolve-response.schema.json`
+
+These schemas follow the same strict validation discipline used in AOP
+manifests, including extension namespace controls and
+`unevaluatedProperties`-based unknown-field rejection.
+
+### 5.1 Registry Record
+
+A registry record is the unit of publication and indexing for an AOP
+object. It describes how an object can be identified, verified, and
+retrieved.
+
+Recommended field semantics (informative):
+
+- Identity
+  - `object_id`: canonical AOP URN for the published object.
+  - `kind`: coarse object classification for filtering.
+  - `object_version`: registry-facing version metadata aligned with URN
+    segment semantics.
+- Integrity and retrieval
+  - `digest.algo` and `digest.value`: integrity hints for retrieved
+    content verification.
+  - `signature_ref`: optional external pointer to signature material.
+  - `locations[]`: one or more URLs where canonical manifests can be
+    fetched.
+- Index metadata
+  - `metadata.publisher`: publisher hint for catalog and provenance
+    views.
+  - `metadata.tags[]`: optional indexing tags and search labels.
+
+Registry records MAY include extension fields under
+`x-<vendor>-<key>`. Ad-hoc unknown fields are rejected under schema
+validation for deterministic behavior.
+
+### 5.2 Resolve Response
+
+A resolve response is the unit of lookup and resolution. Given a request
+object id, it returns either a resolved artifact reference with
+verification hints or a structured error.
+
+Recommended field semantics (informative):
+
+- `request.object_id`: identifier requested by the client.
+- `status`: one of `resolved`, `not_found`, `invalid`, `unauthorized`.
+- `record` or `manifest_location`: resolved data returned on success.
+- `verification`: optional digest/signature hints for integrity checks.
+- `error`: structured failure payload with machine-readable code and
+  human-readable message.
+
+Specific registry field sets are defined by schema files and examples;
+for interoperability testing, the schema is the source of truth.
+
+### 5.3 Validation Expectations (Informative)
+
+AOP encourages schema-backed validation for registry artifacts, even
+while they remain non-normative in v0.4. CI validates registry examples
+and ensures invalid registry fixtures are rejected.
 
 ---
 
