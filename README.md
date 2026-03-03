@@ -146,6 +146,10 @@ Phase 2 - Object schema registry
 Phase 3 - Agent runtime implementation  
 Phase 4 - Ecosystem adoption
 
+Upcoming:
+
+- `AEP-0003` (`aep/aep-0003-v0.4-agenda.md`) defines the v0.4.0 agenda for policy semantics, registry surface, and MCP interop hardening.
+
 ---
 
 ## Status

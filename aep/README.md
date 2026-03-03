@@ -14,6 +14,10 @@ Agent Object Protocol (AOP).
   - Status: `Accepted`
   - Target: `v0.3.0`
   - Tracking: optional issue link
+- `AEP-0003`: v0.4.0 Agenda - Policy Semantics, Registry Surface, MCP Interop
+  - Status: `Draft`
+  - Target: `v0.4.0`
+  - Tracking: optional issue link
 
 ## Status Definitions
 
