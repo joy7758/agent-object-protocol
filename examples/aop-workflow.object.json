@@ -21,5 +21,44 @@
         "report": { "type": "string" }
       }
     }
+  },
+  "invocation": {
+    "mode": "async",
+    "idempotency": "best-effort",
+    "timeouts_ms": {
+      "overall": 120000
+    },
+    "retry": {
+      "max_attempts": 1,
+      "backoff": "fixed",
+      "retry_on": ["timeout"]
+    }
+  },
+  "capabilities": {
+    "side_effects": "low",
+    "determinism": "bounded-nondeterministic",
+    "token_cost_hint": {
+      "input_per_1k": 2400,
+      "output_per_1k": 900
+    }
+  },
+  "security": {
+    "auth": {
+      "scheme": "oauth2",
+      "scopes": ["workflow.execute"],
+      "issuer": "https://auth.example.com",
+      "audience": "aop-runtime"
+    },
+    "permissions": {
+      "data_access": "read-write",
+      "network_access": "restricted",
+      "required_resources": ["dataset:analysis/*", "storage:reports/*"]
+    },
+    "integrity": {
+      "checksum_algo": "sha512",
+      "checksum": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "signed": true,
+      "signature_ref": "https://registry.example.com/signatures/data-analysis-v1.sig"
+    }
   }
 }

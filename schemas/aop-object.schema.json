@@ -5,6 +5,196 @@
   "type": "object",
   "additionalProperties": false,
   "required": ["aop_version", "id", "kind", "name", "description", "schema"],
+  "$defs": {
+    "TimeoutsMs": {
+      "type": "object",
+      "description": "Timeout hints in milliseconds.",
+      "additionalProperties": true,
+      "properties": {
+        "connect": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 600000
+        },
+        "read": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 600000
+        },
+        "overall": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 600000
+        }
+      }
+    },
+    "RetryPolicy": {
+      "type": "object",
+      "description": "Retry hints for invocation failures.",
+      "additionalProperties": true,
+      "properties": {
+        "max_attempts": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "backoff": {
+          "type": "string",
+          "enum": ["none", "fixed", "exponential"]
+        },
+        "retry_on": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "Invocation": {
+      "type": "object",
+      "description": "Optional invocation contract.",
+      "additionalProperties": true,
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["sync", "async", "stream"]
+        },
+        "idempotency": {
+          "type": "string",
+          "enum": ["idempotent", "non-idempotent", "best-effort"]
+        },
+        "timeouts_ms": {
+          "$ref": "#/$defs/TimeoutsMs"
+        },
+        "retry": {
+          "$ref": "#/$defs/RetryPolicy"
+        }
+      }
+    },
+    "TokenCostHint": {
+      "type": "object",
+      "description": "Advisory token cost hints.",
+      "additionalProperties": true,
+      "properties": {
+        "input_per_1k": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "output_per_1k": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "Capabilities": {
+      "type": "object",
+      "description": "Optional capability declarations.",
+      "additionalProperties": true,
+      "properties": {
+        "side_effects": {
+          "type": "string",
+          "enum": ["none", "low", "high"]
+        },
+        "determinism": {
+          "type": "string",
+          "enum": ["deterministic", "bounded-nondeterministic", "nondeterministic"]
+        },
+        "token_cost_hint": {
+          "$ref": "#/$defs/TokenCostHint"
+        }
+      }
+    },
+    "AuthConfig": {
+      "type": "object",
+      "description": "Authentication requirements.",
+      "additionalProperties": true,
+      "properties": {
+        "scheme": {
+          "type": "string",
+          "enum": ["none", "api_key", "oauth2", "mtls", "custom"]
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "issuer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "audience": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "PermissionConfig": {
+      "type": "object",
+      "description": "Permission and access boundaries.",
+      "additionalProperties": true,
+      "properties": {
+        "data_access": {
+          "type": "string",
+          "enum": ["none", "read", "write", "read-write"]
+        },
+        "network_access": {
+          "type": "string",
+          "enum": ["none", "restricted", "unrestricted"]
+        },
+        "required_resources": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "IntegrityConfig": {
+      "type": "object",
+      "description": "Integrity and signing metadata.",
+      "additionalProperties": true,
+      "properties": {
+        "checksum_algo": {
+          "type": "string",
+          "enum": ["sha256", "sha512"]
+        },
+        "checksum": {
+          "type": "string",
+          "pattern": "^(?:[A-Fa-f0-9]{64}|[A-Fa-f0-9]{128})$"
+        },
+        "signed": {
+          "type": "boolean"
+        },
+        "signature_ref": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "Security": {
+      "type": "object",
+      "description": "Optional security/provenance/integrity declarations.",
+      "additionalProperties": true,
+      "properties": {
+        "auth": {
+          "$ref": "#/$defs/AuthConfig"
+        },
+        "permissions": {
+          "$ref": "#/$defs/PermissionConfig"
+        },
+        "integrity": {
+          "$ref": "#/$defs/IntegrityConfig"
+        }
+      }
+    }
+  },
   "properties": {
     "aop_version": {
       "type": "string",
@@ -46,19 +236,13 @@
       }
     },
     "invocation": {
-      "type": "object",
-      "description": "Optional invocation contract (v0.2+).",
-      "additionalProperties": true
+      "$ref": "#/$defs/Invocation"
     },
     "capabilities": {
-      "type": "object",
-      "description": "Optional capability declarations (v0.2+).",
-      "additionalProperties": true
+      "$ref": "#/$defs/Capabilities"
     },
     "security": {
-      "type": "object",
-      "description": "Optional security/provenance/integrity information (v0.2+).",
-      "additionalProperties": true
+      "$ref": "#/$defs/Security"
     },
     "provenance": {
       "type": "object",
