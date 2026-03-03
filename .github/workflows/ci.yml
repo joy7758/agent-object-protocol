@@ -35,7 +35,6 @@ jobs:
           args: >
             --verbose
             --no-progress
-            --exclude-mail
             --timeout 20
             --max-retries 2
             .

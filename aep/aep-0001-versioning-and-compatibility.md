@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD013 -->
+
 # AEP-0001: Versioning and Compatibility Policy for v0.x
 
 - Status: Accepted

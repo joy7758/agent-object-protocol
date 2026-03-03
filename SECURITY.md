@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD013 MD025 MD029 MD032 -->
+
 # Security Policy
 
 AOP is a protocol/specification project. Security here focuses on:

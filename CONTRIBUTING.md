@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD013 MD029 MD032 -->
+
 # Contributing to Agent Object Protocol (AOP)
 
 Thank you for your interest in contributing to Agent Object Protocol (AOP).

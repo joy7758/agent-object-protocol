@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD013 -->
+
 # Agent Object Protocol (AOP)
 
 > **Status:** Draft / Experimental
