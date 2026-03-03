@@ -13,19 +13,26 @@
     "TimeoutsMs": {
       "type": "object",
       "description": "Timeout hints in milliseconds.",
+      "$comment": "Hints only; runtimes may enforce stricter internal caps.",
       "additionalProperties": true,
       "properties": {
         "connect": {
+          "description": "Connection establishment timeout in milliseconds.",
+          "examples": [3000],
           "type": "integer",
           "minimum": 1,
           "maximum": 600000
         },
         "read": {
+          "description": "Read timeout in milliseconds after connection.",
+          "examples": [15000],
           "type": "integer",
           "minimum": 1,
           "maximum": 600000
         },
         "overall": {
+          "description": "Overall invocation timeout budget in milliseconds.",
+          "examples": [30000],
           "type": "integer",
           "minimum": 1,
           "maximum": 600000
@@ -85,13 +92,18 @@
     "TokenCostHint": {
       "type": "object",
       "description": "Advisory token cost hints.",
+      "$comment": "Annotation only; values guide scheduling/cost-aware planning.",
       "additionalProperties": true,
       "properties": {
         "input_per_1k": {
+          "description": "Estimated input-token cost units per 1K tokens.",
+          "examples": [1200],
           "type": "integer",
           "minimum": 0
         },
         "output_per_1k": {
+          "description": "Estimated output-token cost units per 1K tokens.",
+          "examples": [800],
           "type": "integer",
           "minimum": 0
         }
@@ -123,13 +135,18 @@
     "AuthConfig": {
       "type": "object",
       "description": "Authentication requirements.",
+      "$comment": "Runtime-facing auth and verification hints; no secret material.",
       "additionalProperties": true,
       "properties": {
         "scheme": {
+          "description": "Authentication scheme expected by the provider.",
+          "examples": ["none", "oauth2"],
           "type": "string",
           "enum": ["none", "api_key", "oauth2", "mtls", "custom"]
         },
         "scopes": {
+          "description": "Authorization scopes requested by this object.",
+          "examples": [["files.read", "reports.generate"]],
           "type": "array",
           "items": {
             "type": "string",
@@ -138,10 +155,14 @@
           "uniqueItems": true
         },
         "issuer": {
+          "description": "Token issuer verification hint (common in JWT/OIDC flows).",
+          "examples": ["https://auth.example.com"],
           "type": "string",
           "minLength": 1
         },
         "audience": {
+          "description": "Token audience verification hint.",
+          "examples": ["aop-runtime"],
           "type": "string",
           "minLength": 1
         }
@@ -190,17 +211,24 @@
     "PermissionConfig": {
       "type": "object",
       "description": "Permission and access boundaries.",
+      "$comment": "Used by policy engines for gating decisions and audit trails.",
       "additionalProperties": true,
       "properties": {
         "data_access": {
+          "description": "Declared data access level required by the object.",
+          "examples": ["read", "read-write"],
           "type": "string",
           "enum": ["none", "read", "write", "read-write"]
         },
         "network_access": {
+          "description": "Declared network access requirement.",
+          "examples": ["none", "restricted"],
           "type": "string",
           "enum": ["none", "restricted", "unrestricted"]
         },
         "required_resources": {
+          "description": "Resource identifiers expected by the object at runtime.",
+          "examples": [["filesystem:/workspace", "dataset:analysis/*"]],
           "type": "array",
           "items": {
             "type": "string",
@@ -309,6 +337,7 @@
     "Security": {
       "type": "object",
       "description": "Optional security/provenance/integrity declarations.",
+      "$comment": "When security is present, auth is required by v0.3 baseline.",
       "additionalProperties": false,
       "patternProperties": {
         "^x-[a-z0-9][a-z0-9-]{0,31}-[a-z0-9][a-z0-9-]{0,63}$": true
@@ -317,12 +346,15 @@
       "required": ["auth"],
       "properties": {
         "auth": {
+          "description": "Authentication contract object (required when security is present).",
           "$ref": "#/$defs/AuthConfig"
         },
         "permissions": {
+          "description": "Permission and access hints for policy gating.",
           "$ref": "#/$defs/PermissionConfig"
         },
         "integrity": {
+          "description": "Integrity metadata including checksum/signature hints.",
           "$ref": "#/$defs/IntegrityConfig"
         }
       }

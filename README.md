@@ -3,7 +3,7 @@
 # Agent Object Protocol (AOP)
 
 > **Status:** Draft / Experimental
-> **Version:** v0.1.0
+> **Version:** v0.3.x
 > **Stability:** Breaking changes may occur between `v0.x` releases.
 > **Scope:** Specification only (no reference runtime in this repo).
 > **License:** Apache-2.0
@@ -114,6 +114,28 @@ See:
 - `examples/aop-tool.object.json`
 - `examples/aop-workflow.object.json`
 - `CONFORMANCE.md`
+
+---
+
+## v0.3 Quick Start (Validation)
+
+Run local schema conformance checks with Ajv (Draft 2020-12):
+
+```bash
+ajv compile --spec=draft2020 -s schemas/aop-object.schema.json
+ajv validate --spec=draft2020 -s schemas/aop-object.schema.json -d "examples/*.json" --all-errors
+```
+
+Negative fixtures must be rejected:
+
+```bash
+for file in examples/invalid/*.json; do
+  if ajv validate --spec=draft2020 -s schemas/aop-object.schema.json -d "$file" --all-errors; then
+    echo "Unexpectedly valid invalid fixture: $file"
+    exit 1
+  fi
+done
+```
 
 ---
 

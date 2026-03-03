@@ -3,6 +3,14 @@
 This document defines how conformance is interpreted and tested for the
 Agent Object Protocol (AOP) repository.
 
+## v0.3.x Baseline
+
+For v0.3.x, the repository conformance baseline is:
+
+- `schemas/aop-object.schema.json` compiles with `ajv compile --spec=draft2020`
+- `examples/*.json` passes schema validation
+- `examples/invalid/*.json` is rejected by schema validation
+
 ## Normative Sources
 
 The following artifacts are normative for object validation:
