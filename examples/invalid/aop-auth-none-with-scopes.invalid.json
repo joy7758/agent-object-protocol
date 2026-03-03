@@ -1,0 +1,23 @@
+{
+  "aop_version": "0.2",
+  "id": "urn:aop:policy:invalid-auth-none:v1",
+  "kind": "policy",
+  "name": "invalid-auth-none",
+  "description": "Invalid: auth scheme none must not declare scopes",
+  "schema": {
+    "inputs": {
+      "type": "object",
+      "properties": {}
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  "security": {
+    "auth": {
+      "scheme": "none",
+      "scopes": ["unexpected.scope"]
+    }
+  }
+}

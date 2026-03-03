@@ -111,6 +111,7 @@ See:
 - `examples/aop-object.json`
 - `examples/aop-tool.object.json`
 - `examples/aop-workflow.object.json`
+- `CONFORMANCE.md`
 
 ---
 

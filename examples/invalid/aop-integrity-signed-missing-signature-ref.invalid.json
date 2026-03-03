@@ -1,0 +1,24 @@
+{
+  "aop_version": "0.2",
+  "id": "urn:aop:tool:invalid-signed-missing-signature:v1",
+  "kind": "tool",
+  "name": "invalid-signed-missing-signature",
+  "description": "Invalid: signed=true requires signature_ref",
+  "schema": {
+    "inputs": {
+      "type": "object",
+      "properties": {}
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  "security": {
+    "integrity": {
+      "checksum_algo": "sha256",
+      "checksum": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "signed": true
+    }
+  }
+}

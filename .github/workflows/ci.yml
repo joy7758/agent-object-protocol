@@ -63,3 +63,20 @@ jobs:
             -s schemas/aop-object.schema.json \
             -d "examples/*.json" \
             --all-errors
+
+      - name: Validate invalid examples are rejected (draft2020)
+        run: |
+          shopt -s nullglob
+          invalid_files=(examples/invalid/*.json)
+          if [ "${#invalid_files[@]}" -eq 0 ]; then
+            echo "No invalid examples found under examples/invalid"
+            exit 1
+          fi
+          for file in "${invalid_files[@]}"; do
+            echo "Expecting schema validation failure: ${file}"
+            if ajv validate --spec=draft2020 -s schemas/aop-object.schema.json -d "${file}" --all-errors; then
+              echo "Unexpectedly valid invalid fixture: ${file}"
+              exit 1
+            fi
+          done
+          echo "All invalid fixtures were correctly rejected."

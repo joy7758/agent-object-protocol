@@ -1,0 +1,24 @@
+{
+  "aop_version": "0.2",
+  "id": "urn:aop:tool:invalid-oauth2-issuer:v1",
+  "kind": "tool",
+  "name": "invalid-oauth2-issuer",
+  "description": "Invalid: oauth2 auth requires issuer",
+  "schema": {
+    "inputs": {
+      "type": "object",
+      "properties": {}
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  "security": {
+    "auth": {
+      "scheme": "oauth2",
+      "scopes": ["tool.invoke"],
+      "audience": "aop-runtime"
+    }
+  }
+}
