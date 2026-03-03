@@ -1,6 +1,6 @@
 # AEP-0001: Versioning and Compatibility Policy for v0.x
 
-- Status: Draft
+- Status: Accepted
 - Authors: joy7758 (maintainers may append)
 - Created: 2026-03-04
 - Target: AOP v0.x (Draft/Experimental era)

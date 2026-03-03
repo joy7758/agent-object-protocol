@@ -6,7 +6,7 @@ This directory contains AOP Enhancement Proposals (AEPs): design documents used 
 
 | AEP | Title | Status | Target | Tracking |
 |---:|---|---|---|---|
-| 0001 | Versioning and Compatibility Policy for v0.x | Draft | v0.x | (optional) issue link |
+| 0001 | Versioning and Compatibility Policy for v0.x | Accepted | v0.x | (optional) issue link |
 
 ## Status Definitions
 
