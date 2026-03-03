@@ -97,12 +97,37 @@ jobs:
             ajv validate --spec=draft2020 -s schemas/aop-policy.schema.json -d "${file}" --all-errors
           done
 
+      - name: Validate registry examples (draft2020)
+        run: |
+          shopt -s nullglob
+          registry_record_files=(examples/registry/aop-registry-record*.json)
+          if [ "${#registry_record_files[@]}" -eq 0 ]; then
+            echo "No registry record examples found under examples/registry"
+            exit 1
+          fi
+          for file in "${registry_record_files[@]}"; do
+            echo "Validating registry record example: ${file}"
+            ajv validate --spec=draft2020 -s schemas/aop-registry-record.schema.json -d "${file}" --all-errors
+          done
+
+          registry_response_files=(examples/registry/aop-resolve-response*.json)
+          if [ "${#registry_response_files[@]}" -eq 0 ]; then
+            echo "No resolve response examples found under examples/registry"
+            exit 1
+          fi
+          for file in "${registry_response_files[@]}"; do
+            echo "Validating resolve response example: ${file}"
+            ajv validate --spec=draft2020 -s schemas/aop-resolve-response.schema.json -d "${file}" --all-errors
+          done
+
       - name: Validate object invalid fixtures are rejected (draft2020)
         run: |
           shopt -s nullglob
           object_invalid=()
           for file in examples/invalid/*.json; do
-            if [[ "${file}" == examples/invalid/aop-policy-* ]]; then
+            if [[ "${file}" == examples/invalid/aop-policy-* ]] || \
+               [[ "${file}" == examples/invalid/aop-registry-record-* ]] || \
+               [[ "${file}" == examples/invalid/aop-resolve-response-* ]]; then
               continue
             fi
             object_invalid+=("${file}")
@@ -136,3 +161,33 @@ jobs:
             fi
           done
           echo "All policy invalid fixtures were correctly rejected."
+
+      - name: Validate registry invalid fixtures are rejected (draft2020)
+        run: |
+          shopt -s nullglob
+          registry_record_invalid=(examples/invalid/aop-registry-record-*.json)
+          if [ "${#registry_record_invalid[@]}" -eq 0 ]; then
+            echo "No registry record invalid fixtures found under examples/invalid"
+            exit 1
+          fi
+          for file in "${registry_record_invalid[@]}"; do
+            echo "Expecting registry-record schema validation failure: ${file}"
+            if ajv validate --spec=draft2020 -s schemas/aop-registry-record.schema.json -d "${file}" --all-errors; then
+              echo "Unexpectedly valid registry-record invalid fixture: ${file}"
+              exit 1
+            fi
+          done
+
+          registry_response_invalid=(examples/invalid/aop-resolve-response-*.json)
+          if [ "${#registry_response_invalid[@]}" -eq 0 ]; then
+            echo "No resolve-response invalid fixtures found under examples/invalid"
+            exit 1
+          fi
+          for file in "${registry_response_invalid[@]}"; do
+            echo "Expecting resolve-response schema validation failure: ${file}"
+            if ajv validate --spec=draft2020 -s schemas/aop-resolve-response.schema.json -d "${file}" --all-errors; then
+              echo "Unexpectedly valid resolve-response invalid fixture: ${file}"
+              exit 1
+            fi
+          done
+          echo "All registry invalid fixtures were correctly rejected."
