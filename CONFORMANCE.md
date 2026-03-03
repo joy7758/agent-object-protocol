@@ -10,6 +10,8 @@ For the current `main` branch, the repository conformance baseline is:
 - `schemas/*.schema.json` compiles with `ajv compile --spec=draft2020`
 - Object examples pass `schemas/aop-object.schema.json` validation
 - Policy examples pass `schemas/aop-policy.schema.json` validation
+- Policy decision examples pass `schemas/aop-policy-decision.schema.json`
+  validation
 - Registry examples pass registry non-normative schema validation
 - `examples/invalid/*.json` fixtures are rejected by their target schemas
 
@@ -24,6 +26,7 @@ The following artifacts are normative for object validation:
 The following schema artifacts are non-normative in v0.4.x but
 validated in CI for interoperability experiments:
 
+- `schemas/aop-policy-decision.schema.json`
 - `schemas/aop-registry-record.schema.json`
 - `schemas/aop-resolve-response.schema.json`
 
@@ -47,6 +50,8 @@ CI validates examples by schema family:
 
 - `examples/*.json` except `aop-policy.*.json` against `schemas/aop-object.schema.json`
 - `examples/aop-policy.*.json` against `schemas/aop-policy.schema.json`
+- `examples/aop-policy-decision.*.json` against
+  `schemas/aop-policy-decision.schema.json`
 - `examples/registry/aop-registry-record*.json` against `schemas/aop-registry-record.schema.json`
 - `examples/registry/aop-resolve-response*.json` against `schemas/aop-resolve-response.schema.json`
 
@@ -54,6 +59,9 @@ CI also asserts rejection behavior for negative fixtures:
 
 - Object invalid fixtures (non-policy) MUST fail `schemas/aop-object.schema.json`.
 - Policy invalid fixtures (`examples/invalid/aop-policy-*.json`) MUST fail `schemas/aop-policy.schema.json`.
+- Policy decision invalid fixtures
+  (`examples/invalid/aop-policy-decision-*.json`) MUST fail
+  `schemas/aop-policy-decision.schema.json`.
 - Registry invalid fixtures
   (`examples/invalid/aop-registry-record-*.json`) MUST fail
   `schemas/aop-registry-record.schema.json`.
@@ -91,6 +99,12 @@ A system meets Level 2 if it:
 
 Reference CI and tooling use Ajv CLI with `--spec=draft2020` for schema
 compilation and validation.
+
+### Level 2.5: Policy Decision Envelope
+
+A system meets Level 2.5 if it also produces and consumes policy
+decision envelopes that validate against
+`schemas/aop-policy-decision.schema.json`.
 
 ### Level 3: Interoperable Registry Artifacts (Non-Normative, Schema-Validated)
 

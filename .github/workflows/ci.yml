@@ -70,7 +70,8 @@ jobs:
           shopt -s nullglob
           object_files=()
           for file in examples/*.json; do
-            if [[ "${file}" == examples/aop-policy.*.json ]]; then
+            if [[ "${file}" == examples/aop-policy.*.json ]] || \
+               [[ "${file}" == examples/aop-policy-decision.*.json ]]; then
               continue
             fi
             object_files+=("${file}")
@@ -95,6 +96,19 @@ jobs:
           for file in "${policy_files[@]}"; do
             echo "Validating policy example: ${file}"
             ajv validate --spec=draft2020 -s schemas/aop-policy.schema.json -d "${file}" --all-errors
+          done
+
+      - name: Validate policy decision examples (draft2020)
+        run: |
+          shopt -s nullglob
+          decision_files=(examples/aop-policy-decision.*.json)
+          if [ "${#decision_files[@]}" -eq 0 ]; then
+            echo "No policy decision examples found under examples/"
+            exit 1
+          fi
+          for file in "${decision_files[@]}"; do
+            echo "Validating policy decision example: ${file}"
+            ajv validate --spec=draft2020 -s schemas/aop-policy-decision.schema.json -d "${file}" --all-errors
           done
 
       - name: Validate registry examples (draft2020)
@@ -126,6 +140,7 @@ jobs:
           object_invalid=()
           for file in examples/invalid/*.json; do
             if [[ "${file}" == examples/invalid/aop-policy-* ]] || \
+               [[ "${file}" == examples/invalid/aop-policy-decision-* ]] || \
                [[ "${file}" == examples/invalid/aop-registry-record-* ]] || \
                [[ "${file}" == examples/invalid/aop-resolve-response-* ]]; then
               continue
@@ -148,7 +163,13 @@ jobs:
       - name: Validate policy invalid fixtures are rejected (draft2020)
         run: |
           shopt -s nullglob
-          policy_invalid=(examples/invalid/aop-policy-*.json)
+          policy_invalid=()
+          for file in examples/invalid/aop-policy-*.json; do
+            if [[ "${file}" == examples/invalid/aop-policy-decision-* ]]; then
+              continue
+            fi
+            policy_invalid+=("${file}")
+          done
           if [ "${#policy_invalid[@]}" -eq 0 ]; then
             echo "No policy invalid fixtures found under examples/invalid"
             exit 1
@@ -161,6 +182,23 @@ jobs:
             fi
           done
           echo "All policy invalid fixtures were correctly rejected."
+
+      - name: Validate policy decision invalid fixtures are rejected (draft2020)
+        run: |
+          shopt -s nullglob
+          decision_invalid=(examples/invalid/aop-policy-decision-*.json)
+          if [ "${#decision_invalid[@]}" -eq 0 ]; then
+            echo "No policy decision invalid fixtures found under examples/invalid"
+            exit 1
+          fi
+          for file in "${decision_invalid[@]}"; do
+            echo "Expecting policy decision schema validation failure: ${file}"
+            if ajv validate --spec=draft2020 -s schemas/aop-policy-decision.schema.json -d "${file}" --all-errors; then
+              echo "Unexpectedly valid policy decision invalid fixture: ${file}"
+              exit 1
+            fi
+          done
+          echo "All policy decision invalid fixtures were correctly rejected."
 
       - name: Validate registry invalid fixtures are rejected (draft2020)
         run: |
