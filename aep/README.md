@@ -11,7 +11,7 @@ Agent Object Protocol (AOP).
   - Target: `v0.x`
   - Tracking: optional issue link
 - `AEP-0002`: v0.3.0 Breaking Plan - Governance + Extensions
-  - Status: `Draft`
+  - Status: `Accepted`
   - Target: `v0.3.0`
   - Tracking: optional issue link
 
