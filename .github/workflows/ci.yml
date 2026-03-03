@@ -10,12 +10,19 @@ permissions:
 
 jobs:
   markdown-lint:
-    name: Markdown lint
+    name: Markdown lint (spec surface only)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Run markdownlint-cli2
+      - name: Run markdownlint-cli2 (spec surface only)
         uses: DavidAnson/markdownlint-cli2-action@v22
+        with:
+          globs: |
+            README.md
+            SPEC.md
+            CONTRIBUTING.md
+            SECURITY.md
+            aep/**/*.md
 
   link-check:
     name: Link check (lychee)
