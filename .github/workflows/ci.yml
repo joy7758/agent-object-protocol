@@ -53,7 +53,10 @@ jobs:
       - name: Install ajv-cli
         run: npm i -g ajv-cli
 
-      - name: Validate examples against AOP schema
+      - name: Compile AOP schema (draft2020)
+        run: ajv compile --spec=draft2020 -s schemas/aop-object.schema.json
+
+      - name: Validate examples against AOP schema (draft2020)
         run: |
           ajv validate \
             --spec=draft2020 \
