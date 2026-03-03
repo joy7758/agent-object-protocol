@@ -1,0 +1,227 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joy7758/agent-object-protocol/schemas/aop-policy-decision.schema.json",
+  "title": "AOP Policy Decision Envelope",
+  "type": "object",
+  "required": [
+    "aop_version",
+    "decision_id",
+    "policy_id",
+    "target",
+    "decision",
+    "reasons"
+  ],
+  "properties": {
+    "aop_version": {
+      "type": "string",
+      "pattern": "^0\\.(?:[1-9]\\d*)$"
+    },
+    "decision_id": {
+      "type": "string",
+      "description": "Unique identifier for this decision instance (opaque).",
+      "minLength": 8,
+      "maxLength": 128
+    },
+    "policy_id": {
+      "type": "string",
+      "description": "Policy object URN that produced this decision.",
+      "pattern": "^urn:aop:policy:[a-z0-9][a-z0-9-]{0,63}:v[0-9]+$"
+    },
+    "target": {
+      "$ref": "#/$defs/TargetRef"
+    },
+    "decision": {
+      "$ref": "#/$defs/Decision"
+    },
+    "reasons": {
+      "type": "array",
+      "description": "Ordered list of reasons supporting the final decision.",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/Reason"
+      }
+    },
+    "patches": {
+      "type": "array",
+      "description": "Optional remediation hints or requirements produced by policy evaluation.",
+      "items": {
+        "$ref": "#/$defs/Patch"
+      }
+    },
+    "context": {
+      "type": "object",
+      "description": "Optional evaluation context (non-authoritative)."
+    },
+    "timestamp": {
+      "type": "string",
+      "description": "Timestamp when the decision was produced.",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T[^\\s]+(?:Z|[+-]\\d{2}:\\d{2})$"
+    }
+  },
+  "patternProperties": {
+    "^x-[a-z0-9][a-z0-9-]{0,31}-[a-z0-9][a-z0-9-]{0,63}$": true
+  },
+  "unevaluatedProperties": false,
+  "$defs": {
+    "TargetRef": {
+      "type": "object",
+      "required": ["selector"],
+      "properties": {
+        "selector": {
+          "type": "string",
+          "enum": ["object_id", "object_kind"]
+        },
+        "object_id": {
+          "type": "string"
+        },
+        "object_kind": {
+          "type": "string",
+          "enum": ["tool", "workflow", "dataset", "policy"]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "selector": {
+                "const": "object_id"
+              }
+            },
+            "required": ["selector"]
+          },
+          "then": {
+            "required": ["object_id"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "selector": {
+                "const": "object_kind"
+              }
+            },
+            "required": ["selector"]
+          },
+          "then": {
+            "required": ["object_kind"]
+          }
+        }
+      ],
+      "patternProperties": {
+        "^x-[a-z0-9][a-z0-9-]{0,31}-[a-z0-9][a-z0-9-]{0,63}$": true
+      },
+      "unevaluatedProperties": false
+    },
+    "Decision": {
+      "type": "object",
+      "required": ["effect"],
+      "properties": {
+        "effect": {
+          "type": "string",
+          "enum": ["allow", "deny"]
+        },
+        "strategy": {
+          "type": "string",
+          "description": "Informative combination strategy (implementation-defined).",
+          "enum": [
+            "deny_overrides",
+            "allow_overrides",
+            "first_match",
+            "all_match"
+          ]
+        },
+        "rule_ids": {
+          "type": "array",
+          "description": "Rules that contributed to the decision (informative).",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+          }
+        }
+      },
+      "patternProperties": {
+        "^x-[a-z0-9][a-z0-9-]{0,31}-[a-z0-9][a-z0-9-]{0,63}$": true
+      },
+      "unevaluatedProperties": false
+    },
+    "Reason": {
+      "type": "object",
+      "required": ["code", "message"],
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_]{3,64}$"
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2048
+        },
+        "rule_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+        }
+      },
+      "patternProperties": {
+        "^x-[a-z0-9][a-z0-9-]{0,31}-[a-z0-9][a-z0-9-]{0,63}$": true
+      },
+      "unevaluatedProperties": false
+    },
+    "Patch": {
+      "type": "object",
+      "required": ["type", "operations"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["suggest", "require"]
+        },
+        "operations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/PatchOp"
+          }
+        }
+      },
+      "patternProperties": {
+        "^x-[a-z0-9][a-z0-9-]{0,31}-[a-z0-9][a-z0-9-]{0,63}$": true
+      },
+      "unevaluatedProperties": false
+    },
+    "PatchOp": {
+      "type": "object",
+      "required": ["op", "path"],
+      "properties": {
+        "op": {
+          "type": "string",
+          "enum": ["add", "replace", "remove"]
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "value": {}
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "op": {
+                "enum": ["add", "replace"]
+              }
+            },
+            "required": ["op"]
+          },
+          "then": {
+            "required": ["value"]
+          }
+        }
+      ],
+      "patternProperties": {
+        "^x-[a-z0-9][a-z0-9-]{0,31}-[a-z0-9][a-z0-9-]{0,63}$": true
+      },
+      "unevaluatedProperties": false
+    }
+  }
+}

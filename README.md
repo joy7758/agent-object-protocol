@@ -111,6 +111,7 @@ See:
 
 - `schemas/aop-object.schema.json`
 - `schemas/aop-policy.schema.json`
+- `schemas/aop-policy-decision.schema.json`
 - `schemas/aop-registry-record.schema.json` (non-normative, v0.4.x)
 - `schemas/aop-resolve-response.schema.json` (non-normative, v0.4.x)
 - `examples/aop-object.json`
@@ -118,6 +119,8 @@ See:
 - `examples/aop-workflow.object.json`
 - `examples/aop-policy.allow.json`
 - `examples/aop-policy.deny.json`
+- `examples/aop-policy-decision.allow.json`
+- `examples/aop-policy-decision.deny.json`
 - `examples/registry/aop-registry-record.example.json`
 - `examples/registry/aop-resolve-response.example.json`
 - `CONFORMANCE.md`

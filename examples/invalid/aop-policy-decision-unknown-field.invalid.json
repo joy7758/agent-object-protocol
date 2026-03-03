@@ -1,0 +1,19 @@
+{
+  "aop_version": "0.4",
+  "decision_id": "dec_20260304T000004Z_0004",
+  "policy_id": "urn:aop:policy:allow-readonly-tools:v1",
+  "target": {
+    "selector": "object_kind",
+    "object_kind": "tool"
+  },
+  "decision": {
+    "effect": "allow"
+  },
+  "reasons": [
+    {
+      "code": "ALLOW_LOW_RISK",
+      "message": "Unknown field should be rejected."
+    }
+  ],
+  "foo": "bar"
+}
