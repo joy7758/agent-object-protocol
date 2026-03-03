@@ -1,0 +1,25 @@
+{
+  "aop_version": "0.4",
+  "id": "urn:aop:policy:invalid-operator:v1",
+  "kind": "policy",
+  "name": "invalid-operator",
+  "description": "Invalid: rule condition operator must be one of the allowed enum values.",
+  "target": {
+    "selector": "all"
+  },
+  "rules": [
+    {
+      "id": "bad-op",
+      "effect": "deny",
+      "when": {
+        "all": [
+          {
+            "field": "capabilities.side_effects",
+            "op": "matches",
+            "value": "high"
+          }
+        ]
+      }
+    }
+  ]
+}

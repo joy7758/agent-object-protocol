@@ -113,6 +113,8 @@ See:
 - `examples/aop-object.json`
 - `examples/aop-tool.object.json`
 - `examples/aop-workflow.object.json`
+- `examples/aop-policy.allow.json`
+- `examples/aop-policy.deny.json`
 - `CONFORMANCE.md`
 
 ---

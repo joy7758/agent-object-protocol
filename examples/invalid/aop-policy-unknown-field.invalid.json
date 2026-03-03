@@ -1,0 +1,26 @@
+{
+  "aop_version": "0.4",
+  "id": "urn:aop:policy:invalid-unknown-field:v1",
+  "kind": "policy",
+  "name": "invalid-unknown-field",
+  "description": "Invalid: unknown top-level fields are rejected unless extension-namespaced.",
+  "target": {
+    "selector": "all"
+  },
+  "rules": [
+    {
+      "id": "allow-none",
+      "effect": "allow",
+      "when": {
+        "all": [
+          {
+            "field": "capabilities.side_effects",
+            "op": "eq",
+            "value": "none"
+          }
+        ]
+      }
+    }
+  ],
+  "foo": "bar"
+}

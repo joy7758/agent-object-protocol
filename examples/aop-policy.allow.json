@@ -1,0 +1,39 @@
+{
+  "aop_version": "0.4",
+  "id": "urn:aop:policy:allow-readonly-tools:v1",
+  "kind": "policy",
+  "name": "allow-readonly-tools",
+  "description": "Allow tools that declare low or none side effects and non-sensitive auth schemes.",
+  "target": {
+    "selector": "object_kind",
+    "object_kind": "tool"
+  },
+  "evaluation": {
+    "mode": "enforced",
+    "default_effect": "deny"
+  },
+  "rules": [
+    {
+      "id": "allow-low-side-effects",
+      "effect": "allow",
+      "when": {
+        "all": [
+          {
+            "field": "capabilities.side_effects",
+            "op": "in",
+            "value": ["none", "low"]
+          },
+          {
+            "field": "security.auth.scheme",
+            "op": "in",
+            "value": ["none", "oauth2"]
+          }
+        ]
+      },
+      "reason": {
+        "code": "ALLOW_LOW_RISK",
+        "message": "Tool meets low-risk capability and auth requirements."
+      }
+    }
+  ]
+}

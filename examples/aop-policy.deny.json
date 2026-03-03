@@ -1,0 +1,43 @@
+{
+  "aop_version": "0.4",
+  "id": "urn:aop:policy:deny-high-side-effects:v1",
+  "kind": "policy",
+  "name": "deny-high-side-effects",
+  "description": "Deny objects that declare high side effects unless explicitly approved.",
+  "target": {
+    "selector": "all"
+  },
+  "evaluation": {
+    "mode": "enforced",
+    "default_effect": "allow"
+  },
+  "rules": [
+    {
+      "id": "deny-high-effects",
+      "effect": "deny",
+      "when": {
+        "all": [
+          {
+            "field": "capabilities.side_effects",
+            "op": "eq",
+            "value": "high"
+          }
+        ]
+      },
+      "reason": {
+        "code": "DENY_HIGH_SIDE_EFFECTS",
+        "message": "High side effects require explicit approval."
+      },
+      "patch": {
+        "type": "require",
+        "operations": [
+          {
+            "op": "add",
+            "path": "x-acme-approval-ticket",
+            "value": "REQUIRED"
+          }
+        ]
+      }
+    }
+  ]
+}

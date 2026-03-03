@@ -1,0 +1,22 @@
+{
+  "aop_version": "0.4",
+  "id": "urn:aop:policy:invalid-missing-target:v1",
+  "kind": "policy",
+  "name": "invalid-missing-target",
+  "description": "Invalid: policy object must include target.",
+  "rules": [
+    {
+      "id": "deny-by-default",
+      "effect": "deny",
+      "when": {
+        "all": [
+          {
+            "field": "capabilities.side_effects",
+            "op": "eq",
+            "value": "high"
+          }
+        ]
+      }
+    }
+  ]
+}
