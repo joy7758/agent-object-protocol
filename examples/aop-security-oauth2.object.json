@@ -1,0 +1,48 @@
+{
+  "aop_version": "0.2",
+  "id": "urn:aop:tool:secure-report:v1",
+  "kind": "tool",
+  "name": "secure-report",
+  "description": "Generate a signed report under OAuth2-protected access",
+  "schema": {
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["report_id"],
+      "properties": {
+        "report_id": {
+          "type": "string"
+        }
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "security": {
+    "auth": {
+      "scheme": "oauth2",
+      "scopes": ["reports.generate"],
+      "issuer": "https://auth.example.com",
+      "audience": "aop-runtime"
+    },
+    "permissions": {
+      "data_access": "read-write",
+      "network_access": "restricted",
+      "required_resources": ["reports/*"]
+    },
+    "integrity": {
+      "checksum_algo": "sha256",
+      "checksum": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "signed": true,
+      "signature_ref": "https://registry.example.com/signatures/secure-report-v1.sig"
+    }
+  }
+}

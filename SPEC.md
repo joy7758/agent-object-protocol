@@ -91,6 +91,8 @@ Examples for conformance checks:
 - `examples/aop-object.json`
 - `examples/aop-tool.object.json`
 - `examples/aop-workflow.object.json`
+- `examples/aop-security-oauth2.object.json`
+- `examples/aop-security-none.object.json`
 
 CI MUST validate examples against the canonical schema for pull
 requests and pushes to `main`.
@@ -172,6 +174,15 @@ Execution environments should:
 - sandbox object execution
 - validate input schemas
 - enforce policy constraints
+
+Security field semantics for implementers:
+
+- `security.auth.issuer` and `security.auth.audience` are verification
+  hints commonly used with JWT/OIDC-style token validation.
+- `security.auth.scopes` expresses authorization intent and can be used
+  for policy gating in runtime enforcement.
+- `security.integrity.signature_ref` points to external signature
+  material and avoids embedding large signature payloads in manifests.
 
 ---
 
