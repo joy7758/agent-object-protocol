@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joy7758/agent-object-protocol/schemas/aop-object.schema.json",
+  "title": "AOP Object Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["aop_version", "id", "kind", "name", "description", "schema"],
+  "properties": {
+    "aop_version": {
+      "type": "string",
+      "description": "AOP spec version that this object targets (not the repo tag).",
+      "pattern": "^0\\.(?:[1-9]\\d*)$"
+    },
+    "id": {
+      "type": "string",
+      "description": "AOP object identifier URN.",
+      "pattern": "^urn:aop:(tool|workflow|dataset|policy):[a-z0-9][a-z0-9-]{0,63}:v[0-9]+$"
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["tool", "workflow", "dataset", "policy"]
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["inputs", "outputs"],
+      "properties": {
+        "inputs": {
+          "description": "JSON Schema describing invocation inputs.",
+          "$ref": "https://json-schema.org/draft/2020-12/schema"
+        },
+        "outputs": {
+          "description": "JSON Schema describing invocation outputs.",
+          "$ref": "https://json-schema.org/draft/2020-12/schema"
+        }
+      }
+    },
+    "invocation": {
+      "type": "object",
+      "description": "Optional invocation contract (v0.2+).",
+      "additionalProperties": true
+    },
+    "capabilities": {
+      "type": "object",
+      "description": "Optional capability declarations (v0.2+).",
+      "additionalProperties": true
+    },
+    "security": {
+      "type": "object",
+      "description": "Optional security/provenance/integrity information (v0.2+).",
+      "additionalProperties": true
+    },
+    "provenance": {
+      "type": "object",
+      "description": "Optional publisher/source metadata.",
+      "additionalProperties": true
+    }
+  }
+}

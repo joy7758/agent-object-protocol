@@ -1,4 +1,9 @@
-# Agent Object Protocol Specification (Draft v0.1)
+# Agent Object Protocol Specification (Draft v0.2)
+
+This document defines the core AOP object contract.
+The normative machine-readable schema for v0.2 is:
+
+- `schemas/aop-object.schema.json`
 
 ## 1. Object Identifier
 
@@ -6,7 +11,7 @@ Every AOP object must have a globally unique identifier.
 
 Format:
 
-urn:aop:<type>:<name>:<version>
+urn:aop:<kind>:<name>:<version>
 
 Example:
 
@@ -18,27 +23,31 @@ urn:aop:tool:file-search:v1
 
 An AOP object contains:
 
+- aop_version
 - id
-- type
+- kind
 - name
 - description
-- inputs
-- outputs
+- schema.inputs
+- schema.outputs
 
 Example:
 
 {
+  "aop_version": "0.2",
   "id": "urn:aop:tool:file-search:v1",
-  "type": "tool",
+  "kind": "tool",
   "name": "file-search",
   "description": "Search files in a directory",
-  "inputs": {},
-  "outputs": {}
+  "schema": {
+    "inputs": {},
+    "outputs": {}
+  }
 }
 
 ---
 
-## 3. Object Types
+## 3. Object Kinds
 
 Initial object types:
 
@@ -71,7 +80,23 @@ Future work will define a global AOP registry.
 
 ---
 
-## 6. Security Considerations
+## 6. Schema and Conformance
+
+The canonical schema lives in:
+
+- `schemas/aop-object.schema.json`
+
+Examples for conformance checks:
+
+- `examples/aop-object.json`
+- `examples/aop-tool.object.json`
+- `examples/aop-workflow.object.json`
+
+CI MUST validate examples against the canonical schema for pull requests and pushes to `main`.
+
+---
+
+## 7. Security Considerations
 
 Execution environments should:
 

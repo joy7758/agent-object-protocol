@@ -34,30 +34,22 @@ jobs:
             .
 
   schema-validate:
-    name: JSON Schema validate (placeholder)
+    name: JSON Schema validate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Detect schema folder
-        id: detect
-        shell: bash
-        run: |
-          if [ -d "schemas" ]; then
-            echo "has_schemas=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "has_schemas=false" >> "$GITHUB_OUTPUT"
-          fi
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
 
-      - name: Placeholder notice
-        if: steps.detect.outputs.has_schemas != 'true'
-        run: |
-          echo "No schemas/ directory found. Schema validation is currently a placeholder."
-          echo "Add schemas/ and wire ajv validation when ready."
+      - name: Install ajv-cli
+        run: npm i -g ajv-cli
 
-      - name: Validate JSON examples against schemas (TODO)
-        if: steps.detect.outputs.has_schemas == 'true'
+      - name: Validate examples against AOP schema
         run: |
-          echo "TODO: add AJV validation here."
-          echo "Suggested approach: ajv-cli"
-          echo "  npm i -g ajv-cli"
-          echo "  ajv validate -s schemas/aop-object.schema.json -d examples/*.json --all-errors"
+          ajv validate \
+            --spec=draft2020 \
+            -s schemas/aop-object.schema.json \
+            -d "examples/*.json" \
+            --all-errors

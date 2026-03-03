@@ -107,7 +107,10 @@ AOP can be seen as an execution-oriented profile of FAIR Digital Objects for AI 
 
 See:
 
-examples/aop-object.json
+- `schemas/aop-object.schema.json`
+- `examples/aop-object.json`
+- `examples/aop-tool.object.json`
+- `examples/aop-workflow.object.json`
 
 ---
 

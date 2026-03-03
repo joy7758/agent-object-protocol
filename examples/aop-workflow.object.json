@@ -1,0 +1,25 @@
+{
+  "aop_version": "0.2",
+  "id": "urn:aop:workflow:data-analysis:v1",
+  "kind": "workflow",
+  "name": "data-analysis",
+  "description": "A simple analysis workflow object",
+  "schema": {
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dataset_id"],
+      "properties": {
+        "dataset_id": { "type": "string" }
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["report"],
+      "properties": {
+        "report": { "type": "string" }
+      }
+    }
+  }
+}
