@@ -302,6 +302,43 @@ Reference anchors:
   - `examples/v0.9/e2e/negative/scenario-n2-evidence-digest-mismatch/`
   - `examples/v0.9/e2e/negative/scenario-n3-evidence-profile-invalid/`
 
+### Level 8: DSSE-Packaged Evidence (Optional)
+
+A system meets Level 8 if it meets Level 7 and additionally supports
+DSSE envelope packaging for AOP evidence.
+
+Schema:
+
+- DSSE envelope profile schema:
+  - `schemas/profiles/dsse-envelope.profile.schema.json`
+
+Positive fixtures (MUST pass):
+
+- `examples/v1.1/dsse/positive/evidence.dsse.json`
+
+Negative fixtures (MUST be rejected):
+
+- `examples/invalid/v1.1/dsse/*.invalid.json`
+
+Validation discipline (CI-enforced):
+
+1. Envelope MUST be schema-valid.
+2. `payloadType` MUST be recognized for AOP evidence packaging.
+3. `payload` MUST base64-decode.
+4. For JSON payload types:
+   - decoded payload MUST parse as JSON
+   - decoded payload MUST validate against
+     `schemas/aop-evidence.schema.json`
+5. Invalid fixtures MUST be rejected (schema-level or semantic-level
+   rejection are both acceptable).
+
+Notes:
+
+- Level 8 is optional and does not change the v1.0 baseline for
+  implementations that conform at Levels 2-7.
+- DSSE packaging aligns with broader attestation ecosystem usage where
+  envelopes carry typed payloads for portable verification workflows.
+
 ### Validation Expectations
 
 When a schema is provided for structured artifacts, providers are
