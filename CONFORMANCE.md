@@ -244,6 +244,33 @@ Notes:
 - Unknown-field discipline remains strict through schema families using
   2020-12 controls such as `unevaluatedProperties`.
 
+### Level 6: Evidence-Bound E2E Chain (JCS + SHA-256)
+
+A system meets Level 6 if it meets Level 5 and additionally validates
+evidence artifacts bound to v0.8 E2E chains:
+
+- Evidence schema:
+  - `schemas/aop-evidence.schema.json`
+- v0.8 positive scenarios:
+  - `examples/v0.8/e2e/positive/*/`
+- v0.8 negative scenarios (MUST be rejected):
+  - `examples/v0.8/e2e/negative/*/`
+
+Evidence binding rules (CI-enforced):
+
+1. Evidence subject identity binds to artifacts:
+   - `evidence.manifest.subject.id == manifest.id`
+2. Evidence subject digest binds to artifacts:
+   - `evidence.manifest.subject.digest.sha256 == SHA-256(JCS(manifest.json))`
+   - `evidence.decision.subject.digest.sha256 == SHA-256(JCS(decision*.json))`
+3. Evidence binds to policy used:
+   - `evidence.decision.predicate.policy_id == policy.id`
+
+Canonicalization rule:
+
+- JCS refers to RFC 8785 JSON Canonicalization Scheme, which produces a
+  hashable representation for cryptographic methods.
+
 ### Validation Expectations
 
 When a schema is provided for structured artifacts, providers are
