@@ -536,3 +536,89 @@ jobs:
           fi
 
           echo "OK: v0.6 combo fixtures validated."
+
+      - name: v0.7 E2E positive gate (skip if none)
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! compgen -G "examples/v0.7/e2e/positive/*/resolve.json" > /dev/null; then
+            echo "No v0.7 E2E positive scenarios present; skipping E2E gate."
+            exit 0
+          fi
+
+          echo "Compiling E2E schemas..."
+          ajv compile --spec=draft2020 -s schemas/aop-resolve-response.schema.json
+          ajv compile --spec=draft2020 -s schemas/aop-object.schema.json
+          ajv compile --spec=draft2020 -s schemas/aop-policy.schema.json
+          ajv compile --spec=draft2020 -s schemas/aop-policy-decision.schema.json
+
+          shopt -s nullglob
+          for scen_dir in examples/v0.7/e2e/positive/*; do
+            [ -d "${scen_dir}" ] || continue
+            echo "=== E2E scenario: ${scen_dir} ==="
+
+            if [ ! -f "${scen_dir}/resolve.json" ] || \
+               [ ! -f "${scen_dir}/manifest.json" ] || \
+               [ ! -f "${scen_dir}/policy.json" ]; then
+              echo "Missing required E2E files under ${scen_dir}"
+              exit 1
+            fi
+
+            decision_files=("${scen_dir}"/decision*.json)
+            if [ "${#decision_files[@]}" -eq 0 ]; then
+              echo "No decision*.json files found under ${scen_dir}"
+              exit 1
+            fi
+
+            ajv validate --spec=draft2020 -s schemas/aop-resolve-response.schema.json -d "${scen_dir}/resolve.json" --all-errors
+            ajv validate --spec=draft2020 -s schemas/aop-object.schema.json -d "${scen_dir}/manifest.json" --all-errors
+            ajv validate --spec=draft2020 -s schemas/aop-policy.schema.json -d "${scen_dir}/policy.json" --all-errors
+            for file in "${decision_files[@]}"; do
+              ajv validate --spec=draft2020 -s schemas/aop-policy-decision.schema.json -d "${file}" --all-errors
+            done
+
+            SCEN_DIR="${scen_dir}" node - <<'NODE'
+              const fs = require("fs");
+              const path = require("path");
+
+              const scen = process.env.SCEN_DIR;
+              const resolve = JSON.parse(fs.readFileSync(path.join(scen, "resolve.json"), "utf8"));
+              const manifest = JSON.parse(fs.readFileSync(path.join(scen, "manifest.json"), "utf8"));
+              const policy = JSON.parse(fs.readFileSync(path.join(scen, "policy.json"), "utf8"));
+              const decisionFiles = fs
+                .readdirSync(scen)
+                .filter((f) => f.startsWith("decision") && f.endsWith(".json"));
+
+              if (decisionFiles.length === 0) {
+                throw new Error("No decision*.json found");
+              }
+
+              const reqId = resolve?.request?.object_id;
+              if (reqId !== manifest.id) {
+                throw new Error(`resolve.request.object_id mismatch: ${reqId} != ${manifest.id}`);
+              }
+
+              for (const df of decisionFiles) {
+                const dec = JSON.parse(fs.readFileSync(path.join(scen, df), "utf8"));
+
+                if (dec.policy_id !== policy.id) {
+                  throw new Error(`${df}: policy_id mismatch: ${dec.policy_id} != ${policy.id}`);
+                }
+
+                if (dec.target?.selector !== "object_id") {
+                  throw new Error(`${df}: target.selector must be object_id`);
+                }
+                if (dec.target.object_id !== manifest.id) {
+                  throw new Error(`${df}: target.object_id mismatch: ${dec.target.object_id} != ${manifest.id}`);
+                }
+
+                if (dec.decision?.effect === "deny" && (!Array.isArray(dec.reasons) || dec.reasons.length < 1)) {
+                  throw new Error(`${df}: deny decision must include reasons[]`);
+                }
+              }
+
+              console.log("OK: semantic consistency checks passed");
+NODE
+          done
+
+          echo "OK: v0.7 E2E positive scenarios validated."
