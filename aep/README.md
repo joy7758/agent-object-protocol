@@ -22,6 +22,10 @@ Agent Object Protocol (AOP).
   - Status: `Accepted`
   - Target: `v0.5.0`
   - Tracking: optional issue link
+- `AEP-0005`: v0.6.0 Agenda - Suite Expansion (Combo + MCP)
+  - Status: `Draft`
+  - Target: `v0.6.0`
+  - Tracking: optional issue link
 
 ## Status Definitions
 
