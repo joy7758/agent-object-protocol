@@ -1,0 +1,5 @@
+{
+  "payloadType": "application/vnd.in-toto+json",
+  "payload": "ewogICJfdHlwZSI6ICJodHRwczovL2V4YW1wbGUub3JnL1N0YXRlbWVudC92OSIsCiAgInN1YmplY3QiOiBbCiAgICB7CiAgICAgICJuYW1lIjogInBrZzpleGFtcGxlL2Zvb0AxLjAuMCIKICAgIH0KICBdLAogICJwcmVkaWNhdGVUeXBlIjogImh0dHBzOi8vc2xzYS5kZXYvcHJvdmVuYW5jZS92MSIsCiAgInByZWRpY2F0ZSI6IHt9Cn0K",
+  "signatures": []
+}
