@@ -67,6 +67,11 @@ CI validates examples by schema family:
   `schemas/aop-policy-decision.schema.json`
 - `examples/registry/aop-registry-record*.json` against `schemas/aop-registry-record.schema.json`
 - `examples/registry/aop-resolve-response*.json` against `schemas/aop-resolve-response.schema.json`
+- `examples/v0.5/combo/{object,policy,expected}/*.json` by mapped family
+  schemas when present (draft gate)
+- `examples/v0.5/mcp/tool/*.json` against `schemas/aop-object.schema.json`,
+  then `examples/v0.5/mcp/expected/*.json` against a schema derived from
+  `tool.schema.outputs` when present (draft gate)
 
 CI also asserts rejection behavior for negative fixtures:
 
