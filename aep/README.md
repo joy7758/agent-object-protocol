@@ -18,6 +18,10 @@ Agent Object Protocol (AOP).
   - Status: `Accepted`
   - Target: `v0.4.0`
   - Tracking: optional issue link
+- `AEP-0004`: v0.5.0 Agenda - Policy/Decision Combination + End-to-End Interop
+  - Status: `Draft`
+  - Target: `v0.5.0`
+  - Tracking: optional issue link
 
 ## Status Definitions
 
