@@ -1,0 +1,78 @@
+{
+  "aop_version": "0.5",
+  "id": "urn:aop:tool:file-search:v1",
+  "kind": "tool",
+  "name": "file-search",
+  "description": "Search files in a directory (MCP interop fixture)",
+  "schema": {
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path"
+      ],
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "query": {
+          "type": "string"
+        }
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "results"
+      ],
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "path",
+              "score"
+            ],
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "score": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "invocation": {
+    "mode": "sync",
+    "idempotency": "best-effort"
+  },
+  "capabilities": {
+    "side_effects": "none",
+    "determinism": "bounded-nondeterministic",
+    "token_cost_hint": {
+      "input_per_1k": 0,
+      "output_per_1k": 0
+    }
+  },
+  "security": {
+    "auth": {
+      "scheme": "none"
+    },
+    "permissions": {
+      "data_access": "read",
+      "network_access": "none",
+      "required_resources": [
+        "filesystem:/workspace"
+      ]
+    }
+  }
+}
