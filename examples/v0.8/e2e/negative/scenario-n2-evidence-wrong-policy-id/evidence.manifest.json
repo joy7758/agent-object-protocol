@@ -5,7 +5,7 @@
   "subject": {
     "id": "urn:aop:tool:web-fetch:v1",
     "digest": {
-      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      "sha256": "a8152f0cbbce662d0d6bf324b3d31be50e294ef1b53c6d09696254a146b3d85b"
     }
   },
   "predicateType": "https://slsa.dev/provenance/v1",

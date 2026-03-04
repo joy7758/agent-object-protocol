@@ -773,6 +773,7 @@ jobs:
             MODE="${mode}" SCEN_DIR="${scen_dir}" node -e '
               const fs = require("fs");
               const path = require("path");
+              const { execFileSync } = require("child_process");
 
               const mode = process.env.MODE;
               const scen = process.env.SCEN_DIR;
@@ -782,6 +783,12 @@ jobs:
               const policy = JSON.parse(fs.readFileSync(path.join(scen, "policy.json"), "utf8"));
               const evidenceManifest = JSON.parse(fs.readFileSync(path.join(scen, "evidence.manifest.json"), "utf8"));
               const evidenceDecision = JSON.parse(fs.readFileSync(path.join(scen, "evidence.decision.json"), "utf8"));
+
+              const jcsSha256 = (filePath) => {
+                return execFileSync("node", ["tools/jcs_sha256.mjs", filePath], {
+                  encoding: "utf8"
+                }).trim();
+              };
 
               const decisionFiles = fs
                 .readdirSync(scen)
@@ -800,11 +807,17 @@ jobs:
               let caseHandled = false;
 
               const manifestId = manifest.id;
+              const requestObjectId = resolve?.request?.object_id;
               const evidenceManifestId = evidenceManifest?.subject?.id;
               const evidenceManifestSha = evidenceManifest?.subject?.digest?.sha256;
+              const computedManifestSha = jcsSha256(path.join(scen, "manifest.json"));
               const resolveRecordSha = resolve?.record?.digest?.value;
               const resolveVerifySha = resolve?.verification?.digest?.value;
 
+              if (requestObjectId !== manifestId) {
+                semanticOk = false;
+                caseHandled = true;
+              }
               if (evidenceManifestId !== manifestId) {
                 semanticOk = false;
                 caseHandled = true;
@@ -813,7 +826,11 @@ jobs:
                 semanticOk = false;
                 caseHandled = true;
               }
-              if (evidenceManifestSha !== resolveRecordSha || evidenceManifestSha !== resolveVerifySha) {
+              if (evidenceManifestSha !== computedManifestSha) {
+                semanticOk = false;
+                caseHandled = true;
+              }
+              if (resolveRecordSha !== computedManifestSha || resolveVerifySha !== computedManifestSha) {
                 semanticOk = false;
                 caseHandled = true;
               }
@@ -830,6 +847,21 @@ jobs:
               if (!matchedDecision) {
                 semanticOk = false;
                 caseHandled = true;
+              } else {
+                const evidenceDecisionSha = evidenceDecision?.subject?.digest?.sha256;
+                const computedDecisionSha = jcsSha256(path.join(scen, matchedDecision.file));
+                if (typeof evidenceDecisionSha !== "string" || !/^[a-f0-9]{64}$/.test(evidenceDecisionSha)) {
+                  semanticOk = false;
+                  caseHandled = true;
+                }
+                if (evidenceDecisionSha !== computedDecisionSha) {
+                  semanticOk = false;
+                  caseHandled = true;
+                }
+                if (matchedDecision.doc.policy_id !== policyId) {
+                  semanticOk = false;
+                  caseHandled = true;
+                }
               }
 
               if (mode === "valid") {

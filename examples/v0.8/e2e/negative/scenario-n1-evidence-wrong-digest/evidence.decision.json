@@ -5,7 +5,7 @@
   "subject": {
     "id": "dec_v0.8_scenario1_0001",
     "digest": {
-      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      "sha256": "e84a2b1913d8d72b3d060b7bcb3a64525f813be38fa1d2791170ec8f29a7eb56"
     }
   },
   "predicateType": "https://slsa.dev/provenance/v1",

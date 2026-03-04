@@ -9,7 +9,7 @@
     "object_version": "v1",
     "digest": {
       "algo": "sha256",
-      "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      "value": "a8152f0cbbce662d0d6bf324b3d31be50e294ef1b53c6d09696254a146b3d85b"
     },
     "locations": [
       "https://example.org/registry/objects/urn:aop:tool:web-fetch:v1/manifest.json"
@@ -19,7 +19,7 @@
   "verification": {
     "digest": {
       "algo": "sha256",
-      "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      "value": "a8152f0cbbce662d0d6bf324b3d31be50e294ef1b53c6d09696254a146b3d85b"
     }
   }
 }
