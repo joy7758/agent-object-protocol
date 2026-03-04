@@ -1053,7 +1053,8 @@ jobs:
             [ -d "${scen_dir}" ] || continue
             echo "=== v0.9 negative scenario: ${scen_dir} ==="
 
-            if ! (
+            set +e
+            (
               set -euo pipefail
               required_files=(
                 "${scen_dir}/resolve.json"
@@ -1089,11 +1090,15 @@ jobs:
               done
 
               validate_v09_positive_semantics "${scen_dir}"
-            ); then
-              echo "OK: negative scenario rejected as expected: ${scen_dir}"
-            else
+            )
+            case_status=$?
+            set -e
+
+            if [ "${case_status}" -eq 0 ]; then
               echo "ERROR: negative scenario unexpectedly passed: ${scen_dir}"
               exit 1
+            else
+              echo "OK: negative scenario rejected as expected: ${scen_dir}"
             fi
           done
 
