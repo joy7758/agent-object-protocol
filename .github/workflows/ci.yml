@@ -726,3 +726,173 @@ jobs:
           done
 
           echo "OK: v0.7 E2E negative scenarios rejected as expected."
+
+      - name: v0.8 E2E evidence binding gate (skip if none)
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          shopt -s nullglob
+          positive_candidates=(examples/v0.8/e2e/positive/*)
+          negative_candidates=(examples/v0.8/e2e/negative/*)
+
+          positive_scenarios=()
+          for dir in "${positive_candidates[@]}"; do
+            [ -d "${dir}" ] && positive_scenarios+=("${dir}")
+          done
+
+          negative_scenarios=()
+          for dir in "${negative_candidates[@]}"; do
+            [ -d "${dir}" ] && negative_scenarios+=("${dir}")
+          done
+
+          if [ "${#positive_scenarios[@]}" -eq 0 ] && [ "${#negative_scenarios[@]}" -eq 0 ]; then
+            echo "No v0.8 E2E scenarios present; skipping v0.8 evidence gate."
+            exit 0
+          fi
+
+          if [ "${#positive_scenarios[@]}" -eq 0 ]; then
+            echo "v0.8 evidence gate requires at least one positive scenario."
+            exit 1
+          fi
+          if [ "${#negative_scenarios[@]}" -eq 0 ]; then
+            echo "v0.8 evidence gate requires at least one negative scenario."
+            exit 1
+          fi
+
+          echo "Compiling v0.8 E2E schemas..."
+          ajv compile --spec=draft2020 -s schemas/aop-resolve-response.schema.json
+          ajv compile --spec=draft2020 -s schemas/aop-object.schema.json
+          ajv compile --spec=draft2020 -s schemas/aop-policy.schema.json
+          ajv compile --spec=draft2020 -s schemas/aop-policy-decision.schema.json
+          ajv compile --spec=draft2020 -s schemas/aop-evidence.schema.json
+
+          validate_v08_evidence_semantics() {
+            local mode="$1"
+            local scen_dir="$2"
+            MODE="${mode}" SCEN_DIR="${scen_dir}" node -e '
+              const fs = require("fs");
+              const path = require("path");
+
+              const mode = process.env.MODE;
+              const scen = process.env.SCEN_DIR;
+
+              const resolve = JSON.parse(fs.readFileSync(path.join(scen, "resolve.json"), "utf8"));
+              const manifest = JSON.parse(fs.readFileSync(path.join(scen, "manifest.json"), "utf8"));
+              const policy = JSON.parse(fs.readFileSync(path.join(scen, "policy.json"), "utf8"));
+              const evidenceManifest = JSON.parse(fs.readFileSync(path.join(scen, "evidence.manifest.json"), "utf8"));
+              const evidenceDecision = JSON.parse(fs.readFileSync(path.join(scen, "evidence.decision.json"), "utf8"));
+
+              const decisionFiles = fs
+                .readdirSync(scen)
+                .filter((f) => f.startsWith("decision") && f.endsWith(".json"))
+                .sort();
+              if (decisionFiles.length === 0) {
+                throw new Error("No decision*.json found");
+              }
+
+              const decisions = decisionFiles.map((f) => {
+                const doc = JSON.parse(fs.readFileSync(path.join(scen, f), "utf8"));
+                return { file: f, doc };
+              });
+
+              let semanticOk = true;
+              let caseHandled = false;
+
+              const manifestId = manifest.id;
+              const evidenceManifestId = evidenceManifest?.subject?.id;
+              const evidenceManifestSha = evidenceManifest?.subject?.digest?.sha256;
+              const resolveRecordSha = resolve?.record?.digest?.value;
+              const resolveVerifySha = resolve?.verification?.digest?.value;
+
+              if (evidenceManifestId !== manifestId) {
+                semanticOk = false;
+                caseHandled = true;
+              }
+              if (typeof evidenceManifestSha !== "string" || !/^[a-f0-9]{64}$/.test(evidenceManifestSha)) {
+                semanticOk = false;
+                caseHandled = true;
+              }
+              if (evidenceManifestSha !== resolveRecordSha || evidenceManifestSha !== resolveVerifySha) {
+                semanticOk = false;
+                caseHandled = true;
+              }
+
+              const policyId = policy.id;
+              const evidencePolicyId = evidenceDecision?.predicate?.policy_id;
+              if (evidencePolicyId !== policyId) {
+                semanticOk = false;
+                caseHandled = true;
+              }
+
+              const decisionSubjectId = evidenceDecision?.subject?.id;
+              const matchedDecision = decisions.find(({ doc }) => doc.decision_id === decisionSubjectId);
+              if (!matchedDecision) {
+                semanticOk = false;
+                caseHandled = true;
+              }
+
+              if (mode === "valid") {
+                if (!semanticOk) {
+                  throw new Error(`v0.8 evidence semantic validation failed for valid scenario: ${scen}`);
+                }
+              } else if (mode === "invalid") {
+                if (!caseHandled) {
+                  throw new Error(`v0.8 evidence semantic validation could not map invalid scenario: ${scen}`);
+                }
+                if (semanticOk) {
+                  throw new Error(`v0.8 evidence semantic validation unexpectedly passed invalid scenario: ${scen}`);
+                }
+              } else {
+                throw new Error(`Unknown mode: ${mode}`);
+              }
+
+              console.log(`OK: v0.8 evidence semantic check (${mode}) for ${scen}`);
+            '
+          }
+
+          echo "Validating v0.8 positive scenarios..."
+          for scen_dir in "${positive_scenarios[@]}"; do
+            echo "=== v0.8 positive scenario: ${scen_dir} ==="
+            ajv validate --spec=draft2020 -s schemas/aop-resolve-response.schema.json -d "${scen_dir}/resolve.json" --all-errors
+            ajv validate --spec=draft2020 -s schemas/aop-object.schema.json -d "${scen_dir}/manifest.json" --all-errors
+            ajv validate --spec=draft2020 -s schemas/aop-policy.schema.json -d "${scen_dir}/policy.json" --all-errors
+
+            decision_files=("${scen_dir}"/decision*.json)
+            if [ "${#decision_files[@]}" -eq 0 ]; then
+              echo "No decision*.json files found under ${scen_dir}"
+              exit 1
+            fi
+            for file in "${decision_files[@]}"; do
+              ajv validate --spec=draft2020 -s schemas/aop-policy-decision.schema.json -d "${file}" --all-errors
+            done
+
+            ajv validate --spec=draft2020 -s schemas/aop-evidence.schema.json -d "${scen_dir}/evidence.manifest.json" --all-errors
+            ajv validate --spec=draft2020 -s schemas/aop-evidence.schema.json -d "${scen_dir}/evidence.decision.json" --all-errors
+
+            validate_v08_evidence_semantics "valid" "${scen_dir}"
+          done
+
+          echo "Validating v0.8 negative scenarios are rejected..."
+          for scen_dir in "${negative_scenarios[@]}"; do
+            echo "=== v0.8 negative scenario: ${scen_dir} ==="
+            ajv validate --spec=draft2020 -s schemas/aop-resolve-response.schema.json -d "${scen_dir}/resolve.json" --all-errors
+            ajv validate --spec=draft2020 -s schemas/aop-object.schema.json -d "${scen_dir}/manifest.json" --all-errors
+            ajv validate --spec=draft2020 -s schemas/aop-policy.schema.json -d "${scen_dir}/policy.json" --all-errors
+
+            decision_files=("${scen_dir}"/decision*.json)
+            if [ "${#decision_files[@]}" -eq 0 ]; then
+              echo "No decision*.json files found under ${scen_dir}"
+              exit 1
+            fi
+            for file in "${decision_files[@]}"; do
+              ajv validate --spec=draft2020 -s schemas/aop-policy-decision.schema.json -d "${file}" --all-errors
+            done
+
+            ajv validate --spec=draft2020 -s schemas/aop-evidence.schema.json -d "${scen_dir}/evidence.manifest.json" --all-errors
+            ajv validate --spec=draft2020 -s schemas/aop-evidence.schema.json -d "${scen_dir}/evidence.decision.json" --all-errors
+
+            validate_v08_evidence_semantics "invalid" "${scen_dir}"
+          done
+
+          echo "OK: v0.8 E2E evidence binding scenarios validated."

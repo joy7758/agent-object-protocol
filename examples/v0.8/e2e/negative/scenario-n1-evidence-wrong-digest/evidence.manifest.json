@@ -1,0 +1,16 @@
+{
+  "aop_version": "0.8",
+  "id": "urn:aop:evidence:manifest-evidence-s1:v1",
+  "kind": "evidence",
+  "subject": {
+    "id": "urn:aop:tool:web-fetch:v1",
+    "digest": {
+      "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    }
+  },
+  "predicateType": "https://slsa.dev/provenance/v1",
+  "predicate": {
+    "scenario": "v0.8/positive/scenario-1",
+    "note": "Manifest evidence envelope (digest binding checked in later PR)."
+  }
+}
