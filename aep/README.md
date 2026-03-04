@@ -35,7 +35,7 @@ Agent Object Protocol (AOP).
   - Target: `v0.8.0`
   - Tracking: optional issue link
 - `AEP-0008`: v0.9.0 v1 Pre-Freeze Sprint (Evidence Profiles + Convergence)
-  - Status: `Draft`
+  - Status: `Accepted`
   - Target: `v0.9.0`
   - Tracking: optional issue link
 

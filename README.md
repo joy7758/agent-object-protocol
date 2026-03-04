@@ -153,6 +153,7 @@ See:
 - `examples/aop-policy.deny.json`
 - `examples/aop-policy-decision.allow.json`
 - `examples/aop-policy-decision.deny.json`
+- `V1_PUBLIC_API_CANDIDATE.md`
 - `examples/registry/aop-registry-record.example.json`
 - `examples/registry/aop-resolve-response.example.json`
 - `CONFORMANCE.md`

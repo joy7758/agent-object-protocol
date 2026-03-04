@@ -271,6 +271,37 @@ Canonicalization rule:
 - JCS refers to RFC 8785 JSON Canonicalization Scheme, which produces a
   hashable representation for cryptographic methods.
 
+### Level 7: Profiled Evidence-Bound E2E Chain (v0.9)
+
+A system meets Level 7 if it meets Level 6 and additionally validates
+evidence profile semantics in v0.9 E2E scenarios:
+
+- Profile schemas:
+  - `schemas/profiles/aop-provenance.profile.schema.json`
+  - `schemas/profiles/slsa-provenance-min.profile.schema.json`
+- v0.9 positive scenarios:
+  - `examples/v0.9/e2e/positive/*/`
+- v0.9 negative scenarios (MUST be rejected):
+  - `examples/v0.9/e2e/negative/*/`
+
+Level 7 gate requirements (CI-enforced):
+
+1. v0.9 scenarios MUST satisfy Level 6 identity and digest bindings.
+2. At least one profile evidence artifact MUST be present per scenario.
+3. `predicateType` MUST map to a recognized profile schema.
+4. `predicate` MUST validate against the mapped profile schema.
+5. Negative scenarios MUST be rejected if any profile or semantic
+   constraint fails.
+
+Reference anchors:
+
+- Positive scenario:
+  - `examples/v0.9/e2e/positive/scenario-1/`
+- Negative scenarios:
+  - `examples/v0.9/e2e/negative/scenario-n1-resolve-manifest-mismatch/`
+  - `examples/v0.9/e2e/negative/scenario-n2-evidence-digest-mismatch/`
+  - `examples/v0.9/e2e/negative/scenario-n3-evidence-profile-invalid/`
+
 ### Validation Expectations
 
 When a schema is provided for structured artifacts, providers are
