@@ -1,0 +1,57 @@
+{
+  "aop_version": "0.6",
+  "id": "urn:aop:tool:c2-network-sensitive:v1",
+  "kind": "tool",
+  "name": "c2-network-sensitive",
+  "description": "C2 combo fixture object that matches both permit and deny rules.",
+  "schema": {
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "query"
+      ],
+      "properties": {
+        "query": {
+          "type": "string"
+        }
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ok"
+      ],
+      "properties": {
+        "ok": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "invocation": {
+    "mode": "sync",
+    "idempotency": "best-effort"
+  },
+  "capabilities": {
+    "side_effects": "low",
+    "determinism": "bounded-nondeterministic",
+    "token_cost_hint": {
+      "input_per_1k": 0,
+      "output_per_1k": 0
+    }
+  },
+  "security": {
+    "auth": {
+      "scheme": "none"
+    },
+    "permissions": {
+      "data_access": "read",
+      "network_access": "unrestricted",
+      "required_resources": [
+        "network:*"
+      ]
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "aop_version": "0.6",
+  "decision_id": "dec_v0.6_c2_permit_overrides_0001",
+  "policy_id": "urn:aop:policy:c2-permit-vs-deny:v1",
+  "target": {
+    "selector": "object_id",
+    "object_id": "urn:aop:tool:c2-network-sensitive:v1"
+  },
+  "decision": {
+    "effect": "allow",
+    "strategy": "permit_overrides",
+    "rule_ids": [
+      "permit-low-side-effects"
+    ]
+  },
+  "reasons": [
+    {
+      "code": "ALLOW_LOW_SIDE_EFFECTS",
+      "message": "Low side effects are permit-eligible.",
+      "rule_id": "permit-low-side-effects"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "aop_version": "0.6",
+  "id": "urn:aop:policy:c2-permit-vs-deny:v1",
+  "kind": "policy",
+  "name": "c2-permit-vs-deny",
+  "description": "C2 combo fixture showing permit_overrides versus deny_unless_permit behavior.",
+  "target": {
+    "selector": "object_kind",
+    "object_kind": "tool"
+  },
+  "evaluation": {
+    "mode": "enforced",
+    "default_effect": "deny"
+  },
+  "rules": [
+    {
+      "id": "permit-low-side-effects",
+      "effect": "allow",
+      "when": {
+        "all": [
+          {
+            "field": "capabilities.side_effects",
+            "op": "in",
+            "value": [
+              "none",
+              "low"
+            ]
+          }
+        ]
+      },
+      "reason": {
+        "code": "ALLOW_LOW_SIDE_EFFECTS",
+        "message": "Low side effects are permit-eligible."
+      }
+    },
+    {
+      "id": "deny-unrestricted-network",
+      "effect": "deny",
+      "when": {
+        "all": [
+          {
+            "field": "security.permissions.network_access",
+            "op": "eq",
+            "value": "unrestricted"
+          }
+        ]
+      },
+      "reason": {
+        "code": "DENY_UNRESTRICTED_NETWORK",
+        "message": "Unrestricted network access requires explicit approval."
+      },
+      "patch": {
+        "type": "require",
+        "operations": [
+          {
+            "op": "add",
+            "path": "x-acme-network-approval",
+            "value": "REQUIRED"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -485,6 +485,20 @@ jobs:
                   effect === "deny" &&
                   reasonCodes.includes("DENY_SENSITIVE_WRITE") &&
                   hasPatches;
+              } else if (basename.includes("c2-permit-vs-deny.permit_overrides")) {
+                caseHandled = true;
+                semanticOk =
+                  strategy === "permit_overrides" &&
+                  effect === "allow" &&
+                  reasonCodes.includes("ALLOW_LOW_SIDE_EFFECTS") &&
+                  !hasPatches;
+              } else if (basename.includes("c2-permit-vs-deny.deny_unless_permit")) {
+                caseHandled = true;
+                semanticOk =
+                  strategy === "deny_unless_permit" &&
+                  effect === "deny" &&
+                  reasonCodes.includes("DENY_UNRESTRICTED_NETWORK") &&
+                  hasPatches;
               }
 
               if (mode === "valid") {

@@ -126,6 +126,8 @@
           "enum": [
             "deny_overrides",
             "allow_overrides",
+            "permit_overrides",
+            "deny_unless_permit",
             "first_match",
             "all_match"
           ]
