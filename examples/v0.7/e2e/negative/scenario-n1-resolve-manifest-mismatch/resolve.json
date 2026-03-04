@@ -1,0 +1,25 @@
+{
+  "response_type": "aop_resolve_response",
+  "request": {
+    "object_id": "urn:aop:tool:kv-get:v1"
+  },
+  "status": "resolved",
+  "record": {
+    "object_id": "urn:aop:tool:web-fetch:v1",
+    "object_version": "v1",
+    "digest": {
+      "algo": "sha256",
+      "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "locations": [
+      "https://example.org/registry/objects/urn:aop:tool:web-fetch:v1/manifest.json"
+    ]
+  },
+  "manifest_location": "https://example.org/registry/objects/urn:aop:tool:web-fetch:v1/manifest.json",
+  "verification": {
+    "digest": {
+      "algo": "sha256",
+      "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  }
+}
