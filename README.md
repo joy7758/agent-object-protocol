@@ -193,6 +193,8 @@ Upcoming:
 
 - `AEP-0003` (`aep/aep-0003-v0.4-agenda.md`) defines the v0.4.0 agenda for policy semantics, registry surface, and MCP interop hardening.
 - v1.0.0 freeze complete: `AEP-0009` is `Accepted` (`aep/aep-0009-v1.0-freeze.md`).
+- `AEP-0010` (`aep/aep-0010-v1.1-dsse-optional-profile.md`) tracks the
+  v1.1 DSSE optional profile roadmap.
 
 ---
 

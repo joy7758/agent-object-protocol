@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AOP DSSE Envelope Profile (Optional v1.1)",
+  "type": "object",
+  "required": ["payloadType", "payload"],
+  "properties": {
+    "payloadType": {
+      "type": "string",
+      "enum": ["application/vnd.aop.evidence+json"]
+    },
+    "payload": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9+/]+={0,2}$"
+    },
+    "signatures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["sig"],
+        "properties": {
+          "keyid": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "sig": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "patternProperties": {
+          "^x-[a-z0-9][a-z0-9-]{0,31}-[a-z0-9][a-z0-9-]{0,63}$": true
+        },
+        "unevaluatedProperties": false
+      }
+    }
+  },
+  "patternProperties": {
+    "^x-[a-z0-9][a-z0-9-]{0,31}-[a-z0-9][a-z0-9-]{0,63}$": true
+  },
+  "unevaluatedProperties": false
+}

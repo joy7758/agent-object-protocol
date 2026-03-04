@@ -42,6 +42,10 @@ Agent Object Protocol (AOP).
   - Status: `Accepted`
   - Target: `v1.0.0`
   - Tracking: optional issue link
+- `AEP-0010`: v1.1 DSSE Optional Profile - Envelope Packaging for Evidence
+  - Status: `Draft`
+  - Target: `v1.1.0`
+  - Tracking: optional issue link
 
 ## Status Definitions
 
