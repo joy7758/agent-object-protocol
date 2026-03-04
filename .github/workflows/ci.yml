@@ -618,7 +618,7 @@ jobs:
               }
 
               console.log("OK: semantic consistency checks passed");
-NODE
+            NODE
           done
 
           echo "OK: v0.7 E2E positive scenarios validated."
