@@ -61,7 +61,7 @@ followed by cross-artifact consistency checks:
 
 - XACML REST profile (PEP/PDP interaction context):
   [docs.oasis-open.org](https://docs.oasis-open.org/xacml/xacml-rest/v1.0/xacml-rest-v1.0.html)
-- OPA policy decisions can be structured data:
-  [openpolicyagent.org](https://www.openpolicyagent.org/docs/latest/)
+- OPA project reference (policy and decision context):
+  [github.com/open-policy-agent/opa](https://github.com/open-policy-agent/opa)
 - JSON Schema 2020-12 `unevaluatedProperties`:
   [json-schema.org](https://json-schema.org/draft/2020-12/draft-bhutton-json-schema-01#section-11.3)
