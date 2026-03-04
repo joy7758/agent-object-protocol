@@ -1,0 +1,36 @@
+{
+  "aop_version": "0.5",
+  "decision_id": "dec_v0.5_strategy_demo_deny_overrides_0001",
+  "policy_id": "urn:aop:policy:strategy-demo:v1",
+  "target": {
+    "selector": "object_id",
+    "object_id": "urn:aop:tool:dangerous-write:v1"
+  },
+  "decision": {
+    "effect": "deny",
+    "strategy": "deny_overrides",
+    "rule_ids": [
+      "allow-any-tool",
+      "deny-high-side-effects"
+    ]
+  },
+  "reasons": [
+    {
+      "code": "DENY_HIGH_SIDE_EFFECTS",
+      "message": "High side effects require explicit approval.",
+      "rule_id": "deny-high-side-effects"
+    }
+  ],
+  "patches": [
+    {
+      "type": "require",
+      "operations": [
+        {
+          "op": "add",
+          "path": "x-acme-approval-ticket",
+          "value": "REQUIRED"
+        }
+      ]
+    }
+  ]
+}

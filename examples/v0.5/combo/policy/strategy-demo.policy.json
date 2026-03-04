@@ -1,0 +1,61 @@
+{
+  "aop_version": "0.5",
+  "id": "urn:aop:policy:strategy-demo:v1",
+  "kind": "policy",
+  "name": "strategy-demo",
+  "description": "Demonstrate decision differences between first_match and deny_overrides.",
+  "target": {
+    "selector": "object_kind",
+    "object_kind": "tool"
+  },
+  "evaluation": {
+    "mode": "enforced",
+    "default_effect": "deny"
+  },
+  "rules": [
+    {
+      "id": "allow-any-tool",
+      "effect": "allow",
+      "when": {
+        "all": [
+          {
+            "field": "kind",
+            "op": "eq",
+            "value": "tool"
+          }
+        ]
+      },
+      "reason": {
+        "code": "ALLOW_BASELINE",
+        "message": "Baseline allow for tools (demo rule)."
+      }
+    },
+    {
+      "id": "deny-high-side-effects",
+      "effect": "deny",
+      "when": {
+        "all": [
+          {
+            "field": "capabilities.side_effects",
+            "op": "eq",
+            "value": "high"
+          }
+        ]
+      },
+      "reason": {
+        "code": "DENY_HIGH_SIDE_EFFECTS",
+        "message": "High side effects require explicit approval."
+      },
+      "patch": {
+        "type": "require",
+        "operations": [
+          {
+            "op": "add",
+            "path": "x-acme-approval-ticket",
+            "value": "REQUIRED"
+          }
+        ]
+      }
+    }
+  ]
+}

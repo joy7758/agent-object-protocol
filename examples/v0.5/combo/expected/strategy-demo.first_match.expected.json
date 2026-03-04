@@ -1,0 +1,23 @@
+{
+  "aop_version": "0.5",
+  "decision_id": "dec_v0.5_strategy_demo_first_match_0001",
+  "policy_id": "urn:aop:policy:strategy-demo:v1",
+  "target": {
+    "selector": "object_id",
+    "object_id": "urn:aop:tool:dangerous-write:v1"
+  },
+  "decision": {
+    "effect": "allow",
+    "strategy": "first_match",
+    "rule_ids": [
+      "allow-any-tool"
+    ]
+  },
+  "reasons": [
+    {
+      "code": "ALLOW_BASELINE",
+      "message": "Baseline allow for tools (demo rule).",
+      "rule_id": "allow-any-tool"
+    }
+  ]
+}
