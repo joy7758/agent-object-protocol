@@ -9,6 +9,49 @@ permissions:
   contents: read
 
 jobs:
+  v1-freeze-check:
+    name: v1 freeze check (public API changes require AEP)
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - name: Detect public-API surface changes
+        id: public_api_changes
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            public_api:
+              - "schemas/**"
+              - "schemas/profiles/**"
+              - "CONFORMANCE.md"
+              - "V1_PUBLIC_API_CANDIDATE.md"
+
+      - name: Require AEP reference for public-API changes
+        if: steps.public_api_changes.outputs.public_api == 'true'
+        shell: bash
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          set -euo pipefail
+          if [[ "${PR_BODY:-}" == "null" ]]; then
+            PR_BODY=""
+          fi
+
+          if printf '%s\n%s\n' "${PR_TITLE}" "${PR_BODY}" | grep -Eiq 'AEP-[0-9]{4}'; then
+            echo "OK: AEP reference found in PR title/body."
+          else
+            echo "ERROR: Public API surface changed but no AEP-#### reference found."
+            echo "Please add an AEP reference (for example: AEP-0009) to the PR title or description."
+            exit 1
+          fi
+
+      - name: Skip note
+        if: steps.public_api_changes.outputs.public_api != 'true'
+        run: echo "No v1 public-API surface changes detected; skipping AEP check."
+
   markdown-lint:
     name: Markdown lint (spec surface only)
     runs-on: ubuntu-latest
