@@ -199,6 +199,51 @@ Required gate behavior for Level 4:
 - MCP expected outputs MUST pass derived output-schema validation.
 - MCP invalid outputs MUST be rejected.
 
+### Level 5: End-to-End Artifact Chain (v0.7)
+
+A system meets Level 5 if it additionally supports the end-to-end
+artifact chain fixtures and semantic rejection behavior for v0.7:
+
+- Positive scenarios (MUST pass semantic checks):
+  - `examples/v0.7/e2e/positive/*/resolve.json`
+  - `examples/v0.7/e2e/positive/*/manifest.json`
+  - `examples/v0.7/e2e/positive/*/policy.json`
+  - `examples/v0.7/e2e/positive/*/decision*.json`
+- Negative scenarios (MUST be rejected by semantic checks):
+  - `examples/v0.7/e2e/negative/*/resolve.json`
+  - `examples/v0.7/e2e/negative/*/manifest.json`
+  - `examples/v0.7/e2e/negative/*/policy.json`
+  - `examples/v0.7/e2e/negative/*/decision*.json`
+
+Required gate behavior for Level 5:
+
+1. Each E2E file MUST be schema-valid against its family schema.
+2. Cross-artifact constraints MUST hold for positives:
+   - `resolve.request.object_id == manifest.id`
+   - `decision.policy_id == policy.id`
+   - `decision.target.selector == "object_id"`
+   - `decision.target.object_id == manifest.id`
+3. Negative scenarios MUST violate exactly one constraint and MUST be
+   rejected by the semantic gate.
+
+Reference fixtures for quick reproducibility:
+
+- Positive:
+  - `examples/v0.7/e2e/positive/scenario-1/resolve.json`
+  - `examples/v0.7/e2e/positive/scenario-1/manifest.json`
+  - `examples/v0.7/e2e/positive/scenario-1/policy.json`
+  - `examples/v0.7/e2e/positive/scenario-1/decision.deny_overrides.json`
+- Negative:
+  - `examples/v0.7/e2e/negative/scenario-n1-resolve-manifest-mismatch/resolve.json`
+  - `examples/v0.7/e2e/negative/scenario-n2-policy-id-mismatch/decision.deny_overrides.json`
+
+Notes:
+
+- Level 5 expresses request/decision consistency as verifiable artifacts,
+  aligned with common PEP-to-PDP interaction decomposition.
+- Unknown-field discipline remains strict through schema families using
+  2020-12 controls such as `unevaluatedProperties`.
+
 ### Validation Expectations
 
 When a schema is provided for structured artifacts, providers are
