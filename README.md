@@ -195,6 +195,8 @@ Upcoming:
 - v1.0.0 freeze complete: `AEP-0009` is `Accepted` (`aep/aep-0009-v1.0-freeze.md`).
 - `AEP-0010` (`aep/aep-0010-v1.1-dsse-optional-profile.md`) tracks the
   v1.1 DSSE optional profile roadmap.
+- `AEP-0011` (`aep/aep-0011-v1.2-in-toto-statement-compat.md`) tracks
+  v1.2 in-toto Statement compatibility for DSSE payloads.
 
 ---
 

@@ -46,6 +46,10 @@ Agent Object Protocol (AOP).
   - Status: `Accepted`
   - Target: `v1.1.0`
   - Tracking: optional issue link
+- `AEP-0011`: v1.2 in-toto Statement payloadType Compatibility
+  - Status: `Draft`
+  - Target: `v1.2.0`
+  - Tracking: optional issue link
 
 ## Status Definitions
 

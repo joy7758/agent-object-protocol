@@ -6,7 +6,17 @@
   "properties": {
     "payloadType": {
       "type": "string",
-      "enum": ["application/vnd.aop.evidence+json"]
+      "anyOf": [
+        {
+          "const": "application/vnd.aop.evidence+json"
+        },
+        {
+          "const": "application/vnd.in-toto+json"
+        },
+        {
+          "pattern": "^application\\/vnd\\.in-toto\\.[a-z0-9_.-]+\\+json$"
+        }
+      ]
     },
     "payload": {
       "type": "string",
