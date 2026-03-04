@@ -1,0 +1,36 @@
+{
+  "aop_version": "0.6",
+  "decision_id": "dec_v0.6_c1_deny_overrides_0001",
+  "policy_id": "urn:aop:policy:c1-permit-vs-deny:v1",
+  "target": {
+    "selector": "object_id",
+    "object_id": "urn:aop:tool:c1-sensitive-writer:v1"
+  },
+  "decision": {
+    "effect": "deny",
+    "strategy": "deny_overrides",
+    "rule_ids": [
+      "allow-tool-baseline",
+      "deny-sensitive-write"
+    ]
+  },
+  "reasons": [
+    {
+      "code": "DENY_SENSITIVE_WRITE",
+      "message": "High side effects with read-write access require approval.",
+      "rule_id": "deny-sensitive-write"
+    }
+  ],
+  "patches": [
+    {
+      "type": "require",
+      "operations": [
+        {
+          "op": "add",
+          "path": "x-acme-approval-ticket",
+          "value": "REQUIRED"
+        }
+      ]
+    }
+  ]
+}

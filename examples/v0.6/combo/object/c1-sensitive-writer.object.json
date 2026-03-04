@@ -1,0 +1,61 @@
+{
+  "aop_version": "0.6",
+  "id": "urn:aop:tool:c1-sensitive-writer:v1",
+  "kind": "tool",
+  "name": "c1-sensitive-writer",
+  "description": "C1 combo fixture object that matches both baseline allow and deny rules.",
+  "schema": {
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path"
+      ],
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        }
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "written"
+      ],
+      "properties": {
+        "written": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "invocation": {
+    "mode": "sync",
+    "idempotency": "non-idempotent"
+  },
+  "capabilities": {
+    "side_effects": "high",
+    "determinism": "nondeterministic",
+    "token_cost_hint": {
+      "input_per_1k": 0,
+      "output_per_1k": 0
+    }
+  },
+  "security": {
+    "auth": {
+      "scheme": "none"
+    },
+    "permissions": {
+      "data_access": "read-write",
+      "network_access": "restricted",
+      "required_resources": [
+        "filesystem:/workspace",
+        "secrets:runtime/*"
+      ]
+    }
+  }
+}

@@ -401,3 +401,124 @@ jobs:
           done
 
           echo "OK: v0.5 MCP interop fixtures validated."
+
+      - name: v0.6 combo fixtures gate (skip if none)
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! find examples/v0.6/combo -type f -name "*.json" -print -quit | grep -q .; then
+            echo "No v0.6 combo JSON fixtures present; skipping v0.6 combo gate."
+            exit 0
+          fi
+
+          shopt -s nullglob
+          object_files=(examples/v0.6/combo/object/*.json)
+          policy_files=(examples/v0.6/combo/policy/*.json)
+          expected_files=(examples/v0.6/combo/expected/*.expected.json)
+          semantic_invalid_files=(
+            examples/v0.6/combo/expected/*.expected.invalid.json
+            examples/v0.6/combo/expected/*.semantic.invalid.json
+          )
+
+          if [ "${#object_files[@]}" -eq 0 ] || \
+             [ "${#policy_files[@]}" -eq 0 ] || \
+             [ "${#expected_files[@]}" -eq 0 ]; then
+            echo "v0.6 combo gate requires object, policy, and expected fixtures."
+            exit 1
+          fi
+
+          echo "Compiling v0.6 combo schemas..."
+          ajv compile --spec=draft2020 -s schemas/aop-object.schema.json
+          ajv compile --spec=draft2020 -s schemas/aop-policy.schema.json
+          ajv compile --spec=draft2020 -s schemas/aop-policy-decision.schema.json
+
+          echo "Validating v0.6 combo object fixtures..."
+          for file in "${object_files[@]}"; do
+            ajv validate --spec=draft2020 -s schemas/aop-object.schema.json -d "${file}" --all-errors
+          done
+
+          echo "Validating v0.6 combo policy fixtures..."
+          for file in "${policy_files[@]}"; do
+            ajv validate --spec=draft2020 -s schemas/aop-policy.schema.json -d "${file}" --all-errors
+          done
+
+          echo "Validating v0.6 combo expected decisions..."
+          for file in "${expected_files[@]}"; do
+            ajv validate --spec=draft2020 -s schemas/aop-policy-decision.schema.json -d "${file}" --all-errors
+          done
+
+          if [ "${#semantic_invalid_files[@]}" -gt 0 ]; then
+            echo "Validating schema shape for v0.6 semantic-invalid fixtures..."
+            for file in "${semantic_invalid_files[@]}"; do
+              ajv validate --spec=draft2020 -s schemas/aop-policy-decision.schema.json -d "${file}" --all-errors
+            done
+          fi
+
+          validate_v06_combo_semantics() {
+            local mode="$1"
+            local file="$2"
+            MODE="${mode}" FILE="${file}" node -e '
+              const fs = require("fs");
+              const file = process.env.FILE;
+              const mode = process.env.MODE;
+              const data = JSON.parse(fs.readFileSync(file, "utf8"));
+              const basename = file.split("/").pop();
+              const strategy = data?.decision?.strategy;
+              const effect = data?.decision?.effect;
+              const reasonCodes = Array.isArray(data?.reasons) ? data.reasons.map((r) => r.code) : [];
+              const hasPatches = Array.isArray(data?.patches) && data.patches.length > 0;
+
+              let caseHandled = false;
+              let semanticOk = true;
+
+              if (basename.includes("c1-permit-vs-deny.first_match")) {
+                caseHandled = true;
+                semanticOk =
+                  strategy === "first_match" &&
+                  effect === "allow" &&
+                  reasonCodes.includes("ALLOW_TOOL_BASELINE") &&
+                  !hasPatches;
+              } else if (basename.includes("c1-permit-vs-deny.deny_overrides")) {
+                caseHandled = true;
+                semanticOk =
+                  strategy === "deny_overrides" &&
+                  effect === "deny" &&
+                  reasonCodes.includes("DENY_SENSITIVE_WRITE") &&
+                  hasPatches;
+              }
+
+              if (mode === "valid") {
+                if (!caseHandled || !semanticOk) {
+                  console.error(`v0.6 semantic validation failed (expected valid): ${file}`);
+                  process.exit(1);
+                }
+              }
+
+              if (mode === "invalid") {
+                if (!caseHandled) {
+                  console.error(`v0.6 semantic validation could not map invalid case: ${file}`);
+                  process.exit(1);
+                }
+                if (semanticOk) {
+                  console.error(`v0.6 semantic validation unexpectedly passed invalid fixture: ${file}`);
+                  process.exit(1);
+                }
+              }
+            '
+          }
+
+          echo "Validating semantic consistency for v0.6 combo expected fixtures..."
+          for file in "${expected_files[@]}"; do
+            validate_v06_combo_semantics "valid" "${file}"
+          done
+
+          if [ "${#semantic_invalid_files[@]}" -gt 0 ]; then
+            echo "Validating v0.6 semantic-invalid fixtures are rejected..."
+            for file in "${semantic_invalid_files[@]}"; do
+              validate_v06_combo_semantics "invalid" "${file}"
+            done
+          else
+            echo "No v0.6 semantic-invalid fixtures found; skipping semantic invalid gate."
+          fi
+
+          echo "OK: v0.6 combo fixtures validated."
