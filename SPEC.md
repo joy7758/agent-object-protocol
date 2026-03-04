@@ -1,40 +1,67 @@
-# Agent Object Protocol Specification (Draft v0.4)
+# Agent Object Protocol Specification (v1.x Context)
 
-This document defines the core AOP object contract.
-The normative machine-readable schema for v0.2 is:
+This document describes AOP architecture and contract boundaries for the
+v1.x repository line.
 
+## Document Role and Normative Sources
+
+This file is explanatory. The normative source of truth for AOP public
+API behavior is:
+
+- `V1_PUBLIC_API_CANDIDATE.md`
 - `schemas/aop-object.schema.json`
+- `schemas/aop-policy.schema.json`
+- `schemas/aop-policy-decision.schema.json`
+- `schemas/aop-evidence.schema.json`
+- `schemas/profiles/*.schema.json` listed in the v1 candidate surface
+- `CONFORMANCE.md`
 
-## 1. Object Identifier
+If this document conflicts with schema constraints or conformance gate
+semantics, schemas and conformance definitions take precedence.
 
-Every AOP object must have a globally unique identifier.
+## 1. Protocol Scope
 
-Format:
+AOP defines an object-contract layer for agent ecosystems.
 
-`urn:aop:<kind>:<name>:<version>`
+Repository scope:
 
-Example:
+- machine-readable schemas
+- positive and negative fixtures
+- CI-adjudicable conformance gates
+- governance via AEP documents
 
-`urn:aop:tool:file-search:v1`
+This repository does not provide a reference runtime implementation.
 
----
+## 2. Core Object Contract
 
-## 2. Object Structure
+An AOP object manifest is identified by a URN:
 
-An AOP object contains:
+`urn:aop:<kind>:<name>:vN`
 
-- aop_version
-- id
-- kind
-- name
-- description
-- schema.inputs
-- schema.outputs
+Current manifest kinds are:
 
-Example:
+- `tool`
+- `workflow`
+- `dataset`
+- `policy`
 
+Object contract fields are defined by
+`schemas/aop-object.schema.json`.
+At minimum, manifests include:
+
+- `aop_version`
+- `id`
+- `kind`
+- `name`
+- `description`
+- `schema.inputs`
+- `schema.outputs`
+
+Example shape:
+
+```json
 {
-  "aop_version": "0.2",
+  "aop_version": "0.9",
   "id": "urn:aop:tool:file-search:v1",
   "kind": "tool",
   "name": "file-search",
@@ -44,291 +71,81 @@ Example:
     "outputs": {}
   }
 }
+```
 
----
+## 3. Public API Surface Frozen at v1.0
 
-## 3. Object Kinds
+The v1 public API freeze (AEP-0009) covers the schema families and
+conformance levels referenced in `V1_PUBLIC_API_CANDIDATE.md`:
 
-Initial object types:
+- object manifests
+- policy objects
+- policy decision envelopes
+- evidence envelopes
+- profile schemas listed in the v1 candidate surface
+- conformance levels and gate semantics for stable surfaces
 
-tool  
-workflow  
-dataset  
-policy
+## 4. Registry Interoperability Artifacts
 
----
-
-## 4. Execution Model
-
-Agents interact with AOP objects using three steps:
-
-1 Discovery  
-2 Loading  
-3 Invocation
-
----
-
-## 5. Registry (Non-Normative)
-
-AOP defines registry interoperability artifacts as non-normative schemas
-in v0.4. These artifacts support discovery and resolution workflows
-without committing to v1-level protocol guarantees (for example,
-immutability, transparency logs, or auth models).
-
-Non-normative registry schemas:
+Registry-related schemas remain non-normative unless promoted by an
+Accepted AEP:
 
 - `schemas/aop-registry-record.schema.json`
 - `schemas/aop-resolve-response.schema.json`
 
-These schemas follow the same strict validation discipline used in AOP
-manifests, including extension namespace controls and
-`unevaluatedProperties`-based unknown-field rejection.
+These artifacts are CI-validated for interoperability experiments and
+fixture reproducibility.
 
-### 5.1 Registry Record
+## 5. Conformance Model
 
-A registry record is the unit of publication and indexing for an AOP
-object. It describes how an object can be identified, verified, and
-retrieved.
+Conformance is defined in `CONFORMANCE.md` and enforced by CI gates.
+The baseline model is:
 
-Recommended field semantics (informative):
+- positive fixtures must validate and pass semantic checks
+- negative fixtures must be rejected
+- schema compilation must remain green
 
-- Identity
-  - `object_id`: canonical AOP URN for the published object.
-  - `kind`: coarse object classification for filtering.
-  - `object_version`: registry-facing version metadata aligned with URN
-    segment semantics.
-- Integrity and retrieval
-  - `digest.algo` and `digest.value`: integrity hints for retrieved
-    content verification.
-  - `signature_ref`: optional external pointer to signature material.
-  - `locations[]`: one or more URLs where canonical manifests can be
-    fetched.
-- Index metadata
-  - `metadata.publisher`: publisher hint for catalog and provenance
-    views.
-  - `metadata.tags[]`: optional indexing tags and search labels.
+Current levels cover:
 
-Registry records MAY include extension fields under
-`x-<vendor>-<key>`. Ad-hoc unknown fields are rejected under schema
-validation for deterministic behavior.
+- schema-backed object/policy conformance
+- decision envelopes
+- registry interoperability artifacts (non-normative)
+- end-to-end artifact-chain constraints
+- evidence binding and profiles
+- DSSE packaged evidence (optional)
+- in-toto DSSE payload compatibility (optional, v1.2 track)
 
-### 5.2 Resolve Response
+## 6. Versioning Model
 
-A resolve response is the unit of lookup and resolution. Given a request
-object id, it returns either a resolved artifact reference with
-verification hints or a structured error.
+AOP currently uses two version axes:
 
-Recommended field semantics (informative):
+- Repository release tags (SemVer): `v1.x.y`
+- Manifest payload target (`aop_version`): currently `0.x` in published
+  schemas
 
-- `request.object_id`: identifier requested by the client.
-- `status`: one of `resolved`, `not_found`, `invalid`, `unauthorized`.
-- `record` or `manifest_location`: resolved data returned on success.
-- `verification`: optional digest/signature hints for integrity checks.
-- `error`: structured failure payload with machine-readable code and
-  human-readable message.
+This separation is intentional in the current repository state.
+Any change to this model should be introduced via AEP and coordinated
+across schemas, examples, and conformance gates.
 
-Specific registry field sets are defined by schema files and examples;
-for interoperability testing, the schema is the source of truth.
+## 7. Security and Integrity Considerations
 
-### 5.3 Validation Expectations (Informative)
+Security-related fields (`security`, policy decisions, evidence,
+profiles) are schema-defined and validated in CI.
 
-AOP encourages schema-backed validation for registry artifacts, even
-while they remain non-normative in v0.4. CI validates registry examples
-and ensures invalid registry fixtures are rejected.
+Implementations should:
 
----
+- avoid embedding secret material in manifests
+- validate incoming artifacts against published schemas
+- preserve decision and evidence artifacts for auditability
+- enforce runtime sandboxing and authorization controls outside the
+  manifest layer
 
-## 6. Schema and Conformance
+## 8. AOP and MCP
 
-The canonical schema lives in:
+AOP and MCP serve different layers:
 
-- `schemas/aop-object.schema.json`
+- MCP: transport, discovery, invocation channels
+- AOP: object contracts, policy/evidence artifacts, conformance
 
-Examples for conformance checks:
-
-- `examples/aop-object.json`
-- `examples/aop-tool.object.json`
-- `examples/aop-workflow.object.json`
-- `examples/aop-security-oauth2.object.json`
-- `examples/aop-security-none.object.json`
-- `examples/aop-invocation-migrated.valid.json`
-- `examples/aop-capabilities-migrated.valid.json`
-- `examples/aop-extension-x-vendor.valid.json`
-- `examples/aop-policy.allow.json`
-- `examples/aop-policy.deny.json`
-
-Non-normative registry interoperability schemas for v0.4 experiments:
-
-- `schemas/aop-registry-record.schema.json`
-- `schemas/aop-resolve-response.schema.json`
-
-CI MUST validate examples against the canonical schema for pull
-requests and pushes to `main`.
-
----
-
-## 7. Governance Definitions (Normative)
-
-This section defines normative requirements for `invocation`,
-`capabilities`, and `security` fields in the AOP Object Manifest.
-
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-document are to be interpreted as described in RFC 2119.
-
-Only all-caps forms of these keywords are normative.
-
-### 7.1 `invocation` (Normative)
-
-If an object includes `invocation`:
-
-- `invocation.mode` and `invocation.idempotency` are REQUIRED when
-  `invocation` is present.
-- `invocation.mode` MUST be one of: `sync`, `async`, `stream`.
-- `invocation.idempotency` MUST be one of:
-  `idempotent`, `non-idempotent`, `best-effort`.
-- If `invocation.timeouts_ms` is present:
-  - `connect`, `read`, and `overall` values MUST be integers.
-  - Each timeout value MUST be within the inclusive schema range.
-- If `invocation.retry` is present:
-  - `max_attempts` MUST be an integer within the inclusive schema range.
-  - `backoff` MUST be one of: `none`, `fixed`, `exponential`.
-  - `retry_on` SHOULD contain unique reason identifiers.
-
-### 7.2 `capabilities` (Normative)
-
-If an object includes `capabilities`:
-
-- `capabilities.side_effects` and `capabilities.determinism` are
-  REQUIRED when `capabilities` is present.
-- `capabilities.side_effects` MUST be one of: `none`, `low`, `high`.
-- `capabilities.determinism` MUST be one of:
-  `deterministic`, `bounded-nondeterministic`, `nondeterministic`.
-- If present, `capabilities.token_cost_hint.input_per_1k` MUST be an
-  integer greater than or equal to `0`.
-- If present, `capabilities.token_cost_hint.output_per_1k` MUST be an
-  integer greater than or equal to `0`.
-- Objects declaring `side_effects` as `none` MUST NOT intentionally
-  perform externally visible state changes in conforming runtimes.
-
-### 7.3 `security` (Normative)
-
-If an object includes `security`:
-
-- `security.auth` is REQUIRED when `security` is present.
-- If present, `security.auth.scheme` MUST be one of:
-  `none`, `api_key`, `oauth2`, `mtls`, `custom`.
-- If present, `security.auth.scopes` SHOULD contain unique scope values.
-- If present, `security.permissions.data_access` MUST be one of:
-  `none`, `read`, `write`, `read-write`.
-- If present, `security.permissions.network_access` MUST be one of:
-  `none`, `restricted`, `unrestricted`.
-- If present, `security.integrity.checksum_algo` MUST be one of:
-  `sha256`, `sha512`.
-- If present, `security.integrity.checksum` MUST match the schema hash
-  pattern for the declared checksum algorithm.
-- If present, `security.integrity.signed` MUST be a boolean.
-- Objects MUST NOT embed secrets (API keys, private tokens, credentials)
-  directly in the manifest.
-
-### 7.4 Extension Namespace and Unknown-Field Rejection (Normative)
-
-- Extensions MAY be expressed with fields matching:
-  `^x-[a-z0-9][a-z0-9-]{0,31}-[a-z0-9][a-z0-9-]{0,63}$`.
-- Top-level manifest objects and governance objects (`invocation`,
-  `capabilities`, `security`) MUST reject unknown fields that are not
-  defined schema properties and do not match the extension namespace.
-- Conforming schemas SHOULD enforce this behavior using extension
-  `patternProperties` plus `unevaluatedProperties: false`.
-
-### 7.5 Validation and Conformance (Normative)
-
-- Conforming implementations SHOULD validate objects against the
-  normative JSON Schema when available.
-- Registries and repositories publishing AOP objects SHOULD run
-  automated validation for published manifests and examples.
-- The AOP repository CI MUST keep `examples/` passing validation against
-  the normative schema on pull requests and pushes to `main`.
-
-## 8. Policy (Normative)
-
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-document are to be interpreted as described in RFC 2119.
-
-### 8.1 Policy Object Validity
-
-- A policy object MUST conform to
-  `schemas/aop-policy.schema.json`.
-- A policy object MUST use `kind: "policy"` and a policy URN with the
-  form `urn:aop:policy:<name>:vN`.
-- Policy objects MUST NOT embed secrets (credentials, tokens, private
-  keys) directly in the manifest.
-
-### 8.2 Targeting
-
-- A policy object MUST specify a `target.selector`.
-- If `target.selector = "object_id"`, the policy MUST include
-  `target.object_id`.
-- If `target.selector = "object_kind"`, the policy MUST include
-  `target.object_kind`.
-
-### 8.3 Rule Evaluation and Effect
-
-- A runtime operating in `enforced` mode MUST treat any matched `deny`
-  rule as a denial of execution for targeted objects.
-- A runtime operating in `enforced` mode MUST NOT proceed with
-  invocation when the final decision is deny.
-- A runtime operating in `advisory` mode MAY proceed after deny, but
-  SHOULD surface `reason` data for auditability.
-
-Note: v0.4 does not mandate a single rule-combination algorithm (for
-example, first-match-wins versus deny-overrides). Implementations SHOULD
-document their evaluation strategy and keep it stable within a minor
-version.
-
-### 8.4 Reasons and Patches
-
-- If a rule includes `reason`, conforming runtimes SHOULD preserve
-  `reason.code` and `reason.message` in decision outputs or logs.
-- If `patch.type = "require"`, enforced runtimes SHOULD treat patch
-  operations as hard requirements before invocation is allowed.
-- If `patch.type = "suggest"`, runtimes MAY treat patch operations as
-  non-blocking remediation hints.
-
-### 8.5 Extension Discipline
-
-- Policy objects MAY include extension fields in the
-  `x-<vendor>-<key>` namespace.
-- Policy validation MUST reject unknown fields outside the extension
-  namespace, enforced via `patternProperties` and
-  `unevaluatedProperties: false`.
-
-## 9. Security Considerations
-
-Execution environments should:
-
-- sandbox object execution
-- validate input schemas
-- enforce policy constraints
-
-Security field semantics for implementers:
-
-- `security.auth.issuer` and `security.auth.audience` are verification
-  hints commonly used with JWT/OIDC-style token validation.
-- `security.auth.scopes` expresses authorization intent and can be used
-  for policy gating in runtime enforcement.
-- `security.integrity.signature_ref` points to external signature
-  material and avoids embedding large signature payloads in manifests.
-
----
-
-## 10. AOP and MCP Bridge Note (Non-Normative)
-
-- MCP focuses on transport-level discovery and invocation of tools over a
-  standardized channel.
-- AOP focuses on object manifests, versioned contracts, governance
-  definitions, and conformance baselines.
-- Combined usage is complementary:
-  - MCP carries calls and responses.
-  - AOP defines what is being called and how it is validated/governed.
+They are complementary and can be deployed together in interoperable
+agent stacks.

@@ -12,23 +12,46 @@ For the current `main` branch, the repository conformance baseline is:
 - Policy examples pass `schemas/aop-policy.schema.json` validation
 - Policy decision examples pass `schemas/aop-policy-decision.schema.json`
   validation
+- Evidence examples pass `schemas/aop-evidence.schema.json` validation
+- Profile examples pass mapped profile-schema validation
 - Registry examples pass registry non-normative schema validation
+- v1.1 DSSE examples pass and v1.1 DSSE invalid fixtures are rejected
+- v1.2 in-toto DSSE examples pass and v1.2 DSSE invalid fixtures are
+  rejected
 - `examples/invalid/*.json` fixtures are rejected by their target schemas
+
+## Version Axes
+
+AOP currently operates with two version axes:
+
+- Repository releases use SemVer tags (`v1.x.y`).
+- Manifest field `aop_version` remains `0.x` in current published
+  schemas and fixtures.
+
+Conformance gates validate the schema-defined `aop_version` semantics,
+not repository release tag values.
 
 ## Normative Sources
 
-The following artifacts are normative for object validation:
+The following artifacts are normative for the v1 public API baseline:
 
-- `SPEC.md`
+- `V1_PUBLIC_API_CANDIDATE.md`
 - `schemas/aop-object.schema.json`
 - `schemas/aop-policy.schema.json`
-
-The following schema artifacts are non-normative in v0.4.x but
-validated in CI for interoperability experiments:
-
 - `schemas/aop-policy-decision.schema.json`
+- `schemas/aop-evidence.schema.json`
+- Profile schemas listed in `V1_PUBLIC_API_CANDIDATE.md`
+- `CONFORMANCE.md` levels and gate semantics (Levels 2-8)
+
+The following artifacts are non-normative in the v1 baseline but are
+validated in CI for interoperability and reproducibility:
+
 - `schemas/aop-registry-record.schema.json`
 - `schemas/aop-resolve-response.schema.json`
+- `SPEC.md` (architecture and explanatory guidance)
+- Release notes and AEP documents
+- Optional Level 9 (v1.2 in-toto DSSE compatibility) while AEP-0011 is
+  Draft
 
 The following artifacts are non-normative but used as executable
 conformance fixtures:
@@ -138,7 +161,7 @@ interoperability artifacts:
 
 Notes:
 
-- These registry schemas are non-normative in v0.4 and support
+- These registry schemas are non-normative in the v1 baseline and support
   interoperable discovery and resolution workflows without v1-level
   protocol guarantees.
 - Even as non-normative artifacts, AOP expects schema-backed validation
@@ -338,6 +361,43 @@ Notes:
   implementations that conform at Levels 2-7.
 - DSSE packaging aligns with broader attestation ecosystem usage where
   envelopes carry typed payloads for portable verification workflows.
+
+### Level 9: DSSE In-Toto Statement Compatibility (Optional, v1.2 Track)
+
+A system meets Level 9 if it meets Level 8 and additionally supports
+DSSE envelopes carrying in-toto Statement payloads.
+
+Schema:
+
+- in-toto Statement profile schema:
+  - `schemas/profiles/in-toto-statement.profile.schema.json`
+
+Positive fixtures (MUST pass):
+
+- `examples/v1.2/dsse/positive/*.json`
+
+Negative fixtures (MUST be rejected):
+
+- `examples/invalid/v1.2/dsse/*.invalid.json`
+
+Validation discipline (CI-enforced):
+
+1. Envelope MUST be schema-valid against
+   `schemas/profiles/dsse-envelope.profile.schema.json`.
+2. `payloadType` MUST match in-toto-compatible types:
+   - `application/vnd.in-toto+json`
+   - `application/vnd.in-toto.<predicate>+json`
+3. `payload` MUST base64-decode.
+4. Decoded payload MUST parse as JSON.
+5. Decoded payload MUST validate against
+   `schemas/profiles/in-toto-statement.profile.schema.json`.
+6. Invalid fixtures MUST be rejected.
+
+Notes:
+
+- Level 9 is optional and tracks the additive v1.2 interoperability
+  path.
+- Signature verification remains out of scope for conformance levels.
 
 ### Validation Expectations
 
