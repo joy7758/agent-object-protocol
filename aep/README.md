@@ -39,7 +39,7 @@ Agent Object Protocol (AOP).
   - Target: `v0.9.0`
   - Tracking: optional issue link
 - `AEP-0009`: v1.0 Freeze - Public API Definition and Release Governance
-  - Status: `Draft`
+  - Status: `Accepted`
   - Target: `v1.0.0`
   - Tracking: optional issue link
 
