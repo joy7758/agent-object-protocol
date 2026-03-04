@@ -5,7 +5,7 @@
   "subject": {
     "id": "urn:aop:tool:web-fetch:v1",
     "digest": {
-      "sha256": "a8152f0cbbce662d0d6bf324b3d31be50e294ef1b53c6d09696254a146b3d85b"
+      "sha256": "1afbf15cdb42c958a7410db4d5aa59c2671cbe8519b5b27c943b8de03508c5d8"
     }
   },
   "predicateType": "https://aop.dev/profiles/provenance/v0",

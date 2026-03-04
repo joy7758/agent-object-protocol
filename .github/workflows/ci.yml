@@ -755,6 +755,179 @@ jobs:
 
           echo "OK: v0.7 E2E negative scenarios rejected as expected."
 
+      - name: v0.9 E2E positive gate (skip if none)
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! compgen -G "examples/v0.9/e2e/positive/*/resolve.json" > /dev/null; then
+            echo "No v0.9 E2E positive scenarios present; skipping v0.9 positive gate."
+            exit 0
+          fi
+
+          echo "Compiling v0.9 E2E schemas..."
+          ajv compile --spec=draft2020 -s schemas/aop-resolve-response.schema.json
+          ajv compile --spec=draft2020 -s schemas/aop-object.schema.json
+          ajv compile --spec=draft2020 -s schemas/aop-policy.schema.json
+          ajv compile --spec=draft2020 -s schemas/aop-policy-decision.schema.json
+          ajv compile --spec=draft2020 -s schemas/aop-evidence.schema.json
+          ajv compile --spec=draft2020 -r schemas/aop-evidence.schema.json -s schemas/profiles/aop-provenance.profile.schema.json
+          ajv compile --spec=draft2020 -r schemas/aop-evidence.schema.json -s schemas/profiles/slsa-provenance-min.profile.schema.json
+
+          validate_v09_positive_semantics() {
+            local scen_dir="$1"
+            SCEN_DIR="${scen_dir}" node -e '
+              const fs = require("fs");
+              const path = require("path");
+              const { execFileSync } = require("child_process");
+
+              const scen = process.env.SCEN_DIR;
+              const resolve = JSON.parse(fs.readFileSync(path.join(scen, "resolve.json"), "utf8"));
+              const manifest = JSON.parse(fs.readFileSync(path.join(scen, "manifest.json"), "utf8"));
+              const policy = JSON.parse(fs.readFileSync(path.join(scen, "policy.json"), "utf8"));
+              const evidenceManifest = JSON.parse(fs.readFileSync(path.join(scen, "evidence.manifest.json"), "utf8"));
+              const evidenceDecision = JSON.parse(fs.readFileSync(path.join(scen, "evidence.decision.json"), "utf8"));
+
+              const decisionFiles = fs.readdirSync(scen).filter((f) => f.startsWith("decision") && f.endsWith(".json")).sort();
+              if (decisionFiles.length === 0) {
+                throw new Error("No decision*.json found");
+              }
+              const decisions = decisionFiles.map((f) => ({
+                file: f,
+                doc: JSON.parse(fs.readFileSync(path.join(scen, f), "utf8"))
+              }));
+
+              const aopProfileFiles = fs.readdirSync(scen).filter((f) => f.endsWith(".aop-provenance.json")).sort();
+              const slsaProfileFiles = fs.readdirSync(scen).filter((f) => f.endsWith(".slsa-provenance.json")).sort();
+              if (aopProfileFiles.length === 0 && slsaProfileFiles.length === 0) {
+                throw new Error("At least one profile evidence file is required in each v0.9 positive scenario");
+              }
+
+              const jcsSha256 = (filePath) =>
+                execFileSync("node", ["tools/jcs_sha256.mjs", filePath], { encoding: "utf8" }).trim();
+
+              const manifestSha = jcsSha256(path.join(scen, "manifest.json"));
+
+              if (resolve?.request?.object_id !== manifest.id) {
+                throw new Error(`resolve.request.object_id mismatch: ${resolve?.request?.object_id} != ${manifest.id}`);
+              }
+              if (resolve?.record?.digest?.value !== manifestSha) {
+                throw new Error("resolve.record.digest.value does not match computed manifest sha");
+              }
+              if (resolve?.verification?.digest?.value !== manifestSha) {
+                throw new Error("resolve.verification.digest.value does not match computed manifest sha");
+              }
+
+              if (evidenceManifest?.subject?.id !== manifest.id) {
+                throw new Error("evidence.manifest.subject.id does not match manifest.id");
+              }
+              if (evidenceManifest?.subject?.digest?.sha256 !== manifestSha) {
+                throw new Error("evidence.manifest.subject.digest.sha256 does not match computed manifest sha");
+              }
+
+              for (const { file, doc } of decisions) {
+                if (doc.policy_id !== policy.id) {
+                  throw new Error(`${file}: policy_id mismatch: ${doc.policy_id} != ${policy.id}`);
+                }
+                if (doc.target?.selector !== "object_id") {
+                  throw new Error(`${file}: target.selector must be object_id`);
+                }
+                if (doc.target?.object_id !== manifest.id) {
+                  throw new Error(`${file}: target.object_id mismatch: ${doc.target?.object_id} != ${manifest.id}`);
+                }
+                if (doc.decision?.effect === "deny" && (!Array.isArray(doc.reasons) || doc.reasons.length < 1)) {
+                  throw new Error(`${file}: deny decision must include reasons[]`);
+                }
+              }
+
+              if (evidenceDecision?.predicate?.policy_id !== policy.id) {
+                throw new Error("evidence.decision.predicate.policy_id mismatch");
+              }
+              const matchedDecision = decisions.find(({ doc }) => doc.decision_id === evidenceDecision?.subject?.id);
+              if (!matchedDecision) {
+                throw new Error("evidence.decision.subject.id does not match any decision_id");
+              }
+              const decisionSha = jcsSha256(path.join(scen, matchedDecision.file));
+              if (evidenceDecision?.subject?.digest?.sha256 !== decisionSha) {
+                throw new Error("evidence.decision.subject.digest.sha256 does not match computed decision sha");
+              }
+
+              for (const profileName of aopProfileFiles) {
+                const profileDoc = JSON.parse(fs.readFileSync(path.join(scen, profileName), "utf8"));
+                if (profileDoc?.subject?.id !== manifest.id) {
+                  throw new Error(`${profileName}: subject.id mismatch`);
+                }
+                if (profileDoc?.subject?.digest?.sha256 !== manifestSha) {
+                  throw new Error(`${profileName}: subject.digest.sha256 mismatch`);
+                }
+              }
+
+              for (const profileName of slsaProfileFiles) {
+                const profileDoc = JSON.parse(fs.readFileSync(path.join(scen, profileName), "utf8"));
+                if (profileDoc?.subject?.id !== manifest.id) {
+                  throw new Error(`${profileName}: subject.id mismatch`);
+                }
+                if (profileDoc?.subject?.digest?.sha256 !== manifestSha) {
+                  throw new Error(`${profileName}: subject.digest.sha256 mismatch`);
+                }
+              }
+
+              console.log(`OK: v0.9 semantic/profile/digest checks passed for ${scen}`);
+            '
+          }
+
+          shopt -s nullglob
+          for scen_dir in examples/v0.9/e2e/positive/*; do
+            [ -d "${scen_dir}" ] || continue
+            echo "=== v0.9 positive scenario: ${scen_dir} ==="
+
+            required_files=(
+              "${scen_dir}/resolve.json"
+              "${scen_dir}/manifest.json"
+              "${scen_dir}/policy.json"
+              "${scen_dir}/evidence.manifest.json"
+              "${scen_dir}/evidence.decision.json"
+            )
+            for required in "${required_files[@]}"; do
+              if [ ! -f "${required}" ]; then
+                echo "Missing required file: ${required}"
+                exit 1
+              fi
+            done
+
+            decision_files=("${scen_dir}"/decision*.json)
+            if [ "${#decision_files[@]}" -eq 0 ]; then
+              echo "No decision*.json files found under ${scen_dir}"
+              exit 1
+            fi
+
+            ajv validate --spec=draft2020 -s schemas/aop-resolve-response.schema.json -d "${scen_dir}/resolve.json" --all-errors
+            ajv validate --spec=draft2020 -s schemas/aop-object.schema.json -d "${scen_dir}/manifest.json" --all-errors
+            ajv validate --spec=draft2020 -s schemas/aop-policy.schema.json -d "${scen_dir}/policy.json" --all-errors
+            for file in "${decision_files[@]}"; do
+              ajv validate --spec=draft2020 -s schemas/aop-policy-decision.schema.json -d "${file}" --all-errors
+            done
+            ajv validate --spec=draft2020 -s schemas/aop-evidence.schema.json -d "${scen_dir}/evidence.manifest.json" --all-errors
+            ajv validate --spec=draft2020 -s schemas/aop-evidence.schema.json -d "${scen_dir}/evidence.decision.json" --all-errors
+
+            aop_profile_files=("${scen_dir}"/evidence.*.aop-provenance.json)
+            slsa_profile_files=("${scen_dir}"/evidence.*.slsa-provenance.json)
+            if [ "${#aop_profile_files[@]}" -eq 0 ] && [ "${#slsa_profile_files[@]}" -eq 0 ]; then
+              echo "No profile evidence fixtures found under ${scen_dir}"
+              exit 1
+            fi
+
+            for file in "${aop_profile_files[@]}"; do
+              ajv validate --spec=draft2020 -r schemas/aop-evidence.schema.json -s schemas/profiles/aop-provenance.profile.schema.json -d "${file}" --all-errors
+            done
+            for file in "${slsa_profile_files[@]}"; do
+              ajv validate --spec=draft2020 -r schemas/aop-evidence.schema.json -s schemas/profiles/slsa-provenance-min.profile.schema.json -d "${file}" --all-errors
+            done
+
+            validate_v09_positive_semantics "${scen_dir}"
+          done
+
+          echo "OK: v0.9 E2E positive scenarios validated."
+
       - name: v0.8 E2E evidence binding gate (skip if none)
         shell: bash
         run: |
