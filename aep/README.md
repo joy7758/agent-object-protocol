@@ -26,6 +26,10 @@ Agent Object Protocol (AOP).
   - Status: `Accepted`
   - Target: `v0.6.0`
   - Tracking: optional issue link
+- `AEP-0006`: v0.7.0 End-to-End Artifacts (Resolve -> Fetch -> Evaluate -> Decision)
+  - Status: `Draft`
+  - Target: `v0.7.0`
+  - Tracking: optional issue link
 
 ## Status Definitions
 
