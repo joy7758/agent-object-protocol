@@ -242,7 +242,8 @@ jobs:
           shopt -s nullglob
           object_files=(examples/v0.5/combo/object/*.json)
           policy_files=(examples/v0.5/combo/policy/*.json)
-          expected_files=(examples/v0.5/combo/expected/*.json)
+          expected_files=(examples/v0.5/combo/expected/*.expected.json)
+          semantic_invalid_files=(examples/v0.5/combo/expected/*.expected.invalid.json)
 
           if [ "${#object_files[@]}" -eq 0 ] || \
              [ "${#policy_files[@]}" -eq 0 ] || \
@@ -270,6 +271,68 @@ jobs:
           for file in "${expected_files[@]}"; do
             ajv validate --spec=draft2020 -s schemas/aop-policy-decision.schema.json -d "${file}" --all-errors
           done
+
+          if [ "${#semantic_invalid_files[@]}" -gt 0 ]; then
+            echo "Validating schema shape for semantic-invalid combo fixtures..."
+            for file in "${semantic_invalid_files[@]}"; do
+              ajv validate --spec=draft2020 -s schemas/aop-policy-decision.schema.json -d "${file}" --all-errors
+            done
+          fi
+
+          validate_combo_semantics() {
+            local mode="$1"
+            local file="$2"
+            MODE="${mode}" FILE="${file}" node -e '
+              const fs = require("fs");
+              const file = process.env.FILE;
+              const mode = process.env.MODE;
+              const data = JSON.parse(fs.readFileSync(file, "utf8"));
+              const basename = file.split("/").pop();
+              const strategy = data?.decision?.strategy;
+              const effect = data?.decision?.effect;
+              const reasonCodes = Array.isArray(data?.reasons) ? data.reasons.map((r) => r.code) : [];
+              const hasPatches = Array.isArray(data?.patches) && data.patches.length > 0;
+
+              let semanticOk = true;
+              if (basename.includes("strategy-demo.first_match")) {
+                semanticOk =
+                  strategy === "first_match" &&
+                  effect === "allow" &&
+                  reasonCodes.includes("ALLOW_BASELINE") &&
+                  !hasPatches;
+              } else if (basename.includes("strategy-demo.deny_overrides")) {
+                semanticOk =
+                  strategy === "deny_overrides" &&
+                  effect === "deny" &&
+                  reasonCodes.includes("DENY_HIGH_SIDE_EFFECTS") &&
+                  hasPatches;
+              }
+
+              if (mode === "valid" && !semanticOk) {
+                console.error(`Semantic validation failed (expected valid): ${file}`);
+                process.exit(1);
+              }
+
+              if (mode === "invalid" && semanticOk) {
+                console.error(`Semantic validation unexpectedly passed (expected invalid): ${file}`);
+                process.exit(1);
+              }
+            '
+          }
+
+          echo "Validating semantic consistency for combo expected fixtures..."
+          for file in "${expected_files[@]}"; do
+            validate_combo_semantics "valid" "${file}"
+          done
+
+          if [ "${#semantic_invalid_files[@]}" -gt 0 ]; then
+            echo "Validating semantic-invalid combo fixtures are rejected..."
+            for file in "${semantic_invalid_files[@]}"; do
+              validate_combo_semantics "invalid" "${file}"
+            done
+          else
+            echo "No semantic-invalid combo fixtures found; skipping semantic invalid gate."
+          fi
 
           echo "OK: v0.5 combo fixtures validated."
 

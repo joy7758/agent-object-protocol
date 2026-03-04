@@ -28,12 +28,16 @@ This is expressed as expected decision fixtures, not runtime execution.
     `examples/v0.5/combo/expected/strategy-demo.first_match.expected.json`
   - Deny-overrides:
     `examples/v0.5/combo/expected/strategy-demo.deny_overrides.expected.json`
+- Semantic-invalid decision (must be rejected by semantic gate):
+  - `examples/v0.5/combo/expected/strategy-demo.first_match.expected.invalid.json`
 
 ### Notes
 
 - These fixtures illustrate combining-algorithm families documented in
   policy standards such as XACML (for example, deny-overrides and
   first-applicable).
+- CI applies both schema validation and strategy-specific semantic
+  checks for the strategy-demo fixture set.
 - v0.5 does not require runtimes to implement a single strategy. It
   provides a verifiable reference surface for interoperability
   discussions.
