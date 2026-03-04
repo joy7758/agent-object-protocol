@@ -192,6 +192,7 @@ Phase 4 - Ecosystem adoption
 Upcoming:
 
 - `AEP-0003` (`aep/aep-0003-v0.4-agenda.md`) defines the v0.4.0 agenda for policy semantics, registry surface, and MCP interop hardening.
+- v1.0.0 freeze is tracked by `AEP-0009` (`aep/aep-0009-v1.0-freeze.md`).
 
 ---
 
