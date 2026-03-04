@@ -1,0 +1,9 @@
+{
+  "status": 700,
+  "headers": {
+    "content-type": "application/json"
+  },
+  "body": {
+    "text": "invalid status"
+  }
+}

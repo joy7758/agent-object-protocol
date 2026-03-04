@@ -1,0 +1,99 @@
+{
+  "aop_version": "0.5",
+  "id": "urn:aop:tool:web-fetch:v1",
+  "kind": "tool",
+  "name": "web-fetch",
+  "description": "Fetch a web resource and return structured response content (MCP interop fixture)",
+  "schema": {
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "url"
+      ],
+      "properties": {
+        "url": {
+          "type": "string",
+          "minLength": 1
+        },
+        "method": {
+          "type": "string",
+          "enum": [
+            "GET",
+            "POST"
+          ]
+        }
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "headers",
+        "body"
+      ],
+      "properties": {
+        "status": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 599
+        },
+        "headers": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "body": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "text": {
+              "type": "string"
+            },
+            "json": {
+              "type": "object"
+            }
+          },
+          "anyOf": [
+            {
+              "required": [
+                "text"
+              ]
+            },
+            {
+              "required": [
+                "json"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  "invocation": {
+    "mode": "sync",
+    "idempotency": "best-effort"
+  },
+  "capabilities": {
+    "side_effects": "none",
+    "determinism": "bounded-nondeterministic",
+    "token_cost_hint": {
+      "input_per_1k": 0,
+      "output_per_1k": 0
+    }
+  },
+  "security": {
+    "auth": {
+      "scheme": "none"
+    },
+    "permissions": {
+      "data_access": "read",
+      "network_access": "unrestricted",
+      "required_resources": [
+        "network:https"
+      ]
+    }
+  }
+}
