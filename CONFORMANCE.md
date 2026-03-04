@@ -69,6 +69,8 @@ CI validates examples by schema family:
 - `examples/registry/aop-resolve-response*.json` against `schemas/aop-resolve-response.schema.json`
 - `examples/v0.5/combo/{object,policy,expected}/*.json` by mapped family
   schemas when present (draft gate)
+- `examples/v0.6/combo/{object,policy,expected}/*.json` by mapped family
+  schemas when present (draft gate)
 - `examples/v0.5/mcp/tool/*.json` against `schemas/aop-object.schema.json`,
   then `examples/v0.5/mcp/expected/*.json` against a schema derived from
   `tool.schema.outputs` when present (draft gate)
@@ -151,6 +153,51 @@ Reference fixtures for quick interoperability checks:
 - Invalid registry fixtures:
   - `examples/invalid/aop-registry-record-missing-id.invalid.json`
   - `examples/invalid/aop-resolve-response-invalid-shape.invalid.json`
+
+### Level 4: v0.6 Suite Expansion (Combo + Multi-Tool MCP)
+
+A system meets Level 4 if it additionally supports the v0.6 suite
+expansion artifacts and corresponding gate behavior.
+
+Combo semantics fixtures (strategy deltas + semantic-invalid rejection):
+
+- C1 fixtures:
+  - `examples/v0.6/combo/object/c1-sensitive-writer.object.json`
+  - `examples/v0.6/combo/policy/c1-permit-vs-deny.policy.json`
+  - `examples/v0.6/combo/expected/c1-permit-vs-deny.first_match.expected.json`
+  - `examples/v0.6/combo/expected/c1-permit-vs-deny.deny_overrides.expected.json`
+  - `examples/v0.6/combo/expected/c1-permit-vs-deny.first_match.semantic.invalid.json`
+- C2 fixtures:
+  - `examples/v0.6/combo/object/c2-network-sensitive.object.json`
+  - `examples/v0.6/combo/policy/c2-permit-vs-deny.policy.json`
+  - `examples/v0.6/combo/expected/c2-permit-vs-deny.permit_overrides.expected.json`
+  - `examples/v0.6/combo/expected/c2-permit-vs-deny.deny_unless_permit.expected.json`
+  - `examples/v0.6/combo/expected/c2-permit-vs-deny.permit_overrides.semantic.invalid.json`
+
+MCP multi-tool fixtures (derived output-schema validation):
+
+- Tool fixtures:
+  - `examples/v0.5/mcp/tool/file-search.tool.object.json`
+  - `examples/v0.5/mcp/tool/kv-get.tool.object.json`
+  - `examples/v0.5/mcp/tool/web-fetch.tool.object.json`
+- Expected outputs:
+  - `examples/v0.5/mcp/expected/file-search.output.expected.json`
+  - `examples/v0.5/mcp/expected/kv-get.output.expected.json`
+  - `examples/v0.5/mcp/expected/web-fetch.output.expected.json`
+- Invalid outputs:
+  - `examples/invalid/v0.5/mcp/file-search.output-missing-results.invalid.json`
+  - `examples/invalid/v0.5/mcp/file-search.output-score-out-of-range.invalid.json`
+  - `examples/invalid/v0.5/mcp/kv-get.output-missing-value.invalid.json`
+  - `examples/invalid/v0.5/mcp/kv-get.output-wrong-type.invalid.json`
+  - `examples/invalid/v0.5/mcp/web-fetch.output-status-out-of-range.invalid.json`
+  - `examples/invalid/v0.5/mcp/web-fetch.output-missing-body.invalid.json`
+
+Required gate behavior for Level 4:
+
+- Combo expected fixtures MUST pass schema and semantic checks.
+- Combo semantic-invalid fixtures MUST be rejected.
+- MCP expected outputs MUST pass derived output-schema validation.
+- MCP invalid outputs MUST be rejected.
 
 ### Validation Expectations
 
