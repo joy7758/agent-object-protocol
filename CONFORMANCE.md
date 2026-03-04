@@ -46,6 +46,19 @@ for schema in schemas/*.schema.json; do
 done
 ```
 
+### Optional: Strict date-time validation with `ajv-formats`
+
+Some AOP schemas intentionally avoid `format: date-time` so baseline CI
+remains minimal and reproducible across environments. Implementations
+MAY enable stricter format validation by loading `ajv-formats` in
+ajv-cli.
+
+Example:
+
+```bash
+ajv validate --spec=draft2020 -c ajv-formats -s <schema.json> -d <data.json> --all-errors
+```
+
 CI validates examples by schema family:
 
 - `examples/*.json` except `aop-policy.*.json` against `schemas/aop-object.schema.json`
