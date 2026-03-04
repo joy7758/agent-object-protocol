@@ -294,36 +294,47 @@ jobs:
             ajv validate --spec=draft2020 -s schemas/aop-object.schema.json -d "${file}" --all-errors
           done
 
-          echo "Derive output schema from MCP tool fixture..."
-          tool_file="${tool_files[0]}"
-          tmp_schema="${RUNNER_TEMP:-/tmp}/aop_v05_mcp_output.schema.json"
-          TOOL_FILE="${tool_file}" TMP_SCHEMA="${tmp_schema}" node -e '
-            const fs = require("fs");
-            const tool = JSON.parse(fs.readFileSync(process.env.TOOL_FILE, "utf8"));
-            if (!tool.schema || !tool.schema.outputs) {
-              throw new Error("tool.schema.outputs missing");
-            }
-            fs.writeFileSync(process.env.TMP_SCHEMA, JSON.stringify(tool.schema.outputs, null, 2));
-          '
+          for tool_file in "${tool_files[@]}"; do
+            tool_basename="$(basename "${tool_file}")"
+            tool_prefix="${tool_basename%%.*}"
+            tmp_schema="${RUNNER_TEMP:-/tmp}/aop_v05_mcp_output_${tool_prefix}.schema.json"
 
-          ajv compile --spec=draft2020 -s "${tmp_schema}"
+            echo "Derive output schema from MCP tool fixture: ${tool_basename}"
+            TOOL_FILE="${tool_file}" TMP_SCHEMA="${tmp_schema}" node -e '
+              const fs = require("fs");
+              const tool = JSON.parse(fs.readFileSync(process.env.TOOL_FILE, "utf8"));
+              if (!tool.schema || !tool.schema.outputs) {
+                throw new Error("tool.schema.outputs missing: " + process.env.TOOL_FILE);
+              }
+              fs.writeFileSync(process.env.TMP_SCHEMA, JSON.stringify(tool.schema.outputs, null, 2));
+            '
 
-          if compgen -G "examples/v0.5/mcp/expected/*.json" > /dev/null; then
-            ajv validate --spec=draft2020 -s "${tmp_schema}" -d "examples/v0.5/mcp/expected/*.json" --all-errors
-          else
-            echo "No expected MCP outputs found; skipping expected validation."
-          fi
+            ajv compile --spec=draft2020 -s "${tmp_schema}"
 
-          if compgen -G "examples/invalid/v0.5/mcp/*.json" > /dev/null; then
-            for file in examples/invalid/v0.5/mcp/*.json; do
-              if ajv validate --spec=draft2020 -s "${tmp_schema}" -d "${file}" --all-errors; then
-                echo "ERROR: expected invalid MCP output to be rejected: ${file}"
-                exit 1
-              fi
-            done
-            echo "OK: all invalid MCP outputs rejected."
-          else
-            echo "No invalid MCP outputs found; skipping MCP invalid gate."
-          fi
+            expected_pattern="examples/v0.5/mcp/expected/${tool_prefix}.output*.json"
+            invalid_pattern="examples/invalid/v0.5/mcp/${tool_prefix}.output*.invalid.json"
+            expected_files=(${expected_pattern})
+            invalid_files=(${invalid_pattern})
+
+            if [ "${#expected_files[@]}" -gt 0 ]; then
+              for file in "${expected_files[@]}"; do
+                ajv validate --spec=draft2020 -s "${tmp_schema}" -d "${file}" --all-errors
+              done
+            else
+              echo "No expected MCP outputs found for prefix ${tool_prefix}; skipping expected validation."
+            fi
+
+            if [ "${#invalid_files[@]}" -gt 0 ]; then
+              for file in "${invalid_files[@]}"; do
+                if ajv validate --spec=draft2020 -s "${tmp_schema}" -d "${file}" --all-errors; then
+                  echo "ERROR: expected invalid MCP output to be rejected: ${file}"
+                  exit 1
+                fi
+              done
+              echo "OK: all invalid MCP outputs rejected for prefix ${tool_prefix}."
+            else
+              echo "No invalid MCP outputs found for prefix ${tool_prefix}; skipping invalid gate."
+            fi
+          done
 
           echo "OK: v0.5 MCP interop fixtures validated."
