@@ -577,7 +577,7 @@ jobs:
               ajv validate --spec=draft2020 -s schemas/aop-policy-decision.schema.json -d "${file}" --all-errors
             done
 
-            SCEN_DIR="${scen_dir}" node - <<'NODE'
+            SCEN_DIR="${scen_dir}" node -e '
               const fs = require("fs");
               const path = require("path");
 
@@ -618,7 +618,7 @@ jobs:
               }
 
               console.log("OK: semantic consistency checks passed");
-            NODE
+            '
           done
 
           echo "OK: v0.7 E2E positive scenarios validated."
