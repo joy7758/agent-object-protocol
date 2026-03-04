@@ -1,0 +1,17 @@
+{
+  "aop_version": "0.8",
+  "id": "urn:aop:evidence:decision-evidence-s1:v1",
+  "kind": "evidence",
+  "subject": {
+    "id": "dec_v0.8_scenario1_0001",
+    "digest": {
+      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    }
+  },
+  "predicateType": "https://slsa.dev/provenance/v1",
+  "predicate": {
+    "scenario": "v0.8/positive/scenario-1",
+    "policy_id": "urn:aop:policy:deny-unrestricted-network:v1",
+    "note": "Decision evidence envelope (policy binding checked in later PR)."
+  }
+}
