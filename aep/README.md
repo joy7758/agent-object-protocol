@@ -31,7 +31,7 @@ Agent Object Protocol (AOP).
   - Target: `v0.7.0`
   - Tracking: optional issue link
 - `AEP-0007`: v0.8.0 Provenance and Integrity Artifacts (Evidence for E2E Chains)
-  - Status: `Draft`
+  - Status: `Accepted`
   - Target: `v0.8.0`
   - Tracking: optional issue link
 
