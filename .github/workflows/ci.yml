@@ -229,3 +229,18 @@ jobs:
             fi
           done
           echo "All registry invalid fixtures were correctly rejected."
+
+      - name: v0.5 fixtures placeholder (skip if none)
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -d "examples/v0.5" ]; then
+            echo "No examples/v0.5 directory; skipping v0.5 placeholder gate."
+            exit 0
+          fi
+          if find examples/v0.5 -type f -name "*.json" -print -quit | grep -q .; then
+            echo "v0.5 JSON fixtures detected."
+            echo "TODO: wire v0.5 semantic checks when fixtures land."
+          else
+            echo "No v0.5 JSON fixtures present; skipping v0.5 placeholder gate."
+          fi
