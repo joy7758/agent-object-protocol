@@ -36,9 +36,9 @@
 9. This aligns with MCP output-schema responsibilities (server MUST, client SHOULD). [^2]
 10. v0.5.0 is a citeable, reproducible, and adjudicable MINOR baseline.
 
-[^1]: XACML 3.0 Core (combining algorithms): https://docs.oasis-open.org/xacml/3.0/xacml-3.0-core-spec-en.html
-[^2]: MCP Tools spec (output schema responsibility): https://modelcontextprotocol.io/specification/draft/server/tools
-[^3]: JSON Schema 2020-12 `unevaluatedProperties`: https://json-schema.org/draft/2020-12/draft-bhutton-json-schema-01#section-11.3
+[^1]: XACML 3.0 Core (combining algorithms): [x-acml-3.0-core-spec-en](https://docs.oasis-open.org/xacml/3.0/xacml-3.0-core-spec-en.html)
+[^2]: MCP Tools spec (output schema responsibility): [mcp-tools-spec](https://modelcontextprotocol.io/specification/draft/server/tools)
+[^3]: JSON Schema 2020-12 `unevaluatedProperties`: [draft-bhutton-json-schema-01#section-11.3](https://json-schema.org/draft/2020-12/draft-bhutton-json-schema-01#section-11.3)
 
 Agent Object Protocol (AOP) is a proposed open standard for defining executable objects used by AI agents.
 
