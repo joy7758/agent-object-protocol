@@ -231,6 +231,64 @@ jobs:
             ajv validate --spec=draft2020 -s schemas/aop-evidence.schema.json -d "${out_json}" --all-errors
           done
 
+      - name: Validate v1.1 DSSE invalid fixtures are rejected (draft2020)
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          invalid_files=(examples/invalid/v1.1/dsse/*.invalid.json)
+          if [ "${#invalid_files[@]}" -eq 0 ]; then
+            echo "No v1.1 DSSE invalid fixtures found; skipping."
+            exit 0
+          fi
+
+          tmp_dir="$(mktemp -d)"
+          trap 'rm -rf "${tmp_dir}"' EXIT
+
+          for file in "${invalid_files[@]}"; do
+            echo "Expecting DSSE fixture rejection: ${file}"
+            out_json="${tmp_dir}/$(basename "${file}" .json).payload.json"
+            if \
+              ajv validate --spec=draft2020 -s schemas/profiles/dsse-envelope.profile.schema.json -d "${file}" --all-errors && \
+              node -e '
+                const fs = require("fs");
+                const inputPath = process.argv[1];
+                const outputPath = process.argv[2];
+                const doc = JSON.parse(fs.readFileSync(inputPath, "utf8"));
+
+                if (!doc.payloadType || typeof doc.payloadType !== "string") {
+                  throw new Error("payloadType missing");
+                }
+                if (!doc.payloadType.endsWith("+json")) {
+                  throw new Error("unsupported payloadType for JSON parse: " + doc.payloadType);
+                }
+
+                const payload = doc.payload || "";
+                const normalized = payload.replace(/\s+/g, "");
+                const decoded = Buffer.from(normalized, "base64");
+                const reencoded = decoded.toString("base64").replace(/=+$/, "");
+                const original = normalized.replace(/=+$/, "");
+                if (original.length === 0 || reencoded !== original) {
+                  throw new Error("payload is not valid canonical base64");
+                }
+
+                let parsed;
+                try {
+                  parsed = JSON.parse(decoded.toString("utf8"));
+                } catch (err) {
+                  throw new Error("decoded payload is not valid JSON: " + err.message);
+                }
+
+                fs.writeFileSync(outputPath, JSON.stringify(parsed, null, 2));
+              ' "${file}" "${out_json}" && \
+              ajv validate --spec=draft2020 -s schemas/aop-evidence.schema.json -d "${out_json}" --all-errors
+            then
+              echo "Unexpectedly valid DSSE invalid fixture: ${file}"
+              exit 1
+            fi
+            echo "Rejected as expected: ${file}"
+          done
+
       - name: Validate v0.9 profile evidence fixtures (draft2020)
         shell: bash
         run: |

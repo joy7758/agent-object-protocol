@@ -1,0 +1,9 @@
+{
+  "payloadType": "application/vnd.aop.evidence+json",
+  "payload": "e30=",
+  "signatures": [
+    {
+      "keyid": "test-key"
+    }
+  ]
+}
