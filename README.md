@@ -9,6 +9,8 @@
 > **Scope:** Interoperability artifacts only (schemas + fixtures + CI gates; no reference runtime in this repo)
 > **License:** Apache-2.0
 
+![Protocol-by-Artifacts](docs/paper-evidence/protocol-by-artifacts.svg)
+
 **Versioning note:** Repository releases follow SemVer (`v1.x.y`).
 Manifest field `aop_version` currently targets pre-v1 payload
 generations (`0.x`) in the published schemas. Treat repository release
