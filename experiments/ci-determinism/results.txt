@@ -1,0 +1,24 @@
+Run 1
+[OK] examples/invalid/adversarial/duplicate-keys.invalid.json rejected during strict JSON parse (DUPLICATE_KEY)
+[OK] examples/invalid/adversarial/intoto-payloadType.case.invalid.json rejected for non-canonical in-toto payloadType casing
+[OK] examples/invalid/adversarial/number-rounding.edge.invalid.json rejected for unsafe integer at /payload/unsafe_integer
+Adversarial invalid fixtures total: 3
+Rejected at parse: 1
+Rejected by checks: 2
+Unexpectedly passed: 0
+Run 2
+[OK] examples/invalid/adversarial/duplicate-keys.invalid.json rejected during strict JSON parse (DUPLICATE_KEY)
+[OK] examples/invalid/adversarial/intoto-payloadType.case.invalid.json rejected for non-canonical in-toto payloadType casing
+[OK] examples/invalid/adversarial/number-rounding.edge.invalid.json rejected for unsafe integer at /payload/unsafe_integer
+Adversarial invalid fixtures total: 3
+Rejected at parse: 1
+Rejected by checks: 2
+Unexpectedly passed: 0
+Run 3
+[OK] examples/invalid/adversarial/duplicate-keys.invalid.json rejected during strict JSON parse (DUPLICATE_KEY)
+[OK] examples/invalid/adversarial/intoto-payloadType.case.invalid.json rejected for non-canonical in-toto payloadType casing
+[OK] examples/invalid/adversarial/number-rounding.edge.invalid.json rejected for unsafe integer at /payload/unsafe_integer
+Adversarial invalid fixtures total: 3
+Rejected at parse: 1
+Rejected by checks: 2
+Unexpectedly passed: 0
