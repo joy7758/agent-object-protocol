@@ -1,0 +1,28 @@
+digraph AOP {
+rankdir=TB;
+node [shape=box, style=rounded];
+
+Agents [label="AI Agents\nTool Invocations"];
+
+Protocol [label="Agent Object Protocol\n(Protocol-by-Artifacts)"];
+
+Schemas [label="Schemas"];
+Fixtures [label="Conformance Fixtures"];
+CIGates [label="CI Validation Gates"];
+
+Adjudication [label="Deterministic Adjudication"];
+
+Evidence [label="Evidence Logs\nReproducible Results"];
+
+Agents -> Protocol;
+
+Protocol -> Schemas;
+Protocol -> Fixtures;
+Protocol -> CIGates;
+
+Schemas -> Adjudication;
+Fixtures -> Adjudication;
+CIGates -> Adjudication;
+
+Adjudication -> Evidence;
+}

@@ -1,0 +1,10 @@
+Experiment 5 (cross-validator consistency)
+Node total: 1000
+Node parse rejected: 0
+Node checks rejected: 100
+Node admitted: 900
+Python total: 1000
+Python parse rejected: 0
+Python checks rejected: 100
+Python admitted: 900
+Consistent: true

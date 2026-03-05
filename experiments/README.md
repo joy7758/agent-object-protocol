@@ -35,6 +35,27 @@ Run all experiments and regenerate result files:
 - Output: `experiments/adversarial-tests/results.txt`
 - Expected: `total=3, parse_reject=1, checks_reject=2, unexpected_pass=0`
 
+## Experiment 4 - Synthetic-scale stress test (1000 artifacts)
+
+**Claim:** AOP checks preserve classification fidelity under larger artifact volume.
+
+- Script: `experiments/synthetic-scale/scripts/run_synthetic_scale.js`
+- Output: `experiments/synthetic-scale/results/results.txt`
+- Dataset: 900 valid + 100 invalid synthetic artifacts
+- Expected: `Parse rejected: 0`, `AOP checks rejected: 100`, `AOP admitted: 900`
+
+## Experiment 5 - Cross-validator consistency (Node vs Python)
+
+**Claim:** Equivalent AOP checks yield consistent outcomes across independent implementations.
+
+- Scripts:
+  - `experiments/cross-validator/scripts/node_validator.js`
+  - `experiments/cross-validator/scripts/python_validator.py`
+  - `experiments/cross-validator/scripts/run_cross_validator.sh`
+- Output: `experiments/cross-validator/results/results.txt`
+- Input corpus: `experiments/synthetic-scale/generated/*.json`
+- Expected: Node and Python report identical totals/rejections/admissions and `Consistent: true`.
+
 ## Artifact baseline
 
 For the paper baseline commits and CI evidence runs, see:

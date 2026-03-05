@@ -1,0 +1,22 @@
+\documentclass{article}
+\usepackage[paperwidth=6.2in,paperheight=3.8in,margin=0.2in]{geometry}
+\pagestyle{empty}
+\begin{document}
+\begin{center}
+\setlength{\fboxsep}{5pt}
+\fbox{\begin{minipage}{0.95\linewidth}
+\centering
+\textbf{Synthetic-Scale Evaluation (1000 Artifacts)}\\[4pt]
+\begin{tabular}{lccc}
+\textbf{Validation mode} & \textbf{Total} & \textbf{Rejected} & \textbf{Admitted} \\
+\hline
+Parse-only & 1000 & 0 & 1000 \\
+AOP checks & 1000 & 100 & 900 \\
+\end{tabular}\\[6pt]
+\begin{tabular}{l}
+\textit{Mismatch against expected labels: 0} \\
+\textit{Invalid classes: missing id, payloadType casing, unsafe integer}
+\end{tabular}
+\end{minipage}}
+\end{center}
+\end{document}

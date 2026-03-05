@@ -1,0 +1,22 @@
+\documentclass{article}
+\usepackage[paperwidth=6.2in,paperheight=3.8in,margin=0.2in]{geometry}
+\pagestyle{empty}
+\begin{document}
+\begin{center}
+\setlength{\fboxsep}{5pt}
+\begin{tabular}{c c c c c}
+\fbox{Agent} & $\rightarrow$ & \fbox{Tool Artifact (JSON)} & $\rightarrow$ & \fbox{Parser} \\
+ & & & & $\downarrow$ \\
+ & & & & \fbox{AOP Validation} \\
+ & & & & \begin{tabular}{l}
+\quad$\bullet$ Schema \\
+\quad$\bullet$ Fixtures \\
+\quad$\bullet$ CI Gates
+\end{tabular} \\
+ & & & & $\downarrow$ \\
+ & & & & \fbox{PASS / FAIL} \\
+ & & & & $\downarrow$ \\
+ & & & & \fbox{Tool Execution + Logs}
+\end{tabular}
+\end{center}
+\end{document}

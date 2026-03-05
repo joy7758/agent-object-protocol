@@ -1,0 +1,8 @@
+Experiment 4 (synthetic-scale stress test)
+Synthetic artifacts generated: 1000
+Valid target: 900
+Invalid target: 100
+Parse rejected: 0
+AOP checks rejected: 100
+AOP admitted: 900
+Unexpected pass/fail mismatches: 0
