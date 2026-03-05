@@ -37,6 +37,20 @@ AOP emphasizes reproducible interoperability artifacts:
   - `RELEASE_NOTES_v1.0.0.md`
   - `RELEASE_NOTES_v1.1.0.md`
 
+## Paper Evidence
+
+Artifact baseline used for the paper evidence chain:
+
+- Code baseline: [`main@c9f94ee`](https://github.com/joy7758/agent-object-protocol/commit/c9f94ee)
+- Evidence assets baseline:
+  [`main@41242b1`](https://github.com/joy7758/agent-object-protocol/commit/41242b1)
+- CI evidence run:
+  [`22717328360`](https://github.com/joy7758/agent-object-protocol/actions/runs/22717328360)
+- Figure S8:
+  [`docs/paper-evidence/ci/S8_adversarial-gate-summary-ci.png`](docs/paper-evidence/ci/S8_adversarial-gate-summary-ci.png)
+- S8 clean log excerpt:
+  [`docs/paper-evidence/ci/ci_run_22717328360_job_65870183177.clean.log`](docs/paper-evidence/ci/ci_run_22717328360_job_65870183177.clean.log)
+
 ---
 
 ## Motivation
