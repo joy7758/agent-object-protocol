@@ -56,5 +56,5 @@ publishes a v1 public API candidate surface.
 
 - [Semantic Versioning 2.0.0](https://semver.org/)
 - [RFC 8785 JSON Canonicalization Scheme](https://www.rfc-editor.org/rfc/rfc8785)
-- [SLSA provenance v1.0](https://slsa.dev/spec/v1.0/provenance)
+- [SLSA provenance v1.1](https://slsa.dev/spec/v1.1/provenance)
 - [in-toto attestation envelope (DSSE)](https://github.com/in-toto/attestation/blob/main/spec/v1/envelope.md)

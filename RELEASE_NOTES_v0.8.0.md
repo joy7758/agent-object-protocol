@@ -48,5 +48,5 @@ Adds **Level 6 - Evidence-Bound E2E Chain** in `CONFORMANCE.md`.
 ## References (informative)
 
 - [RFC 8785 JSON Canonicalization Scheme](https://www.rfc-editor.org/rfc/rfc8785)
-- [SLSA provenance v1.0](https://slsa.dev/spec/v1.0/provenance)
+- [SLSA provenance v1.1](https://slsa.dev/spec/v1.1/provenance)
 - [in-toto specification](https://github.com/in-toto/specification/blob/master/in-toto-spec.md)
