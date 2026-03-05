@@ -12,3 +12,7 @@ Expected summary:
 - parse_reject=1
 - checks_reject=2
 - unexpected_pass=0
+
+## CI evidence: experiments bundle (PR #6)
+- CI run: https://github.com/joy7758/agent-object-protocol/actions/runs/22721004355
+- Experiments: `experiments/` (see `experiments/README.md`)
