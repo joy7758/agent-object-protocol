@@ -1,0 +1,8 @@
+{
+  "aopVersion": "v1",
+  "kind": "object",
+  "id": "bigint-test",
+  "payload": {
+    "unsafe_integer": 9007199254740993
+  }
+}
