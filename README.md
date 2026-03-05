@@ -2,6 +2,8 @@
 
 # Agent Object Protocol (AOP)
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18876796.svg)](https://doi.org/10.5281/zenodo.18876796)
+
 > **Status:** Active specification repository
 > **Latest Release:** v1.1.0 ([release notes](RELEASE_NOTES_v1.1.0.md))
 > **Public API:** Frozen at v1.0.0 ([AEP-0009](aep/aep-0009-v1.0-freeze.md), [V1_PUBLIC_API_CANDIDATE](V1_PUBLIC_API_CANDIDATE.md))
@@ -196,3 +198,9 @@ AOP is actively maintained as a specification repository.
 
 Contributions are welcome through AEP proposals, schema updates,
 fixtures, and conformance-gate improvements.
+
+## Citation
+
+Zhang, B. (2026). Agent Object Protocol: Protocol-by-Artifacts for
+Machine-Adjudicable AI Artifacts. Zenodo.
+https://doi.org/10.5281/zenodo.18876796
