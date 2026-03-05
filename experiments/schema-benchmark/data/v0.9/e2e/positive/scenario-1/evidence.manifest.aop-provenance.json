@@ -1,0 +1,25 @@
+{
+  "aop_version": "0.9",
+  "id": "urn:aop:evidence:manifest-profiled-s1:v1",
+  "kind": "evidence",
+  "subject": {
+    "id": "urn:aop:tool:web-fetch:v1",
+    "digest": {
+      "sha256": "1afbf15cdb42c958a7410db4d5aa59c2671cbe8519b5b27c943b8de03508c5d8"
+    }
+  },
+  "predicateType": "https://aop.dev/profiles/provenance/v0",
+  "predicate": {
+    "scenario": "v0.9/e2e/positive/scenario-1",
+    "generator": {
+      "name": "aop-ci",
+      "version": "0.9.0"
+    },
+    "inputs": [
+      {
+        "id": "https://example.org/registry/objects/urn:aop:tool:web-fetch:v1/manifest.json"
+      }
+    ],
+    "timestamp": "2026-03-04T18:30:00Z"
+  }
+}

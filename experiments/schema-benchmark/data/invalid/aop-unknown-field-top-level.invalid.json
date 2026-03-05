@@ -1,0 +1,18 @@
+{
+  "aop_version": "0.3",
+  "id": "urn:aop:tool:invalid-top-level-unknown:v1",
+  "kind": "tool",
+  "name": "invalid-top-level-unknown",
+  "description": "Invalid: unknown top-level field without x-vendor namespace",
+  "schema": {
+    "inputs": {
+      "type": "object",
+      "properties": {}
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  "foo": "bar"
+}

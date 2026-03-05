@@ -1,0 +1,25 @@
+{
+  "aop_version": "0.2",
+  "id": "urn:aop:tool:invalid-signature-without-signed:v1",
+  "kind": "tool",
+  "name": "invalid-signature-without-signed",
+  "description": "Invalid: signature_ref requires signed=true",
+  "schema": {
+    "inputs": {
+      "type": "object",
+      "properties": {}
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  "security": {
+    "integrity": {
+      "checksum_algo": "sha256",
+      "checksum": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "signed": false,
+      "signature_ref": "https://registry.example.com/signatures/invalid.sig"
+    }
+  }
+}

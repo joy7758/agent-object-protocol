@@ -1,0 +1,79 @@
+{
+  "aop_version": "0.5",
+  "id": "urn:aop:tool:kv-get:v1",
+  "kind": "tool",
+  "name": "kv-get",
+  "description": "Get a key from a key-value store (MCP interop fixture)",
+  "schema": {
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "value",
+        "found"
+      ],
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "found": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "invocation": {
+    "mode": "sync",
+    "idempotency": "idempotent"
+  },
+  "capabilities": {
+    "side_effects": "none",
+    "determinism": "deterministic",
+    "token_cost_hint": {
+      "input_per_1k": 0,
+      "output_per_1k": 0
+    }
+  },
+  "security": {
+    "auth": {
+      "scheme": "none"
+    },
+    "permissions": {
+      "data_access": "read",
+      "network_access": "none",
+      "required_resources": [
+        "kvstore:default"
+      ]
+    }
+  }
+}

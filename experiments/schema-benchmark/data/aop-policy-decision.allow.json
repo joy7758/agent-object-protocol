@@ -1,0 +1,26 @@
+{
+  "aop_version": "0.4",
+  "decision_id": "dec_20260304T000001Z_0001",
+  "policy_id": "urn:aop:policy:allow-readonly-tools:v1",
+  "target": {
+    "selector": "object_kind",
+    "object_kind": "tool"
+  },
+  "decision": {
+    "effect": "allow",
+    "strategy": "first_match",
+    "rule_ids": ["allow-low-side-effects"]
+  },
+  "reasons": [
+    {
+      "code": "ALLOW_LOW_RISK",
+      "message": "Tool meets low-risk capability and auth requirements.",
+      "rule_id": "allow-low-side-effects"
+    }
+  ],
+  "context": {
+    "runtime_mode": "enforced",
+    "x-acme-trace-id": "trace_123"
+  },
+  "x-acme-observed-latency-ms": 12
+}

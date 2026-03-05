@@ -1,0 +1,22 @@
+{
+  "aop_version": "0.3",
+  "id": "urn:aop:tool:invalid-invocation-unknown:v1",
+  "kind": "tool",
+  "name": "invalid-invocation-unknown",
+  "description": "Invalid: unknown invocation field without x-vendor namespace",
+  "schema": {
+    "inputs": {
+      "type": "object",
+      "properties": {}
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  "invocation": {
+    "mode": "sync",
+    "idempotency": "idempotent",
+    "foo": "bar"
+  }
+}

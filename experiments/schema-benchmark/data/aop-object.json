@@ -1,0 +1,26 @@
+{
+  "aop_version": "0.2",
+  "id": "urn:aop:tool:file-search:v1",
+  "kind": "tool",
+  "name": "file-search",
+  "description": "Search files in a directory",
+  "schema": {
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path"],
+      "properties": {
+        "path": { "type": "string" },
+        "query": { "type": "string" }
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["results"],
+      "properties": {
+        "results": { "type": "array" }
+      }
+    }
+  }
+}

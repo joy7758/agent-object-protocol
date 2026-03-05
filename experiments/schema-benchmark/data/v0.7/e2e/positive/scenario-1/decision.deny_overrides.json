@@ -1,0 +1,35 @@
+{
+  "aop_version": "0.7",
+  "decision_id": "dec_v0.7_scenario1_0001",
+  "policy_id": "urn:aop:policy:deny-unrestricted-network:v1",
+  "target": {
+    "selector": "object_id",
+    "object_id": "urn:aop:tool:web-fetch:v1"
+  },
+  "decision": {
+    "effect": "deny",
+    "strategy": "deny_overrides",
+    "rule_ids": [
+      "deny-network-access"
+    ]
+  },
+  "reasons": [
+    {
+      "code": "DENY_UNRESTRICTED_NETWORK",
+      "message": "Network access requires explicit approval.",
+      "rule_id": "deny-network-access"
+    }
+  ],
+  "patches": [
+    {
+      "type": "require",
+      "operations": [
+        {
+          "op": "add",
+          "path": "x-acme-approval-ticket",
+          "value": "REQUIRED"
+        }
+      ]
+    }
+  ]
+}

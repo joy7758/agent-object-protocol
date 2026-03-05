@@ -1,0 +1,23 @@
+{
+  "aop_version": "0.6",
+  "decision_id": "dec_v0.6_c1_first_match_0001",
+  "policy_id": "urn:aop:policy:c1-permit-vs-deny:v1",
+  "target": {
+    "selector": "object_id",
+    "object_id": "urn:aop:tool:c1-sensitive-writer:v1"
+  },
+  "decision": {
+    "effect": "allow",
+    "strategy": "first_match",
+    "rule_ids": [
+      "allow-tool-baseline"
+    ]
+  },
+  "reasons": [
+    {
+      "code": "ALLOW_TOOL_BASELINE",
+      "message": "Baseline allow for tool kind.",
+      "rule_id": "allow-tool-baseline"
+    }
+  ]
+}

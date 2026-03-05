@@ -1,0 +1,24 @@
+{
+  "aop_version": "0.3",
+  "id": "urn:aop:tool:invalid-token-cost-non-integer:v1",
+  "kind": "tool",
+  "name": "invalid-token-cost-non-integer",
+  "description": "Invalid: token_cost_hint.output_per_1k must be an integer",
+  "schema": {
+    "inputs": {
+      "type": "object",
+      "properties": {}
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  "capabilities": {
+    "side_effects": "none",
+    "determinism": "deterministic",
+    "token_cost_hint": {
+      "output_per_1k": 12.5
+    }
+  }
+}

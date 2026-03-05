@@ -1,0 +1,18 @@
+{
+  "aop_version": "0.3",
+  "id": "urn:aop:tool:extension-bad-vendor:v1",
+  "kind": "tool",
+  "name": "extension-bad-vendor",
+  "description": "Invalid: extension field uses non-conforming vendor segment",
+  "schema": {
+    "inputs": {
+      "type": "object",
+      "properties": {}
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  "x-Acme-feature-flag": true
+}

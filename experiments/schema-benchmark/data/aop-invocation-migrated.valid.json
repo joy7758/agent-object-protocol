@@ -1,0 +1,24 @@
+{
+  "aop_version": "0.3",
+  "id": "urn:aop:tool:invocation-migrated:v1",
+  "kind": "tool",
+  "name": "invocation-migrated",
+  "description": "Migrated object with required invocation core fields",
+  "schema": {
+    "inputs": {
+      "type": "object",
+      "properties": {}
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  "invocation": {
+    "mode": "sync",
+    "idempotency": "best-effort",
+    "timeouts_ms": {
+      "overall": 30000
+    }
+  }
+}

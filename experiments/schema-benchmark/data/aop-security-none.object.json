@@ -1,0 +1,38 @@
+{
+  "aop_version": "0.2",
+  "id": "urn:aop:policy:public-read:v1",
+  "kind": "policy",
+  "name": "public-read",
+  "description": "Policy object with unauthenticated access semantics",
+  "schema": {
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "resource": {
+          "type": "string"
+        }
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed"],
+      "properties": {
+        "allowed": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "security": {
+    "auth": {
+      "scheme": "none"
+    },
+    "permissions": {
+      "data_access": "read",
+      "network_access": "none",
+      "required_resources": ["docs/public/*"]
+    }
+  }
+}

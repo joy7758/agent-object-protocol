@@ -1,0 +1,15 @@
+{
+  "aop_version": "0.4",
+  "decision_id": "dec_20260304T000003Z_0003",
+  "policy_id": "urn:aop:policy:allow-readonly-tools:v1",
+  "target": {
+    "selector": "object_kind",
+    "object_kind": "tool"
+  },
+  "reasons": [
+    {
+      "code": "ALLOW_LOW_RISK",
+      "message": "Missing decision object should be rejected."
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "aop_version": "0.3",
+  "id": "urn:aop:tool:invalid-token-cost-negative:v1",
+  "kind": "tool",
+  "name": "invalid-token-cost-negative",
+  "description": "Invalid: token_cost_hint.input_per_1k must be >= 0",
+  "schema": {
+    "inputs": {
+      "type": "object",
+      "properties": {}
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  "capabilities": {
+    "side_effects": "none",
+    "determinism": "deterministic",
+    "token_cost_hint": {
+      "input_per_1k": -1
+    }
+  }
+}

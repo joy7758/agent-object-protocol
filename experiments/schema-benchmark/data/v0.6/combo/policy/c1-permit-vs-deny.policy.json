@@ -1,0 +1,66 @@
+{
+  "aop_version": "0.6",
+  "id": "urn:aop:policy:c1-permit-vs-deny:v1",
+  "kind": "policy",
+  "name": "c1-permit-vs-deny",
+  "description": "C1 combo fixture showing first_match versus deny_overrides behavior.",
+  "target": {
+    "selector": "object_kind",
+    "object_kind": "tool"
+  },
+  "evaluation": {
+    "mode": "enforced",
+    "default_effect": "deny"
+  },
+  "rules": [
+    {
+      "id": "allow-tool-baseline",
+      "effect": "allow",
+      "when": {
+        "all": [
+          {
+            "field": "kind",
+            "op": "eq",
+            "value": "tool"
+          }
+        ]
+      },
+      "reason": {
+        "code": "ALLOW_TOOL_BASELINE",
+        "message": "Baseline allow for tool kind."
+      }
+    },
+    {
+      "id": "deny-sensitive-write",
+      "effect": "deny",
+      "when": {
+        "all": [
+          {
+            "field": "capabilities.side_effects",
+            "op": "eq",
+            "value": "high"
+          },
+          {
+            "field": "security.permissions.data_access",
+            "op": "eq",
+            "value": "read-write"
+          }
+        ]
+      },
+      "reason": {
+        "code": "DENY_SENSITIVE_WRITE",
+        "message": "High side effects with read-write access require approval."
+      },
+      "patch": {
+        "type": "require",
+        "operations": [
+          {
+            "op": "add",
+            "path": "x-acme-approval-ticket",
+            "value": "REQUIRED"
+          }
+        ]
+      }
+    }
+  ]
+}

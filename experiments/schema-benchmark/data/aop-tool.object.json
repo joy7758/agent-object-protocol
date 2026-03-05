@@ -1,0 +1,63 @@
+{
+  "aop_version": "0.2",
+  "id": "urn:aop:tool:file-search:v1",
+  "kind": "tool",
+  "name": "file-search",
+  "description": "Search files in a directory",
+  "schema": {
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path"],
+      "properties": {
+        "path": { "type": "string" },
+        "query": { "type": "string" }
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["results"],
+      "properties": {
+        "results": { "type": "array" }
+      }
+    }
+  },
+  "invocation": {
+    "mode": "sync",
+    "idempotency": "idempotent",
+    "timeouts_ms": {
+      "read": 15000,
+      "overall": 30000
+    },
+    "retry": {
+      "max_attempts": 2,
+      "backoff": "exponential",
+      "retry_on": ["timeout", "rate_limit"]
+    }
+  },
+  "capabilities": {
+    "side_effects": "none",
+    "determinism": "deterministic",
+    "token_cost_hint": {
+      "input_per_1k": 1200,
+      "output_per_1k": 200
+    }
+  },
+  "security": {
+    "auth": {
+      "scheme": "api_key",
+      "scopes": ["filesystem.read"]
+    },
+    "permissions": {
+      "data_access": "read",
+      "network_access": "restricted",
+      "required_resources": ["filesystem:/workspace"]
+    },
+    "integrity": {
+      "checksum_algo": "sha256",
+      "checksum": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "signed": false
+    }
+  }
+}

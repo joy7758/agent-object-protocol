@@ -1,0 +1,34 @@
+{
+  "aop_version": "0.3",
+  "id": "urn:aop:tool:extension-x-vendor:v1",
+  "kind": "tool",
+  "name": "extension-x-vendor",
+  "description": "Valid object using x-vendor extension fields",
+  "schema": {
+    "inputs": {
+      "type": "object",
+      "properties": {}
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  "x-acme-release-channel": "canary",
+  "invocation": {
+    "mode": "async",
+    "idempotency": "non-idempotent",
+    "x-acme-execution-tier": "gold"
+  },
+  "capabilities": {
+    "side_effects": "high",
+    "determinism": "nondeterministic",
+    "x-acme-cost-class": 3
+  },
+  "security": {
+    "auth": {
+      "scheme": "none"
+    },
+    "x-acme-data-class": "public"
+  }
+}

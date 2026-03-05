@@ -1,0 +1,44 @@
+{
+  "aop_version": "0.7",
+  "id": "urn:aop:policy:deny-unrestricted-network:v1",
+  "kind": "policy",
+  "name": "deny-unrestricted-network",
+  "description": "Deny tools with unrestricted network access unless explicitly approved.",
+  "target": {
+    "selector": "object_kind",
+    "object_kind": "tool"
+  },
+  "evaluation": {
+    "mode": "enforced",
+    "default_effect": "deny"
+  },
+  "rules": [
+    {
+      "id": "deny-network-access",
+      "effect": "deny",
+      "when": {
+        "all": [
+          {
+            "field": "security.permissions.network_access",
+            "op": "eq",
+            "value": "unrestricted"
+          }
+        ]
+      },
+      "reason": {
+        "code": "DENY_UNRESTRICTED_NETWORK",
+        "message": "Network access requires explicit approval."
+      },
+      "patch": {
+        "type": "require",
+        "operations": [
+          {
+            "op": "add",
+            "path": "x-acme-approval-ticket",
+            "value": "REQUIRED"
+          }
+        ]
+      }
+    }
+  ]
+}

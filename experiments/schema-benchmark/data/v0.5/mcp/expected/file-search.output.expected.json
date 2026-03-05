@@ -1,0 +1,12 @@
+{
+  "results": [
+    {
+      "path": "docs/SPEC.md",
+      "score": 0.92
+    },
+    {
+      "path": "schemas/aop-object.schema.json",
+      "score": 0.81
+    }
+  ]
+}

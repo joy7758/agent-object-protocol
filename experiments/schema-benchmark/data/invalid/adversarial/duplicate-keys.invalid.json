@@ -1,0 +1,8 @@
+{
+  "aopVersion": "v1",
+  "kind": "object",
+  "id": "dup-keys-test",
+  "schema": { "type": "object" },
+  "evidence": { "digest": { "sha256": "00" } },
+  "payload": { "k": 1, "k": 2 }
+}

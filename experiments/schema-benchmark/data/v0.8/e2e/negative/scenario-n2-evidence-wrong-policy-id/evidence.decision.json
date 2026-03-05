@@ -1,0 +1,17 @@
+{
+  "aop_version": "0.8",
+  "id": "urn:aop:evidence:decision-evidence-s1:v1",
+  "kind": "evidence",
+  "subject": {
+    "id": "dec_v0.8_scenario1_0001",
+    "digest": {
+      "sha256": "e84a2b1913d8d72b3d060b7bcb3a64525f813be38fa1d2791170ec8f29a7eb56"
+    }
+  },
+  "predicateType": "https://slsa.dev/provenance/v1",
+  "predicate": {
+    "scenario": "v0.8/positive/scenario-1",
+    "policy_id": "urn:aop:policy:allow-readonly-tools:v1",
+    "note": "Decision evidence envelope (policy binding checked in later PR)."
+  }
+}

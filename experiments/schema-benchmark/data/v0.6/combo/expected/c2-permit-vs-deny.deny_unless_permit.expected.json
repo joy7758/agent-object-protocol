@@ -1,0 +1,36 @@
+{
+  "aop_version": "0.6",
+  "decision_id": "dec_v0.6_c2_deny_unless_permit_0001",
+  "policy_id": "urn:aop:policy:c2-permit-vs-deny:v1",
+  "target": {
+    "selector": "object_id",
+    "object_id": "urn:aop:tool:c2-network-sensitive:v1"
+  },
+  "decision": {
+    "effect": "deny",
+    "strategy": "deny_unless_permit",
+    "rule_ids": [
+      "permit-low-side-effects",
+      "deny-unrestricted-network"
+    ]
+  },
+  "reasons": [
+    {
+      "code": "DENY_UNRESTRICTED_NETWORK",
+      "message": "Unrestricted network access requires explicit approval.",
+      "rule_id": "deny-unrestricted-network"
+    }
+  ],
+  "patches": [
+    {
+      "type": "require",
+      "operations": [
+        {
+          "op": "add",
+          "path": "x-acme-network-approval",
+          "value": "REQUIRED"
+        }
+      ]
+    }
+  ]
+}

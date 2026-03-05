@@ -1,0 +1,23 @@
+{
+  "aop_version": "0.2",
+  "id": "urn:aop:tool:invalid-checksum-algo:v1",
+  "kind": "tool",
+  "name": "invalid-checksum-algo",
+  "description": "Invalid: checksum requires checksum_algo",
+  "schema": {
+    "inputs": {
+      "type": "object",
+      "properties": {}
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  "security": {
+    "integrity": {
+      "checksum": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "signed": false
+    }
+  }
+}
