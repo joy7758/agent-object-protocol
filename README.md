@@ -203,4 +203,4 @@ fixtures, and conformance-gate improvements.
 
 Zhang, B. (2026). Agent Object Protocol: Protocol-by-Artifacts for
 Machine-Adjudicable AI Artifacts. Zenodo.
-https://doi.org/10.5281/zenodo.18876796
+[https://doi.org/10.5281/zenodo.18876796](https://doi.org/10.5281/zenodo.18876796)
