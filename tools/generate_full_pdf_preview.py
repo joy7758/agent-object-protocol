@@ -8,6 +8,7 @@ Generate a filled preview package from real experiment outputs:
 
 from __future__ import annotations
 
+import argparse
 import re
 import subprocess
 import sys
@@ -307,9 +308,23 @@ def try_convert_pdf(paper_md: Path, final_pdf: Path) -> str:
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description="Generate filled Markdown/PDF preview from experiment results.")
+    parser.add_argument(
+        "--from-latest",
+        action="store_true",
+        help="Run ./experiments/run_all.sh before generating charts/Markdown/PDF.",
+    )
+    args = parser.parse_args()
+
     repo_root = Path(__file__).resolve().parents[1]
     output_dir = repo_root / "paper_output"
     output_dir.mkdir(exist_ok=True)
+
+    if args.from_latest:
+        print("Refreshing experiments via ./experiments/run_all.sh ...", flush=True)
+        if not run_cmd(["bash", "experiments/run_all.sh"], cwd=repo_root):
+            print("Failed to refresh experiments.")
+            return 2
 
     metrics = load_metrics(repo_root)
     generate_figures(output_dir, metrics)
