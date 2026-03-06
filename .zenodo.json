@@ -1,0 +1,21 @@
+{
+  "title": "Agent Object Protocol (AOP)",
+  "description": "Specification repository for Agent Object Protocol (AOP), including schemas, executable conformance fixtures, CI-adjudicable gates, machine-readable conformance vectors, and verification tooling for interoperable AI agent artifacts.",
+  "upload_type": "software",
+  "license": "Apache-2.0",
+  "creators": [
+    {
+      "name": "Zhang, Bin"
+    }
+  ],
+  "keywords": [
+    "AOP",
+    "Agent Object Protocol",
+    "AI agent",
+    "conformance",
+    "JSON Schema",
+    "DSSE",
+    "in-toto",
+    "FAIR Digital Objects"
+  ]
+}

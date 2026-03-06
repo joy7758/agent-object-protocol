@@ -5,7 +5,7 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18876796.svg)](https://doi.org/10.5281/zenodo.18876796)
 
 > **Status:** Active specification repository
-> **Latest Release:** v1.1.1 ([release notes](RELEASE_NOTES_v1.1.1.md))
+> **Latest Release:** v1.1.2 ([release notes](RELEASE_NOTES_v1.1.2.md))
 > **Public API:** Frozen at v1.0.0 ([AEP-0009](aep/aep-0009-v1.0-freeze.md), [V1_PUBLIC_API_CANDIDATE](V1_PUBLIC_API_CANDIDATE.md))
 > **Conformance:** Levels 2-8 published; optional Level 9 integration is tracked by [AEP-0011](aep/aep-0011-v1.2-in-toto-statement-compat.md)
 > **Scope:** Interoperability artifacts only (schemas + fixtures + CI gates; no reference runtime in this repo)
@@ -41,6 +41,7 @@ AOP emphasizes reproducible interoperability artifacts:
   - `RELEASE_NOTES_v1.0.0.md`
   - `RELEASE_NOTES_v1.1.0.md`
   - `RELEASE_NOTES_v1.1.1.md`
+  - `RELEASE_NOTES_v1.1.2.md`
 
 Conformance vector quick check:
 
