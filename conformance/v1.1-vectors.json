@@ -1,0 +1,105 @@
+{
+  "suite": "AOP Conformance Vectors",
+  "version": "1.1",
+  "description": "Machine-readable schema conformance vectors for reproducible local checks.",
+  "vectors": [
+    {
+      "id": "obj-valid-001",
+      "level": "L1",
+      "schema": "schemas/aop-object.schema.json",
+      "data": "examples/aop-object.json",
+      "expect": "valid"
+    },
+    {
+      "id": "obj-invalid-001",
+      "level": "L1",
+      "schema": "schemas/aop-object.schema.json",
+      "data": "examples/invalid/aop-capabilities-missing-determinism.invalid.json",
+      "expect": "invalid"
+    },
+    {
+      "id": "policy-valid-001",
+      "level": "L2",
+      "schema": "schemas/aop-policy.schema.json",
+      "data": "examples/aop-policy.allow.json",
+      "expect": "valid"
+    },
+    {
+      "id": "policy-invalid-001",
+      "level": "L2",
+      "schema": "schemas/aop-policy.schema.json",
+      "data": "examples/invalid/aop-policy-unknown-field.invalid.json",
+      "expect": "invalid"
+    },
+    {
+      "id": "policy-decision-valid-001",
+      "level": "L2.5",
+      "schema": "schemas/aop-policy-decision.schema.json",
+      "data": "examples/aop-policy-decision.allow.json",
+      "expect": "valid"
+    },
+    {
+      "id": "policy-decision-invalid-001",
+      "level": "L2.5",
+      "schema": "schemas/aop-policy-decision.schema.json",
+      "data": "examples/invalid/aop-policy-decision-missing-decision.invalid.json",
+      "expect": "invalid"
+    },
+    {
+      "id": "registry-record-valid-001",
+      "level": "L3",
+      "schema": "schemas/aop-registry-record.schema.json",
+      "data": "examples/registry/aop-registry-record.example.json",
+      "expect": "valid"
+    },
+    {
+      "id": "registry-record-invalid-001",
+      "level": "L3",
+      "schema": "schemas/aop-registry-record.schema.json",
+      "data": "examples/invalid/aop-registry-record-missing-id.invalid.json",
+      "expect": "invalid"
+    },
+    {
+      "id": "resolve-valid-001",
+      "level": "L3",
+      "schema": "schemas/aop-resolve-response.schema.json",
+      "data": "examples/registry/aop-resolve-response.example.json",
+      "expect": "valid"
+    },
+    {
+      "id": "resolve-invalid-001",
+      "level": "L3",
+      "schema": "schemas/aop-resolve-response.schema.json",
+      "data": "examples/invalid/aop-resolve-response-invalid-shape.invalid.json",
+      "expect": "invalid"
+    },
+    {
+      "id": "dsse-v11-valid-001",
+      "level": "L8",
+      "schema": "schemas/profiles/dsse-envelope.profile.schema.json",
+      "data": "examples/v1.1/dsse/positive/evidence.dsse.json",
+      "expect": "valid"
+    },
+    {
+      "id": "dsse-v11-invalid-001",
+      "level": "L8",
+      "schema": "schemas/profiles/dsse-envelope.profile.schema.json",
+      "data": "examples/invalid/v1.1/dsse/dsse-unknown-payloadtype.invalid.json",
+      "expect": "invalid"
+    },
+    {
+      "id": "dsse-v12-valid-001",
+      "level": "L9",
+      "schema": "schemas/profiles/dsse-envelope.profile.schema.json",
+      "data": "examples/v1.2/dsse/positive/in-toto.statement.dsse.json",
+      "expect": "valid"
+    },
+    {
+      "id": "dsse-v12-invalid-001",
+      "level": "L9",
+      "schema": "schemas/profiles/dsse-envelope.profile.schema.json",
+      "data": "examples/invalid/v1.2/dsse/in-toto-unknown-payloadtype.invalid.json",
+      "expect": "invalid"
+    }
+  ]
+}

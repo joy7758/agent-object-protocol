@@ -69,6 +69,26 @@ for schema in schemas/*.schema.json; do
 done
 ```
 
+### Machine-Readable Vector Suite
+
+For reproducible local conformance checks, the repository includes a
+machine-readable vector suite:
+
+- `conformance/v1.1-vectors.json`
+- `tools/verify_conformance_vectors.mjs`
+
+Run locally:
+
+```bash
+node tools/verify_conformance_vectors.mjs
+```
+
+Expected summary:
+
+```text
+Summary: 14 passed, 0 failed
+```
+
 ### Optional: Strict date-time validation with `ajv-formats`
 
 Some AOP schemas intentionally avoid `format: date-time` so baseline CI
