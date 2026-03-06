@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use Agent Object Protocol in your research, please cite the Zenodo record below."
+title: "Agent Object Protocol (AOP)"
+version: "v1.1.2"
+date-released: "2026-03-07"
+license: "Apache-2.0"
+repository-code: "https://github.com/joy7758/agent-object-protocol"
+url: "https://github.com/joy7758/agent-object-protocol"
+authors:
+  - family-names: "Zhang"
+    given-names: "Bin"
+    affiliation: "Independent Researcher"
+preferred-citation:
+  type: article
+  title: "Agent Object Protocol: Protocol-by-Artifacts for Machine-Adjudicable AI Artifacts"
+  authors:
+    - family-names: "Zhang"
+      given-names: "Bin"
+      affiliation: "Independent Researcher"
+  year: 2026
+  publisher: "Zenodo"
+  doi: "10.5281/zenodo.18876796"
+  url: "https://doi.org/10.5281/zenodo.18876796"

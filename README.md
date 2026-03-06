@@ -31,6 +31,7 @@ AOP emphasizes reproducible interoperability artifacts:
 
 - Public API surface: `V1_PUBLIC_API_CANDIDATE.md`
 - Conformance profile: `CONFORMANCE.md`
+- Citation metadata: `CITATION.cff`
 - Core schema families:
   - `schemas/aop-object.schema.json`
   - `schemas/aop-policy.schema.json`
@@ -209,6 +210,25 @@ fixtures, and conformance-gate improvements.
 
 ## Citation
 
+Preferred scholarly citation:
+
 Zhang, B. (2026). Agent Object Protocol: Protocol-by-Artifacts for
 Machine-Adjudicable AI Artifacts. Zenodo.
 [https://doi.org/10.5281/zenodo.18876796](https://doi.org/10.5281/zenodo.18876796)
+
+Repository citation metadata is available in `CITATION.cff`. The current
+engineering release tag is `v1.1.2`; the Zenodo DOI above remains the
+canonical academic citation.
+
+BibTeX:
+
+```bibtex
+@misc{agent_object_protocol_2026,
+  title = {Agent Object Protocol: Protocol-by-Artifacts for Machine-Adjudicable AI Artifacts},
+  author = {Zhang, Bin},
+  year = {2026},
+  publisher = {Zenodo},
+  doi = {10.5281/zenodo.18876796},
+  url = {https://doi.org/10.5281/zenodo.18876796}
+}
+```
