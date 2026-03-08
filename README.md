@@ -21,6 +21,13 @@ tags and payload `aop_version` as separate version axes.
 Agent Object Protocol (AOP) is an open standard effort for defining
 portable executable object contracts for AI agent ecosystems.
 
+## Digital Biosphere Ecosystem
+
+This repository is part of the **Digital Biosphere Architecture**.
+
+Architecture overview:
+https://github.com/joy7758/digital-biosphere-architecture
+
 AOP emphasizes reproducible interoperability artifacts:
 
 - JSON Schemas as machine-readable contracts
