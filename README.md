@@ -26,7 +26,7 @@ portable executable object contracts for AI agent ecosystems.
 This repository is part of the **Digital Biosphere Architecture**.
 
 Architecture overview:
-https://github.com/joy7758/digital-biosphere-architecture
+[digital-biosphere-architecture](https://github.com/joy7758/digital-biosphere-architecture)
 
 AOP emphasizes reproducible interoperability artifacts:
 
