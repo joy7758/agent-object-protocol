@@ -28,6 +28,8 @@ This repository is part of the **Digital Biosphere Architecture**.
 Architecture overview:
 [digital-biosphere-architecture](https://github.com/joy7758/digital-biosphere-architecture)
 
+This repository is not the top-level narrative hub of the broader ecosystem. It should be read as supporting and adjacent protocol work around structured agent objects and interoperability artifacts. For the layered architecture overview, start with [digital-biosphere-architecture](https://github.com/joy7758/digital-biosphere-architecture); for the persona-specific entry point, see [persona-object-protocol](https://github.com/joy7758/persona-object-protocol).
+
 AOP emphasizes reproducible interoperability artifacts:
 
 - JSON Schemas as machine-readable contracts
