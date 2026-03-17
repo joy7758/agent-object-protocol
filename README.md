@@ -40,6 +40,7 @@ AOP emphasizes reproducible interoperability artifacts:
 
 - Public API surface: `V1_PUBLIC_API_CANDIDATE.md`
 - Conformance profile: `CONFORMANCE.md`
+- Lifecycle RC1 note: `docs/outreach/lifecycle-profile-rc1.md`
 - Citation metadata: `CITATION.cff`
 - Core schema families:
   - `schemas/aop-object.schema.json`
