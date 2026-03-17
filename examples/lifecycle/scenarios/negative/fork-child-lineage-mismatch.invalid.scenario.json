@@ -1,0 +1,59 @@
+{
+  "scenario_id": "fork-child-lineage-mismatch",
+  "description": "Forked child object exists but carries a mismatched lineage_id.",
+  "objects": [
+    {
+      "schema_version": "0.1.0",
+      "object_type": "lifecycle_object",
+      "lifecycle_object_id": "urn:lifecycle-object:agent-alpha",
+      "agent_instance_id": "agent-alpha",
+      "lineage_id": "lineage-root-001",
+      "persona_ref": "urn:pop:persona:research-assistant:v1",
+      "current_state": "ACTIVE",
+      "state_since": "2026-03-17T02:00:00Z",
+      "governance_profile_ref": "urn:governance-profile:token-governor:default:v1",
+      "receipt_chain_head": "urn:lifecycle-receipt:fork-agent-alpha",
+      "evidence_refs": [
+        "urn:evidence:bundle:fork-agent-alpha"
+      ],
+      "created_at": "2026-03-17T00:00:00Z"
+    },
+    {
+      "schema_version": "0.1.0",
+      "object_type": "lifecycle_object",
+      "lifecycle_object_id": "urn:lifecycle-object:agent-alpha-child",
+      "agent_instance_id": "agent-alpha-child",
+      "lineage_id": "lineage-root-999",
+      "persona_ref": "urn:pop:persona:research-assistant:v1",
+      "current_state": "ACTIVE",
+      "state_since": "2026-03-17T02:00:00Z",
+      "governance_profile_ref": "urn:governance-profile:token-governor:default:v1",
+      "receipt_chain_head": "urn:lifecycle-receipt:fork-agent-alpha",
+      "evidence_refs": [
+        "urn:evidence:bundle:fork-agent-alpha"
+      ],
+      "created_at": "2026-03-17T02:00:00Z"
+    }
+  ],
+  "receipts": [
+    {
+      "schema_version": "0.1.0",
+      "object_type": "lifecycle_receipt",
+      "receipt_id": "urn:lifecycle-receipt:fork-agent-alpha",
+      "transition_type": "fork",
+      "subject_instance_id": "agent-alpha",
+      "related_instance_id": "agent-alpha-child",
+      "lineage_id": "lineage-root-001",
+      "prior_state": "ACTIVE",
+      "next_state": "ACTIVE",
+      "issued_at": "2026-03-17T02:00:00Z",
+      "evidence_ref": "urn:evidence:bundle:fork-agent-alpha",
+      "governance_decision_ref": "urn:governance-decision:fork-approve-001",
+      "signer": "urn:signer:token-governor:lifecycle",
+      "protected_hashes": {
+        "transition_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "previous_receipt_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    }
+  ]
+}

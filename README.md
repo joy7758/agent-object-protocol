@@ -59,6 +59,12 @@ Conformance vector quick check:
 node tools/verify_conformance_vectors.mjs
 ```
 
+Lifecycle profile semantic check:
+
+```bash
+node tools/verify_lifecycle_profile.mjs
+```
+
 ## Paper Evidence
 
 Artifact baseline used for the paper evidence chain:
@@ -169,6 +175,9 @@ checks, and positive/negative expectations), use:
 
 - `CONFORMANCE.md`
 - `.github/workflows/ci.yml`
+
+Lifecycle Profile v0.1 adds a current-branch gate for lifecycle object /
+receipt schemas plus cross-object semantic checks.
 
 ---
 

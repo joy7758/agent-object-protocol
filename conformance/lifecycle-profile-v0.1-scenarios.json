@@ -1,0 +1,32 @@
+{
+  "suite": "Lifecycle Profile v0.1 Semantic Scenarios",
+  "version": "0.1.0",
+  "description": "Cross-object lifecycle conformance scenarios with schema and semantic expectations.",
+  "scenarios": [
+    {
+      "id": "lifecycle-scenario-baseline-valid-001",
+      "data": "examples/lifecycle/scenarios/positive/baseline-valid.scenario.json",
+      "expect": "valid"
+    },
+    {
+      "id": "lifecycle-scenario-terminated-resume-invalid-001",
+      "data": "examples/lifecycle/scenarios/negative/terminated-object-cannot-resume.invalid.scenario.json",
+      "expect": "invalid"
+    },
+    {
+      "id": "lifecycle-scenario-fork-lineage-invalid-001",
+      "data": "examples/lifecycle/scenarios/negative/fork-child-lineage-mismatch.invalid.scenario.json",
+      "expect": "invalid"
+    },
+    {
+      "id": "lifecycle-scenario-merge-target-invalid-001",
+      "data": "examples/lifecycle/scenarios/negative/merge-missing-target.invalid.scenario.json",
+      "expect": "invalid"
+    },
+    {
+      "id": "lifecycle-scenario-merge-from-terminated-invalid-001",
+      "data": "examples/lifecycle/scenarios/negative/merge-from-terminated.invalid.scenario.json",
+      "expect": "invalid"
+    }
+  ]
+}

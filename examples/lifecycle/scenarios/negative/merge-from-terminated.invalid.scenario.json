@@ -1,0 +1,97 @@
+{
+  "scenario_id": "merge-from-terminated",
+  "description": "Merge is incorrectly claimed from a TERMINATED branch.",
+  "objects": [
+    {
+      "schema_version": "0.1.0",
+      "object_type": "lifecycle_object",
+      "lifecycle_object_id": "urn:lifecycle-object:agent-alpha",
+      "agent_instance_id": "agent-alpha",
+      "lineage_id": "lineage-root-001",
+      "persona_ref": "urn:pop:persona:research-assistant:v1",
+      "current_state": "ACTIVE",
+      "state_since": "2026-03-17T02:00:00Z",
+      "governance_profile_ref": "urn:governance-profile:token-governor:default:v1",
+      "receipt_chain_head": "urn:lifecycle-receipt:fork-agent-alpha",
+      "evidence_refs": [
+        "urn:evidence:bundle:fork-agent-alpha"
+      ],
+      "created_at": "2026-03-17T00:00:00Z"
+    },
+    {
+      "schema_version": "0.1.0",
+      "object_type": "lifecycle_object",
+      "lifecycle_object_id": "urn:lifecycle-object:agent-alpha-child",
+      "agent_instance_id": "agent-alpha-child",
+      "lineage_id": "lineage-root-001",
+      "persona_ref": "urn:pop:persona:research-assistant:v1",
+      "current_state": "MERGED",
+      "state_since": "2026-03-17T03:00:00Z",
+      "governance_profile_ref": "urn:governance-profile:token-governor:default:v1",
+      "receipt_chain_head": "urn:lifecycle-receipt:merge-agent-alpha-child",
+      "evidence_refs": [
+        "urn:evidence:bundle:merge-agent-alpha-child"
+      ],
+      "created_at": "2026-03-17T02:00:00Z"
+    }
+  ],
+  "receipts": [
+    {
+      "schema_version": "0.1.0",
+      "object_type": "lifecycle_receipt",
+      "receipt_id": "urn:lifecycle-receipt:fork-agent-alpha",
+      "transition_type": "fork",
+      "subject_instance_id": "agent-alpha",
+      "related_instance_id": "agent-alpha-child",
+      "lineage_id": "lineage-root-001",
+      "prior_state": "ACTIVE",
+      "next_state": "ACTIVE",
+      "issued_at": "2026-03-17T02:00:00Z",
+      "evidence_ref": "urn:evidence:bundle:fork-agent-alpha",
+      "governance_decision_ref": "urn:governance-decision:fork-approve-001",
+      "signer": "urn:signer:token-governor:lifecycle",
+      "protected_hashes": {
+        "transition_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "previous_receipt_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "schema_version": "0.1.0",
+      "object_type": "lifecycle_receipt",
+      "receipt_id": "urn:lifecycle-receipt:terminate-agent-alpha-child",
+      "transition_type": "terminate",
+      "subject_instance_id": "agent-alpha-child",
+      "lineage_id": "lineage-root-001",
+      "prior_state": "ACTIVE",
+      "next_state": "TERMINATED",
+      "issued_at": "2026-03-17T02:10:00Z",
+      "evidence_ref": "urn:evidence:bundle:terminate-agent-alpha-child",
+      "governance_decision_ref": "urn:governance-decision:terminate-approve-001",
+      "transition_reason": "Child branch was ended.",
+      "signer": "urn:signer:token-governor:lifecycle",
+      "protected_hashes": {
+        "transition_hash": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+        "previous_receipt_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+      }
+    },
+    {
+      "schema_version": "0.1.0",
+      "object_type": "lifecycle_receipt",
+      "receipt_id": "urn:lifecycle-receipt:merge-agent-alpha-child",
+      "transition_type": "merge",
+      "subject_instance_id": "agent-alpha-child",
+      "related_instance_id": "agent-alpha",
+      "lineage_id": "lineage-root-001",
+      "prior_state": "TERMINATED",
+      "next_state": "MERGED",
+      "issued_at": "2026-03-17T03:00:00Z",
+      "evidence_ref": "urn:evidence:bundle:merge-agent-alpha-child",
+      "governance_decision_ref": "urn:governance-decision:merge-approve-001",
+      "signer": "urn:signer:token-governor:lifecycle",
+      "protected_hashes": {
+        "transition_hash": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+        "previous_receipt_hash": "sha256:8888888888888888888888888888888888888888888888888888888888888888"
+      }
+    }
+  ]
+}

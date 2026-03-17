@@ -18,6 +18,8 @@ For the current `main` branch, the repository conformance baseline is:
 - v1.1 DSSE examples pass and v1.1 DSSE invalid fixtures are rejected
 - v1.2 in-toto DSSE examples pass and v1.2 DSSE invalid fixtures are
   rejected
+- Lifecycle Profile v0.1 fixtures pass schema validation and lifecycle
+  scenarios pass cross-object semantic checks
 - `examples/invalid/*.json` fixtures are rejected by their target schemas
 
 ## Version Axes
@@ -58,6 +60,7 @@ conformance fixtures:
 
 - `examples/*.json`
 - `examples/invalid/*.json`
+- `examples/lifecycle/**`
 
 ## Tested Surface
 
@@ -88,6 +91,30 @@ Expected summary:
 ```text
 Summary: 14 passed, 0 failed
 ```
+
+### Lifecycle Profile v0.1 Semantic Gate
+
+Lifecycle Profile v0.1 is part of the current-branch conformance
+baseline. It adds schema-validated lifecycle artifacts plus cross-object
+semantic checks for lifecycle continuity.
+
+Artifacts:
+
+- `schemas/lifecycle/lifecycle-object.schema.json`
+- `schemas/lifecycle/lifecycle-receipt.schema.json`
+- `conformance/lifecycle-profile-v0.1-vectors.json`
+- `conformance/lifecycle-profile-v0.1-scenarios.json`
+- `tools/verify_lifecycle_profile.mjs`
+
+Run locally:
+
+```bash
+node tools/verify_lifecycle_profile.mjs
+```
+
+This gate checks more than schema validity. It includes cross-object
+semantic rules such as terminal-state rejection, lineage continuity
+across fork, and merge target existence.
 
 ### Optional: Strict date-time validation with `ajv-formats`
 

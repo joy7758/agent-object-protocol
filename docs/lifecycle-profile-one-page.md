@@ -62,6 +62,7 @@ It only adds a reusable continuity layer for lifecycle governance.
 At minimum, a conforming implementation should:
 
 - validate objects and receipts against the lifecycle schemas
+- run cross-object semantic checks, not only schema validation
 - reject forbidden transitions
 - require lineage references
 - require governance and evidence references on receipts

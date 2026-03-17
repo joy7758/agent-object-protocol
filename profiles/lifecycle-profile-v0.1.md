@@ -4,6 +4,7 @@ Lifecycle Profile v0.1 defines the smallest governance continuity surface for
 autonomous agent instances.
 
 This profile defines governance continuity semantics, not metaphysical identity.
+Lifecycle conformance includes cross-object semantic checks, not only schema validity.
 
 ## What this profile covers
 

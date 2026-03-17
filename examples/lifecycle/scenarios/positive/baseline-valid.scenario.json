@@ -1,0 +1,136 @@
+{
+  "scenario_id": "baseline-valid",
+  "description": "Parent branch is initialized, activated, forks a child, and the child is merged then terminated.",
+  "objects": [
+    {
+      "schema_version": "0.1.0",
+      "object_type": "lifecycle_object",
+      "lifecycle_object_id": "urn:lifecycle-object:agent-alpha",
+      "agent_instance_id": "agent-alpha",
+      "lineage_id": "lineage-root-001",
+      "persona_ref": "urn:pop:persona:research-assistant:v1",
+      "current_state": "ACTIVE",
+      "state_since": "2026-03-17T02:00:00Z",
+      "governance_profile_ref": "urn:governance-profile:token-governor:default:v1",
+      "receipt_chain_head": "urn:lifecycle-receipt:fork-agent-alpha",
+      "evidence_refs": [
+        "urn:evidence:bundle:init-agent-alpha",
+        "urn:evidence:bundle:activate-agent-alpha",
+        "urn:evidence:bundle:fork-agent-alpha"
+      ],
+      "created_at": "2026-03-17T00:00:00Z"
+    },
+    {
+      "schema_version": "0.1.0",
+      "object_type": "lifecycle_object",
+      "lifecycle_object_id": "urn:lifecycle-object:agent-alpha-child",
+      "agent_instance_id": "agent-alpha-child",
+      "lineage_id": "lineage-root-001",
+      "persona_ref": "urn:pop:persona:research-assistant:v1",
+      "current_state": "TERMINATED",
+      "state_since": "2026-03-17T03:10:00Z",
+      "governance_profile_ref": "urn:governance-profile:token-governor:default:v1",
+      "receipt_chain_head": "urn:lifecycle-receipt:terminate-agent-alpha-child",
+      "evidence_refs": [
+        "urn:evidence:bundle:merge-agent-alpha-child",
+        "urn:evidence:bundle:terminate-agent-alpha-child"
+      ],
+      "created_at": "2026-03-17T02:00:00Z"
+    }
+  ],
+  "receipts": [
+    {
+      "schema_version": "0.1.0",
+      "object_type": "lifecycle_receipt",
+      "receipt_id": "urn:lifecycle-receipt:init-agent-alpha",
+      "transition_type": "init",
+      "subject_instance_id": "agent-alpha",
+      "lineage_id": "lineage-root-001",
+      "prior_state": null,
+      "next_state": "BORN",
+      "issued_at": "2026-03-17T00:00:00Z",
+      "evidence_ref": "urn:evidence:bundle:init-agent-alpha",
+      "governance_decision_ref": "urn:governance-decision:init-approve-001",
+      "signer": "urn:signer:token-governor:lifecycle",
+      "protected_hashes": {
+        "transition_hash": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+        "previous_receipt_hash": null
+      }
+    },
+    {
+      "schema_version": "0.1.0",
+      "object_type": "lifecycle_receipt",
+      "receipt_id": "urn:lifecycle-receipt:activate-agent-alpha",
+      "transition_type": "activate",
+      "subject_instance_id": "agent-alpha",
+      "lineage_id": "lineage-root-001",
+      "prior_state": "BORN",
+      "next_state": "ACTIVE",
+      "issued_at": "2026-03-17T00:05:00Z",
+      "evidence_ref": "urn:evidence:bundle:activate-agent-alpha",
+      "governance_decision_ref": "urn:governance-decision:activate-approve-001",
+      "signer": "urn:signer:token-governor:lifecycle",
+      "protected_hashes": {
+        "transition_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "previous_receipt_hash": "sha256:7777777777777777777777777777777777777777777777777777777777777777"
+      }
+    },
+    {
+      "schema_version": "0.1.0",
+      "object_type": "lifecycle_receipt",
+      "receipt_id": "urn:lifecycle-receipt:fork-agent-alpha",
+      "transition_type": "fork",
+      "subject_instance_id": "agent-alpha",
+      "related_instance_id": "agent-alpha-child",
+      "lineage_id": "lineage-root-001",
+      "prior_state": "ACTIVE",
+      "next_state": "ACTIVE",
+      "issued_at": "2026-03-17T02:00:00Z",
+      "evidence_ref": "urn:evidence:bundle:fork-agent-alpha",
+      "governance_decision_ref": "urn:governance-decision:fork-approve-001",
+      "signer": "urn:signer:token-governor:lifecycle",
+      "protected_hashes": {
+        "transition_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "previous_receipt_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "schema_version": "0.1.0",
+      "object_type": "lifecycle_receipt",
+      "receipt_id": "urn:lifecycle-receipt:merge-agent-alpha-child",
+      "transition_type": "merge",
+      "subject_instance_id": "agent-alpha-child",
+      "related_instance_id": "agent-alpha",
+      "lineage_id": "lineage-root-001",
+      "prior_state": "ACTIVE",
+      "next_state": "MERGED",
+      "issued_at": "2026-03-17T03:00:00Z",
+      "evidence_ref": "urn:evidence:bundle:merge-agent-alpha-child",
+      "governance_decision_ref": "urn:governance-decision:merge-approve-001",
+      "signer": "urn:signer:token-governor:lifecycle",
+      "protected_hashes": {
+        "transition_hash": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+        "previous_receipt_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+      }
+    },
+    {
+      "schema_version": "0.1.0",
+      "object_type": "lifecycle_receipt",
+      "receipt_id": "urn:lifecycle-receipt:terminate-agent-alpha-child",
+      "transition_type": "terminate",
+      "subject_instance_id": "agent-alpha-child",
+      "lineage_id": "lineage-root-001",
+      "prior_state": "MERGED",
+      "next_state": "TERMINATED",
+      "issued_at": "2026-03-17T03:10:00Z",
+      "evidence_ref": "urn:evidence:bundle:terminate-agent-alpha-child",
+      "governance_decision_ref": "urn:governance-decision:terminate-approve-001",
+      "transition_reason": "Merged child branch is now closed.",
+      "signer": "urn:signer:token-governor:lifecycle",
+      "protected_hashes": {
+        "transition_hash": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+        "previous_receipt_hash": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+      }
+    }
+  ]
+}
