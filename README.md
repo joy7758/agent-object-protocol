@@ -66,6 +66,8 @@ Lifecycle profile semantic check:
 node tools/verify_lifecycle_profile.mjs
 ```
 
+Canonical RC1 entry: `docs/releases/lifecycle-profile-v0.1-rc1.md`
+
 ## Paper Evidence
 
 Artifact baseline used for the paper evidence chain:
