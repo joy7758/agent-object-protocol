@@ -1,0 +1,84 @@
+{
+  "suite": "Lifecycle Profile v0.1 Conformance Vectors",
+  "version": "0.1.0",
+  "description": "Machine-readable lifecycle schema conformance vectors for reproducible local checks.",
+  "vectors": [
+    {
+      "id": "lifecycle-object-born-valid-001",
+      "level": "LC0.1",
+      "schema": "schemas/lifecycle/lifecycle-object.schema.json",
+      "data": "examples/lifecycle/valid/born-valid.json",
+      "expect": "valid"
+    },
+    {
+      "id": "lifecycle-object-active-valid-001",
+      "level": "LC0.1",
+      "schema": "schemas/lifecycle/lifecycle-object.schema.json",
+      "data": "examples/lifecycle/valid/active-valid.json",
+      "expect": "valid"
+    },
+    {
+      "id": "lifecycle-object-suspend-valid-001",
+      "level": "LC0.1",
+      "schema": "schemas/lifecycle/lifecycle-object.schema.json",
+      "data": "examples/lifecycle/valid/suspend-valid.json",
+      "expect": "valid"
+    },
+    {
+      "id": "lifecycle-object-terminate-valid-001",
+      "level": "LC0.1",
+      "schema": "schemas/lifecycle/lifecycle-object.schema.json",
+      "data": "examples/lifecycle/valid/terminate-valid.json",
+      "expect": "valid"
+    },
+    {
+      "id": "lifecycle-receipt-fork-valid-001",
+      "level": "LC0.1",
+      "schema": "schemas/lifecycle/lifecycle-receipt.schema.json",
+      "data": "examples/lifecycle/valid/fork-receipt-valid.json",
+      "expect": "valid"
+    },
+    {
+      "id": "lifecycle-receipt-merge-valid-001",
+      "level": "LC0.1",
+      "schema": "schemas/lifecycle/lifecycle-receipt.schema.json",
+      "data": "examples/lifecycle/valid/merge-receipt-valid.json",
+      "expect": "valid"
+    },
+    {
+      "id": "lifecycle-object-missing-lineage-invalid-001",
+      "level": "LC0.1",
+      "schema": "schemas/lifecycle/lifecycle-object.schema.json",
+      "data": "examples/lifecycle/invalid/missing-lineage-id.json",
+      "expect": "invalid"
+    },
+    {
+      "id": "lifecycle-receipt-invalid-transition-001",
+      "level": "LC0.1",
+      "schema": "schemas/lifecycle/lifecycle-receipt.schema.json",
+      "data": "examples/lifecycle/invalid/invalid-state-transition.json",
+      "expect": "invalid"
+    },
+    {
+      "id": "lifecycle-receipt-terminate-no-reason-001",
+      "level": "LC0.1",
+      "schema": "schemas/lifecycle/lifecycle-receipt.schema.json",
+      "data": "examples/lifecycle/invalid/terminate-without-reason.json",
+      "expect": "invalid"
+    },
+    {
+      "id": "lifecycle-receipt-fork-no-governance-001",
+      "level": "LC0.1",
+      "schema": "schemas/lifecycle/lifecycle-receipt.schema.json",
+      "data": "examples/lifecycle/invalid/fork-without-governance-ref.json",
+      "expect": "invalid"
+    },
+    {
+      "id": "lifecycle-receipt-merge-no-prior-state-001",
+      "level": "LC0.1",
+      "schema": "schemas/lifecycle/lifecycle-receipt.schema.json",
+      "data": "examples/lifecycle/invalid/merge-without-prior-state.json",
+      "expect": "invalid"
+    }
+  ]
+}

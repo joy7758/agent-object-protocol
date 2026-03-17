@@ -1,0 +1,19 @@
+{
+  "schema_version": "0.1.0",
+  "object_type": "lifecycle_receipt",
+  "receipt_id": "urn:lifecycle-receipt:fork-agent-alpha",
+  "transition_type": "fork",
+  "subject_instance_id": "agent-alpha",
+  "related_instance_id": "agent-alpha-child",
+  "lineage_id": "lineage-root-001",
+  "prior_state": "ACTIVE",
+  "next_state": "ACTIVE",
+  "issued_at": "2026-03-17T02:00:00Z",
+  "evidence_ref": "urn:evidence:bundle:fork-agent-alpha",
+  "governance_decision_ref": "urn:governance-decision:fork-approve-001",
+  "signer": "urn:signer:token-governor:lifecycle",
+  "protected_hashes": {
+    "transition_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+    "previous_receipt_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  }
+}

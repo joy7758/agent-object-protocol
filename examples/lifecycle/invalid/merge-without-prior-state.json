@@ -1,0 +1,18 @@
+{
+  "schema_version": "0.1.0",
+  "object_type": "lifecycle_receipt",
+  "receipt_id": "urn:lifecycle-receipt:merge-agent-alpha-child",
+  "transition_type": "merge",
+  "subject_instance_id": "agent-alpha-child",
+  "related_instance_id": "agent-alpha",
+  "lineage_id": "lineage-root-001",
+  "next_state": "MERGED",
+  "issued_at": "2026-03-17T03:00:00Z",
+  "evidence_ref": "urn:evidence:bundle:merge-agent-alpha-child",
+  "governance_decision_ref": "urn:governance-decision:merge-approve-001",
+  "signer": "urn:signer:token-governor:lifecycle",
+  "protected_hashes": {
+    "transition_hash": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+    "previous_receipt_hash": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+  }
+}

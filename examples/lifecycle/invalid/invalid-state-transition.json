@@ -1,0 +1,18 @@
+{
+  "schema_version": "0.1.0",
+  "object_type": "lifecycle_receipt",
+  "receipt_id": "urn:lifecycle-receipt:resume-agent-alpha",
+  "transition_type": "resume",
+  "subject_instance_id": "agent-alpha",
+  "lineage_id": "lineage-root-001",
+  "prior_state": "ACTIVE",
+  "next_state": "ACTIVE",
+  "issued_at": "2026-03-17T01:30:00Z",
+  "evidence_ref": "urn:evidence:bundle:resume-agent-alpha",
+  "governance_decision_ref": "urn:governance-decision:resume-approve-001",
+  "signer": "urn:signer:token-governor:lifecycle",
+  "protected_hashes": {
+    "transition_hash": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+    "previous_receipt_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+  }
+}

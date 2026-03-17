@@ -1,0 +1,16 @@
+{
+  "schema_version": "0.1.0",
+  "object_type": "lifecycle_object",
+  "lifecycle_object_id": "urn:lifecycle-object:agent-alpha",
+  "agent_instance_id": "agent-alpha",
+  "lineage_id": "lineage-root-001",
+  "persona_ref": "urn:pop:persona:research-assistant:v1",
+  "current_state": "BORN",
+  "state_since": "2026-03-17T00:00:00Z",
+  "governance_profile_ref": "urn:governance-profile:token-governor:default:v1",
+  "receipt_chain_head": "urn:lifecycle-receipt:init-agent-alpha",
+  "evidence_refs": [
+    "urn:evidence:bundle:init-agent-alpha"
+  ],
+  "created_at": "2026-03-17T00:00:00Z"
+}

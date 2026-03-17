@@ -1,0 +1,18 @@
+{
+  "schema_version": "0.1.0",
+  "object_type": "lifecycle_receipt",
+  "receipt_id": "urn:lifecycle-receipt:terminate-agent-alpha-child",
+  "transition_type": "terminate",
+  "subject_instance_id": "agent-alpha-child",
+  "lineage_id": "lineage-root-001",
+  "prior_state": "ACTIVE",
+  "next_state": "TERMINATED",
+  "issued_at": "2026-03-17T03:10:00Z",
+  "evidence_ref": "urn:evidence:bundle:terminate-agent-alpha-child",
+  "governance_decision_ref": "urn:governance-decision:terminate-approve-001",
+  "signer": "urn:signer:token-governor:lifecycle",
+  "protected_hashes": {
+    "transition_hash": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+    "previous_receipt_hash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+  }
+}

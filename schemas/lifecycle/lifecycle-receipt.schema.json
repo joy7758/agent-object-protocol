@@ -1,0 +1,296 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/joy7758/agent-object-protocol/schemas/lifecycle/lifecycle-receipt.schema.json",
+  "title": "Lifecycle Receipt",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "object_type",
+    "receipt_id",
+    "transition_type",
+    "subject_instance_id",
+    "lineage_id",
+    "prior_state",
+    "next_state",
+    "issued_at",
+    "evidence_ref",
+    "governance_decision_ref",
+    "signer",
+    "protected_hashes"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "0.1.0"
+    },
+    "object_type": {
+      "type": "string",
+      "const": "lifecycle_receipt"
+    },
+    "receipt_id": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 256
+    },
+    "transition_type": {
+      "$ref": "#/$defs/TransitionType"
+    },
+    "subject_instance_id": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 128
+    },
+    "related_instance_id": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 128
+    },
+    "lineage_id": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 128
+    },
+    "prior_state": {
+      "$ref": "#/$defs/PriorState"
+    },
+    "next_state": {
+      "$ref": "#/$defs/LifecycleState"
+    },
+    "issued_at": {
+      "$ref": "#/$defs/Timestamp"
+    },
+    "evidence_ref": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 512
+    },
+    "governance_decision_ref": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 512
+    },
+    "transition_reason": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 2048
+    },
+    "signer": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 256
+    },
+    "protected_hashes": {
+      "$ref": "#/$defs/ProtectedHashes"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "transition_type": {
+            "const": "init"
+          }
+        },
+        "required": ["transition_type"]
+      },
+      "then": {
+        "properties": {
+          "prior_state": {
+            "const": null
+          },
+          "next_state": {
+            "const": "BORN"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "transition_type": {
+            "const": "activate"
+          }
+        },
+        "required": ["transition_type"]
+      },
+      "then": {
+        "properties": {
+          "prior_state": {
+            "const": "BORN"
+          },
+          "next_state": {
+            "const": "ACTIVE"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "transition_type": {
+            "const": "suspend"
+          }
+        },
+        "required": ["transition_type"]
+      },
+      "then": {
+        "properties": {
+          "prior_state": {
+            "const": "ACTIVE"
+          },
+          "next_state": {
+            "const": "SUSPENDED"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "transition_type": {
+            "const": "resume"
+          }
+        },
+        "required": ["transition_type"]
+      },
+      "then": {
+        "properties": {
+          "prior_state": {
+            "const": "SUSPENDED"
+          },
+          "next_state": {
+            "const": "ACTIVE"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "transition_type": {
+            "const": "fork"
+          }
+        },
+        "required": ["transition_type"]
+      },
+      "then": {
+        "required": ["related_instance_id"],
+        "properties": {
+          "prior_state": {
+            "const": "ACTIVE"
+          },
+          "next_state": {
+            "const": "ACTIVE"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "transition_type": {
+            "const": "merge"
+          }
+        },
+        "required": ["transition_type"]
+      },
+      "then": {
+        "required": ["related_instance_id"],
+        "properties": {
+          "prior_state": {
+            "type": "string",
+            "enum": ["ACTIVE", "SUSPENDED"]
+          },
+          "next_state": {
+            "const": "MERGED"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "transition_type": {
+            "const": "terminate"
+          }
+        },
+        "required": ["transition_type"]
+      },
+      "then": {
+        "required": ["transition_reason"],
+        "properties": {
+          "prior_state": {
+            "type": "string",
+            "enum": ["BORN", "ACTIVE", "SUSPENDED", "MERGED"]
+          },
+          "next_state": {
+            "const": "TERMINATED"
+          }
+        }
+      }
+    }
+  ],
+  "patternProperties": {
+    "^x-[a-z0-9][a-z0-9-]{0,31}-[a-z0-9][a-z0-9-]{0,63}$": true
+  },
+  "unevaluatedProperties": false,
+  "$defs": {
+    "LifecycleState": {
+      "type": "string",
+      "enum": ["BORN", "ACTIVE", "SUSPENDED", "MERGED", "TERMINATED"]
+    },
+    "PriorState": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/LifecycleState"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "TransitionType": {
+      "type": "string",
+      "enum": [
+        "init",
+        "activate",
+        "suspend",
+        "resume",
+        "fork",
+        "merge",
+        "terminate"
+      ]
+    },
+    "Timestamp": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T[^\\s]+(?:Z|[+-]\\d{2}:\\d{2})$"
+    },
+    "ProtectedHashes": {
+      "type": "object",
+      "required": ["transition_hash"],
+      "properties": {
+        "transition_hash": {
+          "$ref": "#/$defs/Sha256"
+        },
+        "previous_receipt_hash": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "patternProperties": {
+        "^x-[a-z0-9][a-z0-9-]{0,31}-[a-z0-9][a-z0-9-]{0,63}$": true
+      },
+      "unevaluatedProperties": false
+    },
+    "Sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}
