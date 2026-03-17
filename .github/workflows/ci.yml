@@ -111,6 +111,22 @@ jobs:
             ajv compile --spec=draft2020 -s "${schema}"
           done
 
+      - name: Compile lifecycle schemas (draft2020)
+        run: |
+          shopt -s nullglob
+          lifecycle_schema_files=(schemas/lifecycle/*.schema.json)
+          if [ "${#lifecycle_schema_files[@]}" -eq 0 ]; then
+            echo "No lifecycle schema files found under schemas/lifecycle/"
+            exit 1
+          fi
+          for schema in "${lifecycle_schema_files[@]}"; do
+            echo "Compiling lifecycle schema: ${schema}"
+            ajv compile --spec=draft2020 -s "${schema}"
+          done
+
+      - name: Run lifecycle semantic gate
+        run: node tools/verify_lifecycle_profile.mjs
+
       - name: Validate object examples against aop-object schema (draft2020)
         run: |
           shopt -s nullglob

@@ -40,6 +40,19 @@ The allowed lifecycle transitions are:
 - `merge`: `ACTIVE|SUSPENDED -> MERGED`
 - `terminate`: `BORN|ACTIVE|SUSPENDED|MERGED -> TERMINATED`
 
+## `related_instance_id` semantics
+
+`related_instance_id` is only required for transitions that point at another
+instance.
+
+- For `fork`, `subject_instance_id` is the source branch whose state continues,
+  and `related_instance_id` is the new child branch created by the fork.
+- For `merge`, `subject_instance_id` is the branch being merged and closed, and
+  `related_instance_id` is the existing target instance that receives the merge.
+
+In other words, `subject_instance_id` is always the instance whose lifecycle
+state is being updated by the receipt.
+
 ## Forbidden transitions
 
 The profile forbids at least these cases:

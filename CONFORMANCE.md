@@ -70,6 +70,12 @@ CI currently tests conformance with these commands:
 for schema in schemas/*.schema.json; do
   ajv compile --spec=draft2020 -s "${schema}"
 done
+
+for schema in schemas/lifecycle/*.schema.json; do
+  ajv compile --spec=draft2020 -s "${schema}"
+done
+
+node tools/verify_lifecycle_profile.mjs
 ```
 
 ### Machine-Readable Vector Suite
