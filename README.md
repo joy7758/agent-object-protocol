@@ -21,6 +21,35 @@ tags and payload `aop_version` as separate version axes.
 Agent Object Protocol (AOP) is an open standard effort for defining
 portable executable object contracts for AI agent ecosystems.
 
+## Role
+
+`agent-object-protocol` is supporting and adjacent protocol work for interoperability artifacts. It focuses on schemas, fixtures, and conformance around executable agent objects rather than on the canonical five-layer core.
+
+## Not this repo
+
+- not the canonical theory hub
+- not the persona layer
+- not the interaction layer
+- not a runtime framework
+
+## Start here
+
+- `V1_PUBLIC_API_CANDIDATE.md`
+- `CONFORMANCE.md`
+- `schemas/`
+
+## Depends on
+
+- [digital-biosphere-architecture](https://github.com/joy7758/digital-biosphere-architecture)
+- adjacent to [persona-object-protocol](https://github.com/joy7758/persona-object-protocol) and [agent-intent-protocol](https://github.com/joy7758/agent-intent-protocol)
+- interoperates with broader audit and governance surfaces without replacing them
+
+## Status
+
+- active specification repository
+- supporting interoperability annex
+- no reference runtime in this repo
+
 ## Digital Biosphere Ecosystem
 
 This repository is part of the **Digital Biosphere Architecture**.
