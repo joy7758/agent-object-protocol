@@ -1,8 +1,8 @@
+<!-- markdownlint-disable MD013 -->
+<!-- markdownlint-disable MD041 -->
 <!-- language-switch:start -->
 [English](./README.md) | [中文](./README.zh-CN.md)
 <!-- language-switch:end -->
-
-<!-- markdownlint-disable MD013 -->
 
 # Agent Object Protocol (AOP)
 
